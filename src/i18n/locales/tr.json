@@ -1,0 +1,116 @@
+{
+  "nav": {
+    "home": "Ana Sayfa",
+    "gallery": "Galeri",
+    "offer": "Teklif Al",
+    "contact": "İletişim",
+    "services": "Hizmetler",
+    "machines": "Makine Parkuru"
+  },
+  "hero": {
+    "title": "Hassas CNC Üretim",
+    "subtitle": "Kocaeli Dilovası'nda yüksek kaliteli torna ve işleme merkezi hizmetleri",
+    "ctaPrimary": "Teklif Al",
+    "ctaSecondary": "Bize Ulaş"
+  },
+  "services": {
+    "title": "Hizmetlerimiz",
+    "subtitle": "Endüstriyel üretimde kapsamlı çözümler"
+  },
+  "machines": {
+    "title": "Makine Parkuru",
+    "subtitle": "Modern ve yüksek kapasiteli üretim altyapısı"
+  },
+  "clients": {
+    "title": "Aktif Müşteriler",
+    "subtitle": "Güvenilir iş ortaklarımız"
+  },
+  "counters": {
+    "projects": "Tamamlanan Proje",
+    "clients": "Aktif Müşteri",
+    "capacity": "Üretim Kapasitesi"
+  },
+  "gallery": {
+    "title": "Galeri",
+    "subtitle": "Üretim süreçlerimizden kareler",
+    "photos": "Fotoğraf",
+    "videos": "Video",
+    "all": "Tümü",
+    "noItems": "Henüz içerik bulunmuyor",
+    "loadMore": "Daha Fazla"
+  },
+  "offer": {
+    "title": "Hızlı Teklif Al",
+    "subtitle": "Projeniz için hemen teklif alın",
+    "fullName": "Ad Soyad",
+    "company": "Firma",
+    "phone": "Telefon",
+    "email": "E-Posta",
+    "description": "Açıklama",
+    "files": "Dosya Yükle",
+    "filesHint": "PDF, DWG, DXF, STEP, STP dosyaları kabul edilir",
+    "submit": "Teklif Gönder",
+    "submitting": "Gönderiliyor...",
+    "success": "Teklifiniz başarıyla gönderildi. En kısa sürede size dönüş yapacağız.",
+    "error": "Bir hata oluştu. Lütfen tekrar deneyin."
+  },
+  "contact": {
+    "title": "İletişim",
+    "subtitle": "Bizimle iletişime geçin",
+    "phone": "Telefon",
+    "email": "E-Posta",
+    "whatsapp": "WhatsApp",
+    "address": "Adres"
+  },
+  "footer": {
+    "rights": "Tüm hakları saklıdır.",
+    "description": "Kocaeli Dilovası'nda hassas CNC üretim ve talaşlı imalat hizmetleri."
+  },
+  "theme": {
+    "light": "Açık Tema",
+    "dark": "Koyu Tema",
+    "system": "Sistem"
+  },
+  "admin": {
+    "login": "Admin Girişi",
+    "email": "E-posta",
+    "password": "Şifre",
+    "loginButton": "Giriş Yap",
+    "logout": "Çıkış",
+    "dashboard": "Panel",
+    "hero": "Hero İçerik",
+    "services": "Hizmetler",
+    "machines": "Makineler",
+    "gallery": "Galeri",
+    "videos": "Videolar",
+    "clients": "Müşteriler",
+    "offers": "Teklifler",
+    "seo": "SEO Ayarları",
+    "settings": "Ayarlar",
+    "save": "Kaydet",
+    "saving": "Kaydediliyor...",
+    "saved": "Kaydedildi",
+    "delete": "Sil",
+    "add": "Ekle",
+    "edit": "Düzenle",
+    "cancel": "İptal",
+    "confirmDelete": "Silmek istediğinize emin misiniz?",
+    "status": "Durum",
+    "pending": "Beklemede",
+    "reviewed": "İncelendi",
+    "completed": "Tamamlandı",
+    "rejected": "Reddedildi"
+  },
+  "validation": {
+    "required": "Bu alan zorunludur",
+    "email": "Geçerli bir e-posta girin",
+    "phone": "Geçerli bir telefon numarası girin",
+    "minLength": "En az {{min}} karakter olmalı"
+  },
+  "common": {
+    "loading": "Yükleniyor...",
+    "error": "Bir hata oluştu",
+    "back": "Geri",
+    "close": "Kapat"
+  }
+}

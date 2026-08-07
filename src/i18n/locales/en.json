@@ -1,0 +1,116 @@
+{
+  "nav": {
+    "home": "Home",
+    "gallery": "Gallery",
+    "offer": "Get Quote",
+    "contact": "Contact",
+    "services": "Services",
+    "machines": "Machine Park"
+  },
+  "hero": {
+    "title": "Precision CNC Manufacturing",
+    "subtitle": "High-quality lathe and machining center services in Kocaeli Dilovası",
+    "ctaPrimary": "Get Quote",
+    "ctaSecondary": "Contact Us"
+  },
+  "services": {
+    "title": "Our Services",
+    "subtitle": "Comprehensive solutions in industrial manufacturing"
+  },
+  "machines": {
+    "title": "Machine Park",
+    "subtitle": "Modern and high-capacity production infrastructure"
+  },
+  "clients": {
+    "title": "Active Clients",
+    "subtitle": "Our trusted business partners"
+  },
+  "counters": {
+    "projects": "Completed Projects",
+    "clients": "Active Clients",
+    "capacity": "Production Capacity"
+  },
+  "gallery": {
+    "title": "Gallery",
+    "subtitle": "Snapshots from our production processes",
+    "photos": "Photos",
+    "videos": "Videos",
+    "all": "All",
+    "noItems": "No content yet",
+    "loadMore": "Load More"
+  },
+  "offer": {
+    "title": "Quick Quote",
+    "subtitle": "Get a quote for your project now",
+    "fullName": "Full Name",
+    "company": "Company",
+    "phone": "Phone",
+    "email": "Email",
+    "description": "Description",
+    "files": "Upload Files",
+    "filesHint": "PDF, DWG, DXF, STEP, STP files accepted",
+    "submit": "Submit Quote",
+    "submitting": "Submitting...",
+    "success": "Your quote has been submitted successfully. We will get back to you shortly.",
+    "error": "An error occurred. Please try again."
+  },
+  "contact": {
+    "title": "Contact",
+    "subtitle": "Get in touch with us",
+    "phone": "Phone",
+    "email": "Email",
+    "whatsapp": "WhatsApp",
+    "address": "Address"
+  },
+  "footer": {
+    "rights": "All rights reserved.",
+    "description": "Precision CNC manufacturing and chip removal services in Kocaeli Dilovası."
+  },
+  "theme": {
+    "light": "Light Theme",
+    "dark": "Dark Theme",
+    "system": "System"
+  },
+  "admin": {
+    "login": "Admin Login",
+    "email": "Email",
+    "password": "Password",
+    "loginButton": "Sign In",
+    "logout": "Logout",
+    "dashboard": "Dashboard",
+    "hero": "Hero Content",
+    "services": "Services",
+    "machines": "Machines",
+    "gallery": "Gallery",
+    "videos": "Videos",
+    "clients": "Clients",
+    "offers": "Offers",
+    "seo": "SEO Settings",
+    "settings": "Settings",
+    "save": "Save",
+    "saving": "Saving...",
+    "saved": "Saved",
+    "delete": "Delete",
+    "add": "Add",
+    "edit": "Edit",
+    "cancel": "Cancel",
+    "confirmDelete": "Are you sure you want to delete?",
+    "status": "Status",
+    "pending": "Pending",
+    "reviewed": "Reviewed",
+    "completed": "Completed",
+    "rejected": "Rejected"
+  },
+  "validation": {
+    "required": "This field is required",
+    "email": "Enter a valid email",
+    "phone": "Enter a valid phone number",
+    "minLength": "Must be at least {{min}} characters"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "back": "Back",
+    "close": "Close"
+  }
+}
