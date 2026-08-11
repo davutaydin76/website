@@ -37,9 +37,16 @@ export default function Footer() {
                   {import.meta.env.VITE_COMPANY_EMAIL || 'info@aydintornacnc.com.tr'}
                 </a>
               </li>
-              <li className="flex items-center gap-2">
-                <MapPin className="w-4 h-4 text-accent" />
-                <span>Dilovası, Kocaeli</span>
+              <li className="flex items-start gap-2">
+                <MapPin className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
+                <a
+                  href="https://www.google.com/maps/dir/?api=1&destination=Diliskelesi+Mh.+Cumhuriyet+Cd.+702.+Sk.+No:5+Dilovasi+Kocaeli"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-accent transition-colors leading-relaxed"
+                >
+                  Diliskelesi Mh. Cumhuriyet Cd. 702. Sk. No:5, Dilovası / Kocaeli
+                </a>
               </li>
             </ul>
           </div>

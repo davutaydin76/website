@@ -9,12 +9,14 @@ interface CountersProps {
 
 export default function Counters({ counters }: CountersProps) {
   const { t } = useTranslation()
-  const data = counters || { projects: 500, clients: 120, capacity: 95 }
+  const safeProjects = Number(counters?.projects) || 500
+  const safeClients = Number(counters?.clients) || 150
+  const safeCapacity = Number(counters?.capacity) || 98
 
   const items = [
-    { value: data.projects, label: t('counters.projects'), suffix: '+' },
-    { value: data.clients, label: t('counters.clients'), suffix: '+' },
-    { value: data.capacity, label: t('counters.capacity'), suffix: '%' },
+    { value: safeProjects, label: t('counters.projects'), suffix: '+' },
+    { value: safeClients, label: t('counters.clients'), suffix: '+' },
+    { value: safeCapacity, label: t('counters.capacity'), suffix: '%' },
   ]
 
   return (

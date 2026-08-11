@@ -54,14 +54,15 @@ export function formatPhone(phone: string): string {
   return phone.replace(/\s/g, '')
 }
 
-export function getWhatsAppLink(number: string, message?: string): string {
-  const clean = number.replace(/[^0-9]/g, '')
+export function getWhatsAppLink(number?: string | null, message?: string): string {
+  const safePhone = (number || import.meta.env.VITE_WHATSAPP_NUMBER || '').toString()
+  const clean = safePhone.replace(/[^0-9]/g, '')
   const text = message ? `?text=${encodeURIComponent(message)}` : ''
   return `https://wa.me/${clean}${text}`
 }
 
 export function getAcceptedFileTypes(): string {
-  return '.pdf,.dwg,.dxf,.step,.stp'
+  return '.pdf,.dwg,.dxf,.step,.stp,.onecnc'
 }
 
 export const ACCEPTED_MIME_TYPES = [
@@ -71,7 +72,16 @@ export const ACCEPTED_MIME_TYPES = [
   'application/dxf',
   'application/step',
   'model/step',
+  'application/octet-stream',
 ]
+
+export function isValidFileExtension(fileName: string): boolean {
+  const allowed = ['.pdf', '.dwg', '.dxf', '.step', '.stp', '.onecnc']
+  const lastDot = fileName.lastIndexOf('.')
+  if (lastDot === -1) return false
+  const ext = fileName.slice(lastDot).toLowerCase()
+  return allowed.includes(ext)
+}
 
 export const GALLERY_CATEGORIES = [
   { id: 'all', tr: 'Tümü', en: 'All' },

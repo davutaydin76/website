@@ -135,6 +135,7 @@ export default function ScrollObjects() {
 }
 
 export function AnimatedCounter({ value, suffix = '' }: { value: number; suffix?: string }) {
+  const safeVal = Number(value) || 0
   const [count, setCount] = useState(0)
 
   useEffect(() => {
@@ -143,11 +144,11 @@ export function AnimatedCounter({ value, suffix = '' }: { value: number; suffix?
     const animate = (now: number) => {
       const progress = Math.min((now - start) / duration, 1)
       const eased = 1 - Math.pow(1 - progress, 3)
-      setCount(Math.round(eased * value))
+      setCount(Math.round(eased * safeVal))
       if (progress < 1) requestAnimationFrame(animate)
     }
     requestAnimationFrame(animate)
-  }, [value])
+  }, [safeVal])
 
   return (
     <span>

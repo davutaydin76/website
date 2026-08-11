@@ -141,8 +141,8 @@ export async function fetchContactSettings(): Promise<ContactSettings> {
       phone: import.meta.env.VITE_COMPANY_PHONE || '',
       email: import.meta.env.VITE_COMPANY_EMAIL || '',
       whatsapp: import.meta.env.VITE_WHATSAPP_NUMBER || '',
-      address_tr: 'Dilovası, Kocaeli',
-      address_en: 'Dilovası, Kocaeli',
+      address_tr: 'Diliskelesi Mh. Cumhuriyet Cd. 702. Sk. No:5, Dilovası / Kocaeli',
+      address_en: 'Diliskelesi Mh. Cumhuriyet Cd. 702. Sk. No:5, Dilovası / Kocaeli',
     }
   } catch (err) {
     console.error('[content] fetchContactSettings beklenmeyen hata:', err)
@@ -150,8 +150,8 @@ export async function fetchContactSettings(): Promise<ContactSettings> {
       phone: import.meta.env.VITE_COMPANY_PHONE || '',
       email: import.meta.env.VITE_COMPANY_EMAIL || '',
       whatsapp: import.meta.env.VITE_WHATSAPP_NUMBER || '',
-      address_tr: 'Dilovası, Kocaeli',
-      address_en: 'Dilovası, Kocaeli',
+      address_tr: 'Diliskelesi Mh. Cumhuriyet Cd. 702. Sk. No:5, Dilovası / Kocaeli',
+      address_en: 'Diliskelesi Mh. Cumhuriyet Cd. 702. Sk. No:5, Dilovası / Kocaeli',
     }
   }
 }

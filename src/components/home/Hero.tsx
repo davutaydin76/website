@@ -14,18 +14,10 @@ export default function Hero({ content }: HeroProps) {
   const { t, i18n } = useTranslation()
   const lang = i18n.language as 'tr' | 'en'
 
-  const title = content
-    ? getLocalizedField(content, 'title', lang)
-    : t('hero.title')
-  const subtitle = content
-    ? getLocalizedField(content, 'subtitle', lang)
-    : t('hero.subtitle')
-  const ctaPrimary = content
-    ? getLocalizedField(content, 'cta_primary', lang)
-    : t('hero.ctaPrimary')
-  const ctaSecondary = content
-    ? getLocalizedField(content, 'cta_secondary', lang)
-    : t('hero.ctaSecondary')
+  const title = (content ? getLocalizedField(content, 'title', lang) : null) || t('hero.title')
+  const subtitle = (content ? getLocalizedField(content, 'subtitle', lang) : null) || t('hero.subtitle')
+  const ctaPrimary = (content ? getLocalizedField(content, 'cta_primary', lang) : null) || t('hero.get_quote') || t('hero.ctaPrimary') || (lang === 'tr' ? 'Teklif Al' : 'Get Quote')
+  const ctaSecondary = (content ? getLocalizedField(content, 'cta_secondary', lang) : null) || t('hero.our_services') || t('hero.ctaSecondary') || (lang === 'tr' ? 'Hizmetlerimiz' : 'Our Services')
 
   const videoUrl = content?.video_url ||
     'https://assets.mixkit.co/videos/preview/mixkit-close-up-of-a-cnc-machine-cutting-metal-4933-large.mp4'
@@ -65,16 +57,20 @@ export default function Hero({ content }: HeroProps) {
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link to="/offer">
-              <Button variant="secondary" size="lg" className="min-w-[180px]">
-                {ctaPrimary}
-                <ArrowRight className="w-4 h-4" />
+              <Button
+                variant="secondary"
+                size="lg"
+                className="min-w-[180px] bg-accent text-white hover:bg-accent-600 flex items-center justify-center gap-2 font-medium shadow-lg shadow-accent/20"
+              >
+                <span>{ctaPrimary}</span>
+                <ArrowRight className="w-5 h-5 flex-shrink-0" />
               </Button>
             </Link>
-            <a href="#contact">
+            <a href="#services">
               <Button
                 variant="outline"
                 size="lg"
-                className="min-w-[180px] border-white/30 text-white hover:bg-white/10"
+                className="min-w-[180px] border border-white/30 text-white backdrop-blur-md bg-white/10 hover:bg-white/20 transition-all flex items-center justify-center font-medium"
               >
                 {ctaSecondary}
               </Button>

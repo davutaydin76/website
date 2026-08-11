@@ -11,7 +11,7 @@ import Button from '@/components/ui/Button'
 import Card from '@/components/ui/Card'
 import { useToast } from '@/contexts/ToastContext'
 import { submitOffer } from '@/services/offers'
-import { getAcceptedFileTypes } from '@/lib/utils'
+import { getAcceptedFileTypes, isValidFileExtension } from '@/lib/utils'
 
 const offerSchema = z.object({
   full_name: z.string().min(2),
@@ -77,6 +77,12 @@ export default function OfferForm({ compact = false }: OfferFormProps) {
 
     if (oversized.length > 0) {
       setFileError(`Dosya boyutu 10 MB'ı aşamaz: ${oversized.map((f) => f.name).join(', ')}`)
+      return
+    }
+
+    const invalid = selected.filter((f) => !isValidFileExtension(f.name))
+    if (invalid.length > 0) {
+      setFileError(`Desteklenmeyen dosya formatı: ${invalid.map((f) => f.name).join(', ')}. Kabul edilenler: PDF, DWG, DXF, STEP, STP, ONECNC.`)
       return
     }
 
@@ -157,7 +163,7 @@ export default function OfferForm({ compact = false }: OfferFormProps) {
           >
             <Upload className="w-8 h-8 text-muted mb-2" />
             <span className="text-sm text-muted">{t('offer.filesHint')}</span>
-            <span className="text-xs text-muted mt-0.5">PDF, DWG, DXF, STEP — maks. 10 MB</span>
+            <span className="text-xs text-muted mt-0.5">PDF, DWG, DXF, STEP, STP, ONECNC — maks. 10 MB</span>
             {files.length > 0 && (
               <span className="text-sm text-accent mt-1 font-medium">
                 {files.length} dosya seçildi

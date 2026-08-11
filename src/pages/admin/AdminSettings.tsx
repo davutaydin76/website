@@ -24,8 +24,24 @@ export default function AdminSettings() {
       const { data, error } = await supabase.from('settings').select('*')
       if (error) throw error
       data?.forEach((row) => {
-        if (row.key === 'contact') setContact(row.value as ContactSettings)
-        if (row.key === 'counters') setCounters(row.value as CounterSettings)
+        if (row.key === 'contact' && row.value) {
+          const val = row.value as ContactSettings
+          setContact({
+            phone: val.phone || '',
+            email: val.email || '',
+            whatsapp: val.whatsapp || '',
+            address_tr: val.address_tr || '',
+            address_en: val.address_en || '',
+          })
+        }
+        if (row.key === 'counters' && row.value) {
+          const val = row.value as CounterSettings
+          setCounters({
+            projects: Number(val.projects) || 0,
+            clients: Number(val.clients) || 0,
+            capacity: Number(val.capacity) || 0,
+          })
+        }
       })
     } catch (err) {
       console.error('[AdminSettings] load error:', err)
