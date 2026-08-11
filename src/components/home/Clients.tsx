@@ -7,12 +7,12 @@ interface ClientsProps {
 }
 
 const fallbackBrands = [
-  { id: 'fb-1', name: 'RÖHM Germany', website_url: 'https://www.roehm.biz/' },
-  { id: 'fb-2', name: 'SIEMENS', website_url: 'https://www.siemens.com/' },
-  { id: 'fb-3', name: 'FAGOR', website_url: 'https://www.fagorautomation.com/' },
-  { id: 'fb-4', name: 'SANDVIK', website_url: 'https://www.sandvik.coromant.com/' },
-  { id: 'fb-5', name: 'HAAS Automation', website_url: 'https://www.haascnc.com/' },
-  { id: 'fb-6', name: 'YAMAZAKI MAZAK', website_url: 'https://www.mazakeu.com/' },
+  { id: 'fb-1', name: 'RÖHM Germany', website: 'https://www.roehm.biz/' },
+  { id: 'fb-2', name: 'SIEMENS', website: 'https://www.siemens.com/' },
+  { id: 'fb-3', name: 'FAGOR', website: 'https://www.fagorautomation.com/' },
+  { id: 'fb-4', name: 'SANDVIK', website: 'https://www.sandvik.coromant.com/' },
+  { id: 'fb-5', name: 'HAAS Automation', website: 'https://www.haascnc.com/' },
+  { id: 'fb-6', name: 'YAMAZAKI MAZAK', website: 'https://www.mazakeu.com/' },
 ]
 
 export default function Clients({ clients }: ClientsProps) {
@@ -55,9 +55,9 @@ export default function Clients({ clients }: ClientsProps) {
             {/* Birinci set */}
             {list.map((item) => (
               <div key={`${item.id}-1`} className="flex-shrink-0">
-                {item.website_url ? (
+                {item.website ? (
                   <a
-                    href={item.website_url}
+                    href={item.website}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="block group"
@@ -97,9 +97,9 @@ export default function Clients({ clients }: ClientsProps) {
             {/* İkinci set (sonsuz döngü için kopya) */}
             {list.map((item) => (
               <div key={`${item.id}-2`} className="flex-shrink-0">
-                {item.website_url ? (
+                {item.website ? (
                   <a
-                    href={item.website_url}
+                    href={item.website}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="block group"

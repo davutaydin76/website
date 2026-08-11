@@ -227,7 +227,7 @@ export default function GalleryPage() {
                   {getLocalizedField(selectedPhoto, 'title', lang) || (lang === 'tr' ? selectedPhoto.title_tr : selectedPhoto.title_en) || 'Aydın Torna CNC'}
                 </h4>
                 <p className="text-xs text-neutral-400 mt-1 uppercase tracking-widest">
-                  {lang === 'tr' ? 'Kategori' : 'Category'}: {selectedPhoto.category ? t(`gallery.${selectedPhoto.category}`) || selectedPhoto.category : ''}
+                  {lang === 'tr' ? 'Kategori' : 'Category'}: {selectedPhoto.category ? t(`gallery.categories.${selectedPhoto.category}`, selectedPhoto.category) : ''}
                 </p>
               </div>
               <button

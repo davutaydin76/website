@@ -10,7 +10,7 @@ import { useToast } from '@/contexts/ToastContext'
 import type { Client } from '@/types'
 
 const empty: Partial<Client> = {
-  name: '', logo_url: '', website_url: '', sort_order: 0, is_active: true,
+  name: '', logo_url: '', website: '', sort_order: 0, is_active: true,
 }
 
 const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/avif', 'image/gif']
@@ -45,11 +45,22 @@ export default function AdminClients() {
       toastError('Firma adı zorunludur', 'Lütfen geçerli bir firma adı girin.')
       return
     }
+    if (!editing.logo_url) {
+      toastError('Logo yüklenmesi veya URL girmesi zorunludur.', 'Lütfen bir logo ekleyin.')
+      return
+    }
 
     try {
+      const payload = {
+        name: editing.name,
+        logo_url: editing.logo_url,
+        website: editing.website || null,
+        sort_order: Number(editing.sort_order) || 0,
+        is_active: editing.is_active !== false
+      }
       const { error } = editing.id
-        ? await supabase.from('clients').update(editing).eq('id', editing.id)
-        : await supabase.from('clients').insert(editing)
+        ? await supabase.from('clients').update(payload).eq('id', editing.id)
+        : await supabase.from('clients').insert(payload)
       if (error) throw error
       success(t('admin.saved'))
       setEditing(null)
@@ -147,7 +158,7 @@ export default function AdminClients() {
             />
             {uploading && <p className="text-xs text-muted mt-1 animate-pulse">Yükleniyor...</p>}
           </div>
-          <Input label="Website" value={editing.website_url || ''} onChange={(e) => setEditing({ ...editing, website_url: e.target.value })} />
+          <Input label="Website" value={editing.website || ''} onChange={(e) => setEditing({ ...editing, website: e.target.value })} />
           <Input label="Sıra" type="number" value={editing.sort_order ?? 0} onChange={(e) => setEditing({ ...editing, sort_order: Number(e.target.value) })} />
           <div className="flex gap-2">
             <Button onClick={save} disabled={uploading}>{t('admin.save')}</Button>

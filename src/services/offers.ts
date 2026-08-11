@@ -41,16 +41,17 @@ export async function submitOffer(data: OfferFormData): Promise<OfferResult> {
     const { error: insertError } = await supabase
       .from('offers')
       .insert({
-        full_name: data.full_name,
-        company: data.company || null,
+        contact_name: data.full_name,
+        company_name: data.company || null,
         phone: data.phone,
         email: data.email,
-        description: data.description || null,
+        message: data.description || null,
         file_urls: fileUrls,
+        status: 'pending'
       })
 
     if (insertError) {
-      console.error('Teklif kayıt hatası:', insertError)
+      console.error("Teklif kayıt hatası:", insertError.message, insertError.details, insertError.hint);
       throw new Error('Teklif kaydedilemedi. Lütfen tekrar deneyin.')
     }
 

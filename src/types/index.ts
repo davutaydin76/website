@@ -75,7 +75,7 @@ export interface Client {
   id: string
   name: string
   logo_url: string
-  website_url: string | null
+  website: string | null
   sort_order: number
   is_active: boolean
   created_at: string

@@ -40,7 +40,14 @@
     "videos": "Video",
     "all": "Tümü",
     "noItems": "Henüz içerik bulunmuyor",
-    "loadMore": "Daha Fazla"
+    "loadMore": "Daha Fazla",
+    "categories": {
+      "torna": "CNC Torna",
+      "freze": "CNC Freze",
+      "kaynak": "Kaynak & İmalat",
+      "genel": "Genel / Atölye",
+      "all": "Tümü"
+    }
   },
   "offer": {
     "title": "Hızlı Teklif Al",

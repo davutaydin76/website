@@ -178,7 +178,18 @@ export async function fetchOffers(): Promise<Offer[]> {
       .select('*')
       .order('created_at', { ascending: false })
     if (error) console.error('[content] fetchOffers:', error.message)
-    return data || []
+    const mapped = (data || []).map((row: any) => ({
+      id: row.id,
+      full_name: row.contact_name,
+      company: row.company_name,
+      phone: row.phone,
+      email: row.email,
+      description: row.message,
+      file_urls: row.file_urls,
+      status: row.status,
+      created_at: row.created_at,
+    }))
+    return mapped
   } catch (err) {
     console.error('[content] fetchOffers beklenmeyen hata:', err)
     return []

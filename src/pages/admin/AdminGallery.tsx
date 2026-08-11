@@ -141,7 +141,19 @@ export default function AdminGallery() {
             {uploading && <p className="text-xs text-muted mt-1 animate-pulse">Yükleniyor...</p>}
           </div>
 
-          <Input label="Kategori" value={editing.category || ''} onChange={(e) => setEditing({ ...editing, category: e.target.value })} />
+          <div>
+            <label className="block text-sm font-medium mb-1.5">Kategori</label>
+            <select
+              value={editing.category || 'genel'}
+              onChange={(e) => setEditing({ ...editing, category: e.target.value })}
+              className="w-full px-3 py-2 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-sm focus:outline-none focus:ring-1 focus:ring-accent"
+            >
+              <option value="torna">CNC Torna (torna)</option>
+              <option value="freze">CNC Freze (freze)</option>
+              <option value="kaynak">Kaynak & İmalat (kaynak)</option>
+              <option value="genel">Genel / Atölye (genel)</option>
+            </select>
+          </div>
           <Input label="Sıra" type="number" value={editing.sort_order ?? 0} onChange={(e) => setEditing({ ...editing, sort_order: Number(e.target.value) })} />
           <div className="flex gap-2">
             <Button onClick={save} disabled={uploading}>{t('admin.save')}</Button>

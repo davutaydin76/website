@@ -40,7 +40,14 @@
     "videos": "Videos",
     "all": "All",
     "noItems": "No content yet",
-    "loadMore": "Load More"
+    "loadMore": "Load More",
+    "categories": {
+      "torna": "CNC Lathe",
+      "freze": "CNC Milling",
+      "kaynak": "Welding & Production",
+      "genel": "General / Workshop",
+      "all": "All"
+    }
   },
   "offer": {
     "title": "Quick Quote",

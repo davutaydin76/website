@@ -85,10 +85,10 @@ export function isValidFileExtension(fileName: string): boolean {
 
 export const GALLERY_CATEGORIES = [
   { id: 'all', tr: 'Tümü', en: 'All' },
-  { id: 'cnc', tr: 'CNC İşleme', en: 'CNC Machining' },
-  { id: 'welding', tr: 'Kaynak', en: 'Welding' },
-  { id: 'production', tr: 'Üretim', en: 'Production' },
-  { id: 'general', tr: 'Genel', en: 'General' },
+  { id: 'torna', tr: 'CNC Torna', en: 'CNC Lathe' },
+  { id: 'freze', tr: 'CNC Freze', en: 'CNC Milling' },
+  { id: 'kaynak', tr: 'Kaynak & İmalat', en: 'Welding & Production' },
+  { id: 'genel', tr: 'Genel / Atölye', en: 'General / Workshop' },
 ] as const
 
 export function debounce<T extends (...args: Parameters<T>) => void>(
