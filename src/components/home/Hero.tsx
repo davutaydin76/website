@@ -39,14 +39,16 @@ export default function Hero({ content }: HeroProps) {
           loop
           playsInline
           className="w-full h-full object-cover"
-          poster={content?.image_url || undefined}
+          // Hero videosu LCP öğesi — eager + yüksek fetchpriority
+          preload="metadata"
+          poster={content?.image_url || '/images/factory-exterior.jpg'}
         >
           <source src={videoUrl} type="video/mp4" />
         </video>
         <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/80" />
       </div>
 
-      <div className="relative z-10 container-max mx-auto px-4 sm:px-6 lg:px-8 text-center text-white pt-20">
+      <div className="relative z-10 container-max mx-auto px-4 sm:px-6 lg:px-8 text-center text-white pt-20 pb-24">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -79,17 +81,17 @@ export default function Hero({ content }: HeroProps) {
             </a>
           </div>
         </motion.div>
-
-        <motion.div
-          className="absolute bottom-8 left-1/2 -translate-x-1/2"
-          animate={{ y: [0, 8, 0] }}
-          transition={{ duration: 2, repeat: Infinity }}
-        >
-          <a href="#services" aria-label="Scroll down">
-            <ChevronDown className="w-6 h-6 text-white/60" />
-          </a>
-        </motion.div>
       </div>
+
+      <motion.div
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10"
+        animate={{ y: [0, 8, 0] }}
+        transition={{ duration: 2, repeat: Infinity }}
+      >
+        <a href="#services" aria-label="Aşağı kaydır">
+          <ChevronDown className="w-6 h-6 text-white/60" />
+        </a>
+      </motion.div>
     </section>
   )
 }

@@ -51,7 +51,7 @@ export default function Services({ services }: ServicesProps) {
           <p className="text-muted text-lg max-w-2xl mx-auto">{t('services.subtitle')}</p>
         </motion.div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {items.map((service, i) => {
             const Icon = iconMap[service.icon] || Cog
             const title = 'id' in service

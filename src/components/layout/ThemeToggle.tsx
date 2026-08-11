@@ -1,5 +1,6 @@
 import { Sun, Moon, Monitor } from 'lucide-react'
 import { useTheme } from '@/contexts/ThemeContext'
+import { cn } from '@/lib/utils'
 import type { Theme } from '@/types'
 
 const icons: Record<Theme, typeof Sun> = {
@@ -10,7 +11,11 @@ const icons: Record<Theme, typeof Sun> = {
 
 const cycle: Theme[] = ['light', 'dark', 'system']
 
-export default function ThemeToggle() {
+interface ThemeToggleProps {
+  variant?: 'default' | 'light'
+}
+
+export default function ThemeToggle({ variant = 'default' }: ThemeToggleProps) {
   const { theme, setTheme } = useTheme()
 
   const next = () => {
@@ -23,7 +28,12 @@ export default function ThemeToggle() {
   return (
     <button
       onClick={next}
-      className="p-2 rounded-full hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+      className={cn(
+        'p-2 rounded-full transition-colors',
+        variant === 'light'
+          ? 'text-white/80 hover:text-white hover:bg-white/10'
+          : 'hover:bg-neutral-100 dark:hover:bg-neutral-800'
+      )}
       aria-label="Toggle theme"
     >
       <Icon className="w-5 h-5" />

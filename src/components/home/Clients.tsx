@@ -15,14 +15,7 @@ export default function Clients({ clients }: ClientsProps) {
         <div className="container-max mx-auto text-center">
           <h2 className="heading-lg mb-4">{t('clients.title')}</h2>
           <p className="text-muted">{t('clients.subtitle')}</p>
-          <div className="mt-12 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8">
-            {Array.from({ length: 6 }).map((_, i) => (
-              <div
-                key={i}
-                className="h-16 rounded-xl bg-neutral-100 dark:bg-neutral-800 animate-pulse"
-              />
-            ))}
-          </div>
+          <p className="text-sm text-muted mt-6">{t('clients.empty')}</p>
         </div>
       </section>
     )

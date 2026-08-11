@@ -1,7 +1,40 @@
 import type { Language } from '@/types'
+import { supabase } from '@/lib/supabase'
 
 export function cn(...classes: (string | boolean | undefined | null)[]): string {
   return classes.filter(Boolean).join(' ')
+}
+
+export function mapAuthError(message: string): string {
+  const normalized = message.toLowerCase()
+
+  if (normalized.includes('invalid login credentials')) {
+    return 'E-posta veya şifre hatalı.'
+  }
+  if (normalized.includes('email not confirmed')) {
+    return 'E-posta adresiniz henüz doğrulanmamış. Supabase panelinden kullanıcıyı onaylayın.'
+  }
+  if (normalized.includes('too many requests') || normalized.includes('over_request_rate_limit')) {
+    return 'Çok fazla deneme yapıldı. Lütfen birkaç dakika bekleyip tekrar deneyin.'
+  }
+  if (normalized.includes('user not found')) {
+    return 'Bu e-posta ile kayıtlı kullanıcı bulunamadı.'
+  }
+  if (normalized.includes('signup_disabled')) {
+    return 'Yeni kayıt oluşturma şu anda devre dışı.'
+  }
+  if (normalized.includes('user_banned') || normalized.includes('banned')) {
+    return 'Bu hesap erişime kapatılmıştır.'
+  }
+  if (normalized.includes('session_not_found') || normalized.includes('session expired')) {
+    return 'Oturumunuz sona erdi. Lütfen tekrar giriş yapın.'
+  }
+  if (normalized.includes('network') || normalized.includes('fetch')) {
+    return 'Bağlantı hatası. İnternet bağlantınızı kontrol edin.'
+  }
+
+  // Teknik prefix'leri temizle (örn. "AuthApiError: ...")
+  return message.replace(/^[A-Za-z]+Error:\s*/i, '')
 }
 
 export function getLocalizedField(
@@ -64,7 +97,6 @@ export async function uploadFile(
   path: string,
   file: File
 ): Promise<string | null> {
-  const { supabase } = await import('@/lib/supabase')
   const { error } = await supabase.storage.from(bucket).upload(path, file, {
     cacheControl: '3600',
     upsert: false,
@@ -81,7 +113,6 @@ export async function uploadFile(
 }
 
 export async function getFileUrl(storedPath: string): Promise<string> {
-  const { supabase } = await import('@/lib/supabase')
   if (storedPath.startsWith('documents/')) {
     const relativePath = storedPath.replace('documents/', '')
     const { data } = await supabase.storage

@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { motion } from 'framer-motion'
 import SEO from '@/components/seo/SEO'
+import { SkeletonGalleryItem, SkeletonVideoItem } from '@/components/ui/Skeleton'
 import { fetchGallery, fetchVideos, fetchSeo } from '@/services/content'
 import { GALLERY_CATEGORIES, getLocalizedField } from '@/lib/utils'
 import type { GalleryItem, VideoItem, SeoSettings } from '@/types'
@@ -37,7 +38,15 @@ export default function GalleryPage() {
     loadData()
   }, [loadData])
 
-  const items = tab === 'photos' ? gallery : videos
+  const defaultPhotos = [
+    { id: 'f-1', image_url: '/images/factory-exterior.jpg', title_tr: 'Aydın Torna Dış Görünüm', title_en: 'Aydın Torna Exterior View', category: 'general' },
+    { id: 'f-2', image_url: '/images/long-lathe.jpg', title_tr: '7.5 Metre CNC Torna Tezgahı', title_en: '7.5m CNC Lathe Machine', category: 'cnc' },
+    { id: 'f-3', image_url: '/images/lathe-workpiece.jpg', title_tr: 'Ağır Sanayi CNC Torna İmalatı', title_en: 'Heavy Duty CNC Lathe Production', category: 'cnc' },
+    { id: 'f-4', image_url: '/images/lathe-chuck.jpg', title_tr: 'Hassas Torna İşleme Aşaması', title_en: 'Precision Lathe Machining Stage', category: 'cnc' }
+  ]
+
+  const displayPhotos = gallery.length > 0 ? gallery : defaultPhotos
+  const items = tab === 'photos' ? displayPhotos : videos
   const visibleItems = items.slice(0, page * ITEMS_PER_PAGE)
   const hasMore = visibleItems.length < items.length
 
@@ -81,7 +90,7 @@ export default function GalleryPage() {
                   className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
                     category === cat.id
                       ? 'bg-accent text-white'
-                      : 'bg-neutral-100 dark:bg-neutral-800 text-muted'
+                      : 'bg-neutral-100 dark:bg-neutral-800 text-muted hover:bg-neutral-200 dark:hover:bg-neutral-700'
                   }`}
                 >
                   {lang === 'tr' ? cat.tr : cat.en}
@@ -90,10 +99,21 @@ export default function GalleryPage() {
             </div>
           </div>
 
+          {/* Skeleton loading state */}
           {loading ? (
-            <div className="flex justify-center py-20">
-              <div className="w-8 h-8 border-2 border-accent border-t-transparent rounded-full animate-spin" />
-            </div>
+            tab === 'photos' ? (
+              <div className="columns-1 sm:columns-2 lg:columns-3 gap-4 space-y-4">
+                {Array.from({ length: 9 }).map((_, i) => (
+                  <SkeletonGalleryItem key={i} />
+                ))}
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {Array.from({ length: 6 }).map((_, i) => (
+                  <SkeletonVideoItem key={i} />
+                ))}
+              </div>
+            )
           ) : items.length === 0 ? (
             <p className="text-center text-muted py-20">{t('gallery.noItems')}</p>
           ) : tab === 'photos' ? (
@@ -108,13 +128,17 @@ export default function GalleryPage() {
                     transition={{ delay: (i % ITEMS_PER_PAGE) * 0.03 }}
                     className="break-inside-avoid"
                   >
-                    <img
-                      src={photo.image_url}
-                      alt={getLocalizedField(photo, 'title', lang) || 'Gallery'}
-                      className="w-full rounded-2xl object-cover"
-                      loading="lazy"
-                      decoding="async"
-                    />
+                    <div className="relative overflow-hidden rounded-2xl bg-neutral-100 dark:bg-neutral-800">
+                      <img
+                        src={photo.image_url}
+                        alt={getLocalizedField(photo, 'title', lang) || 'Galeri görseli'}
+                        className="w-full h-auto object-cover"
+                        loading="lazy"
+                        decoding="async"
+                        width={600}
+                        height={400}
+                      />
+                    </div>
                   </motion.div>
                 )
               })}
@@ -144,7 +168,7 @@ export default function GalleryPage() {
             </div>
           )}
 
-          {hasMore && (
+          {hasMore && !loading && (
             <div className="text-center mt-10">
               <button
                 onClick={() => setPage((p) => p + 1)}

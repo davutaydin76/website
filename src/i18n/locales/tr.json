@@ -23,7 +23,8 @@
   },
   "clients": {
     "title": "Aktif Müşteriler",
-    "subtitle": "Güvenilir iş ortaklarımız"
+    "subtitle": "Güvenilir iş ortaklarımız",
+    "empty": "Müşteri logoları yakında eklenecek."
   },
   "counters": {
     "projects": "Tamamlanan Proje",
@@ -52,7 +53,11 @@
     "submit": "Teklif Gönder",
     "submitting": "Gönderiliyor...",
     "success": "Teklifiniz başarıyla gönderildi. En kısa sürede size dönüş yapacağız.",
-    "error": "Bir hata oluştu. Lütfen tekrar deneyin."
+    "successTitle": "Talebiniz alındı!",
+    "successMessage": "En kısa sürede size dönüş yapacağız.",
+    "errorTitle": "Gönderim başarısız",
+    "error": "Bir hata oluştu. Lütfen tekrar deneyin.",
+    "newRequest": "Yeni Talep Oluştur"
   },
   "contact": {
     "title": "İletişim",
@@ -76,6 +81,8 @@
     "email": "E-posta",
     "password": "Şifre",
     "loginButton": "Giriş Yap",
+    "loginError": "Giriş yapılamadı. Bilgilerinizi kontrol edin.",
+    "noAdminAccess": "Bu hesabın admin yetkisi yok.",
     "logout": "Çıkış",
     "dashboard": "Panel",
     "hero": "Hero İçerik",

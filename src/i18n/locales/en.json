@@ -23,7 +23,8 @@
   },
   "clients": {
     "title": "Active Clients",
-    "subtitle": "Our trusted business partners"
+    "subtitle": "Our trusted business partners",
+    "empty": "Client logos will be added soon."
   },
   "counters": {
     "projects": "Completed Projects",
@@ -52,7 +53,11 @@
     "submit": "Submit Quote",
     "submitting": "Submitting...",
     "success": "Your quote has been submitted successfully. We will get back to you shortly.",
-    "error": "An error occurred. Please try again."
+    "successTitle": "Request received!",
+    "successMessage": "We will get back to you as soon as possible.",
+    "errorTitle": "Submission failed",
+    "error": "An error occurred. Please try again.",
+    "newRequest": "Submit Another Request"
   },
   "contact": {
     "title": "Contact",

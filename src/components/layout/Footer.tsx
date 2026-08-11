@@ -12,9 +12,11 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
           <div>
             <div className="flex items-center gap-2 mb-4">
-              <div className="w-8 h-8 rounded-lg bg-neutral-900 dark:bg-white flex items-center justify-center">
-                <div className="w-3 h-3 rounded-full bg-accent" />
-              </div>
+              <img
+                src="/logo.png"
+                alt="Aydın Torna CNC Logo"
+                className="w-8 h-8 rounded-lg object-contain bg-black dark:bg-transparent"
+              />
               <span className="font-semibold text-lg">Aydın Torna CNC</span>
             </div>
             <p className="text-sm text-muted max-w-xs">{t('footer.description')}</p>

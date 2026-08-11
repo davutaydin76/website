@@ -55,8 +55,10 @@ Supabase Dashboard → SQL Editor → `supabase/schema.sql` dosyasını çalış
 
 ### 4. Admin kullanıcısı oluşturun
 
-1. Supabase Dashboard → Authentication → Users → Add user
-2. SQL Editor'de admin profili ekleyin:
+1. Supabase Dashboard → Authentication → Users → **Add user**
+   - E-posta ve şifre girin
+   - **Auto Confirm User** seçeneğini işaretleyin (önemli!)
+2. SQL Editor'de `supabase/setup-admin.sql` dosyasındaki sorguyu çalıştırın (UUID'yi güncelleyin)
 
 ```sql
 INSERT INTO admin_profiles (id, email, role)

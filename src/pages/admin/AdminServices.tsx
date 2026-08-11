@@ -6,6 +6,7 @@ import Input from '@/components/ui/Input'
 import Textarea from '@/components/ui/Textarea'
 import Button from '@/components/ui/Button'
 import Card from '@/components/ui/Card'
+import { useToast } from '@/contexts/ToastContext'
 import type { Service } from '@/types'
 
 const emptyService: Partial<Service> = {
@@ -14,30 +15,45 @@ const emptyService: Partial<Service> = {
 
 export default function AdminServices() {
   const { t } = useTranslation()
+  const { success, error: toastError } = useToast()
   const [items, setItems] = useState<Service[]>([])
   const [editing, setEditing] = useState<Partial<Service> | null>(null)
+  const [loading, setLoading] = useState(true)
 
-  const load = () => {
-    supabase.from('services').select('*').order('sort_order').then(({ data }) => setItems(data || []))
+  const load = async () => {
+    const { data, error } = await supabase.from('services').select('*').order('sort_order')
+    if (error) console.error('[AdminServices] load:', error.message)
+    setItems(data || [])
+    setLoading(false)
   }
 
   useEffect(() => { load() }, [])
 
   const save = async () => {
     if (!editing) return
-    if (editing.id) {
-      await supabase.from('services').update(editing).eq('id', editing.id)
-    } else {
-      await supabase.from('services').insert(editing)
+    try {
+      const { error } = editing.id
+        ? await supabase.from('services').update(editing).eq('id', editing.id)
+        : await supabase.from('services').insert(editing)
+      if (error) throw error
+      success(t('admin.saved'))
+      setEditing(null)
+      load()
+    } catch (err) {
+      toastError('Kayıt başarısız', err instanceof Error ? err.message : 'Hata oluştu')
     }
-    setEditing(null)
-    load()
   }
 
   const remove = async (id: string) => {
     if (!confirm(t('admin.confirmDelete'))) return
-    await supabase.from('services').delete().eq('id', id)
-    load()
+    try {
+      const { error } = await supabase.from('services').delete().eq('id', id)
+      if (error) throw error
+      success('Hizmet silindi.')
+      load()
+    } catch (err) {
+      toastError('Silme başarısız', err instanceof Error ? err.message : 'Hata oluştu')
+    }
   }
 
   return (
@@ -59,7 +75,7 @@ export default function AdminServices() {
             <Textarea label="Açıklama (TR)" value={editing.description_tr || ''} onChange={(e) => setEditing({ ...editing, description_tr: e.target.value })} />
             <Textarea label="Description (EN)" value={editing.description_en || ''} onChange={(e) => setEditing({ ...editing, description_en: e.target.value })} />
           </div>
-          <Input label="Icon" value={editing.icon || ''} onChange={(e) => setEditing({ ...editing, icon: e.target.value })} />
+          <Input label="Icon (lucide adı)" value={editing.icon || ''} onChange={(e) => setEditing({ ...editing, icon: e.target.value })} />
           <Input label="Sıra" type="number" value={editing.sort_order ?? 0} onChange={(e) => setEditing({ ...editing, sort_order: Number(e.target.value) })} />
           <div className="flex gap-2">
             <Button onClick={save}>{t('admin.save')}</Button>
@@ -68,24 +84,34 @@ export default function AdminServices() {
         </Card>
       )}
 
-      <div className="space-y-3">
-        {items.map((item) => (
-          <Card key={item.id} className="flex items-center justify-between">
-            <div>
-              <p className="font-medium">{item.title_tr}</p>
-              <p className="text-sm text-muted">{item.title_en}</p>
-            </div>
-            <div className="flex gap-2">
-              <button onClick={() => setEditing(item)} className="p-2 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-lg">
-                <Pencil className="w-4 h-4" />
-              </button>
-              <button onClick={() => remove(item.id)} className="p-2 hover:bg-red-50 dark:hover:bg-red-950/20 rounded-lg text-red-500">
-                <Trash2 className="w-4 h-4" />
-              </button>
-            </div>
-          </Card>
-        ))}
-      </div>
+      {loading ? (
+        <div className="space-y-3">
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="h-16 rounded-2xl bg-neutral-100 dark:bg-neutral-800 animate-pulse" />
+          ))}
+        </div>
+      ) : items.length === 0 ? (
+        <p className="text-muted text-center py-12">Henüz hizmet eklenmemiş.</p>
+      ) : (
+        <div className="space-y-3">
+          {items.map((item) => (
+            <Card key={item.id} className="flex items-center justify-between">
+              <div className="min-w-0">
+                <p className="font-medium truncate">{item.title_tr}</p>
+                <p className="text-sm text-muted truncate">{item.title_en}</p>
+              </div>
+              <div className="flex gap-2 flex-shrink-0">
+                <button onClick={() => setEditing(item)} aria-label="Düzenle" className="p-2 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-lg transition-colors">
+                  <Pencil className="w-4 h-4" />
+                </button>
+                <button onClick={() => remove(item.id)} aria-label="Sil" className="p-2 hover:bg-red-50 dark:hover:bg-red-950/20 rounded-lg text-red-500 transition-colors">
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              </div>
+            </Card>
+          ))}
+        </div>
+      )}
     </div>
   )
 }

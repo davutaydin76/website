@@ -10,19 +10,35 @@ export interface OfferFormData {
   files?: File[]
 }
 
-export async function submitOffer(data: OfferFormData): Promise<{ success: boolean; error?: string }> {
-  try {
-    const fileUrls: string[] = []
+export interface OfferResult {
+  success: boolean
+  error?: string
+}
 
+/**
+ * Teklif gönderir:
+ * 1. Dosyaları Supabase Storage 'documents' bucket'ına yükler
+ * 2. Teklif kaydını 'offers' tablosuna ekler
+ * 3. Edge Function aracılığıyla e-posta bildirimi gönderir
+ */
+export async function submitOffer(data: OfferFormData): Promise<OfferResult> {
+  try {
+    // 1. Dosya yükleme
+    const fileUrls: string[] = []
     if (data.files?.length) {
       for (const file of data.files) {
-        const path = `offers/${Date.now()}-${file.name}`
+        const path = `offers/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g, '_')}`
         const url = await uploadFile('documents', path, file)
-        if (url) fileUrls.push(url)
+        if (url) {
+          fileUrls.push(url)
+        } else {
+          console.warn(`Dosya yüklenemedi: ${file.name}`)
+        }
       }
     }
 
-    const { error } = await supabase
+    // 2. Veritabanına kaydet
+    const { error: insertError } = await supabase
       .from('offers')
       .insert({
         full_name: data.full_name,
@@ -32,11 +48,13 @@ export async function submitOffer(data: OfferFormData): Promise<{ success: boole
         description: data.description || null,
         file_urls: fileUrls,
       })
-      .select()
-      .single()
 
-    if (error) throw error
+    if (insertError) {
+      console.error('Teklif kayıt hatası:', insertError)
+      throw new Error('Teklif kaydedilemedi. Lütfen tekrar deneyin.')
+    }
 
+    // 3. E-posta bildirimi (hata oluşsa bile kayıt başarılı sayılır)
     await sendOfferNotification({
       full_name: data.full_name,
       company: data.company,
@@ -48,7 +66,10 @@ export async function submitOffer(data: OfferFormData): Promise<{ success: boole
 
     return { success: true }
   } catch (err) {
-    const message = err instanceof Error ? err.message : 'Unknown error'
+    const message =
+      err instanceof Error
+        ? err.message
+        : 'Bilinmeyen bir hata oluştu. Lütfen daha sonra tekrar deneyin.'
     return { success: false, error: message }
   }
 }
@@ -60,13 +81,16 @@ async function sendOfferNotification(payload: {
   email: string
   description?: string
   file_urls?: string[]
-}) {
+}): Promise<void> {
   try {
     const { error } = await supabase.functions.invoke('send-offer-email', {
       body: payload,
     })
-    if (error) console.error('Email notification error:', error)
+    if (error) {
+      // E-posta hatası kritik değil — teklif zaten kaydedildi
+      console.error('E-posta bildirimi gönderilemedi:', error.message)
+    }
   } catch (err) {
-    console.error('Failed to send email notification:', err)
+    console.error('Edge Function çağrısı başarısız:', err)
   }
 }

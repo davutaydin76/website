@@ -3,6 +3,8 @@ import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import { ThemeProvider } from '@/contexts/ThemeContext'
 import { AuthProvider } from '@/contexts/AuthContext'
+import { ToastProvider } from '@/contexts/ToastContext'
+import ToastContainer from '@/components/ui/Toast'
 import App from '@/App'
 import '@/i18n'
 import '@/index.css'
@@ -15,15 +17,18 @@ createRoot(root).render(
     <BrowserRouter>
       <ThemeProvider>
         <AuthProvider>
-          <Suspense
-            fallback={
-              <div className="min-h-screen flex items-center justify-center">
-                <div className="w-8 h-8 border-2 border-accent border-t-transparent rounded-full animate-spin" />
-              </div>
-            }
-          >
-            <App />
-          </Suspense>
+          <ToastProvider>
+            <Suspense
+              fallback={
+                <div className="min-h-screen flex items-center justify-center bg-white dark:bg-surface-dark">
+                  <div className="w-8 h-8 border-2 border-accent border-t-transparent rounded-full animate-spin" />
+                </div>
+              }
+            >
+              <App />
+            </Suspense>
+            <ToastContainer />
+          </ToastProvider>
         </AuthProvider>
       </ThemeProvider>
     </BrowserRouter>
