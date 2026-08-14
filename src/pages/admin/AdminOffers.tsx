@@ -95,14 +95,14 @@ export default function AdminOffers() {
   }
 
   return (
-    <div className="w-full min-h-screen p-6 overflow-x-auto space-y-6">
+    <div className="w-full min-h-screen p-4 md:p-8 space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="heading-md">{t('admin.offers')}</h1>
       </div>
 
-      <div className="flex flex-col md:flex-row gap-6 items-start w-full">
+      <div className="flex flex-col lg:flex-row gap-6 items-start w-full">
         {/* Teklif listesi tablosu */}
-        <div className={`transition-all duration-300 \${selected ? 'flex-1 min-w-0' : 'w-full'}`}>
+        <div className="flex-1 w-full min-w-0 overflow-hidden">
           <Card className="p-0 overflow-hidden border border-neutral-200 dark:border-neutral-800">
             {loading ? (
               <div className="p-8 space-y-4">
@@ -178,7 +178,7 @@ export default function AdminOffers() {
 
         {/* Teklif detay kartı */}
         {selected && (
-          <Card className="w-full md:w-2/3 sticky top-6 border border-neutral-200 dark:border-neutral-800 flex flex-col gap-4">
+          <Card className="w-full lg:w-[450px] shrink-0 sticky top-6 border border-neutral-200 dark:border-neutral-800 flex flex-col gap-4">
             <div className="flex items-center justify-between border-b border-neutral-100 dark:border-neutral-800 pb-3">
               <div>
                 <h3 className="font-semibold text-lg text-neutral-900 dark:text-white">{selected.full_name}</h3>
@@ -202,13 +202,13 @@ export default function AdminOffers() {
               <div className="grid grid-cols-1 gap-3 bg-neutral-50 dark:bg-neutral-900/50 p-4 rounded-xl">
                 <div>
                   <span className="block text-xs text-muted font-medium uppercase mb-0.5">Telefon</span>
-                  <a href={`tel:${selected.phone}`} className="font-medium text-accent hover:underline">
+                  <a href={`tel:${selected.phone}`} className="font-medium text-accent hover:underline break-all">
                     {selected.phone}
                   </a>
                 </div>
                 <div>
                   <span className="block text-xs text-muted font-medium uppercase mb-0.5">E-posta</span>
-                  <a href={`mailto:${selected.email}`} className="font-medium text-accent hover:underline">
+                  <a href={`mailto:${selected.email}`} className="font-medium text-accent hover:underline break-all">
                     {selected.email}
                   </a>
                 </div>
@@ -216,7 +216,7 @@ export default function AdminOffers() {
 
               <div>
                 <span className="block text-xs text-muted font-medium uppercase mb-1">Açıklama / Mesaj</span>
-                <p className="p-3 bg-neutral-50 dark:bg-neutral-900/50 rounded-xl whitespace-pre-wrap leading-relaxed">
+                <p className="p-3 bg-neutral-50 dark:bg-neutral-900/50 rounded-xl whitespace-pre-wrap break-words leading-relaxed">
                   {selected.description || 'Açıklama belirtilmemiş.'}
                 </p>
               </div>
@@ -232,9 +232,9 @@ export default function AdminOffers() {
                           href={file.url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex items-center justify-between gap-2 p-2 rounded-lg bg-white dark:bg-neutral-800 hover:ring-1 hover:ring-accent transition-all text-xs font-medium text-neutral-800 dark:text-neutral-200"
+                          className="flex items-center justify-between gap-2 p-2 rounded-lg bg-white dark:bg-neutral-800 hover:ring-1 hover:ring-accent transition-all text-xs font-medium text-neutral-800 dark:text-neutral-200 overflow-hidden"
                         >
-                          <span className="truncate flex-1 pr-2">{file.name}</span>
+                          <span className="truncate break-all min-w-0 flex-1 pr-2">{file.name}</span>
                           <ExternalLink className="w-3.5 h-3.5 text-accent flex-shrink-0" />
                         </a>
                       ))
@@ -248,7 +248,7 @@ export default function AdminOffers() {
 
             <div className="border-t border-neutral-100 dark:border-neutral-800 pt-4 mt-2">
               <span className="block text-xs text-muted font-medium uppercase mb-2">Durumu Güncelle</span>
-              <div className="flex flex-wrap gap-1.5">
+              <div className="grid grid-cols-2 gap-2">
                 {(['pending', 'reviewed', 'completed', 'rejected'] as const).map((status) => (
                   <Button
                     key={status}
@@ -256,6 +256,7 @@ export default function AdminOffers() {
                     variant={selected.status === status ? 'secondary' : 'outline'}
                     onClick={() => handleStatus(selected.id, status)}
                     disabled={updating}
+                    className="whitespace-nowrap w-full"
                   >
                     {t(`admin.${status}`)}
                   </Button>
