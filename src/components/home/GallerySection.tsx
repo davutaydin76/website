@@ -22,10 +22,10 @@ export default function GallerySection({ gallery = [], videos = [], loading = fa
   const [selectedPhoto, setSelectedPhoto] = useState<GalleryItem | null>(null)
 
   const defaultPhotos = [
-    { id: 'f-1', image_url: '/images/factory-exterior.jpg', title_tr: 'Aydın Torna Dış Görünüm', title_en: 'Aydın Torna Exterior View', category: 'general' },
-    { id: 'f-2', image_url: '/images/long-lathe.jpg', title_tr: '7.5 Metre CNC Torna Tezgahı', title_en: '7.5m CNC Lathe Machine', category: 'cnc' },
-    { id: 'f-3', image_url: '/images/lathe-workpiece.jpg', title_tr: 'Ağır Sanayi CNC Torna İmalatı', title_en: 'Heavy Duty CNC Lathe Production', category: 'cnc' },
-    { id: 'f-4', image_url: '/images/lathe-chuck.jpg', title_tr: 'Hassas Torna İşleme Aşaması', title_en: 'Precision Lathe Machining Stage', category: 'cnc' }
+    { id: 'f-1', image_url: '/images/factory-exterior.jpg', title_tr: 'Aydın Torna Dış Görünüm', title_en: 'Aydın Torna Exterior View', category: 'genel' },
+    { id: 'f-2', image_url: '/images/long-lathe.jpg', title_tr: '7.5 Metre CNC Torna Tezgahı', title_en: '7.5m CNC Lathe Machine', category: 'torna' },
+    { id: 'f-3', image_url: '/images/lathe-workpiece.jpg', title_tr: 'Ağır Sanayi CNC Torna İmalatı', title_en: 'Heavy Duty CNC Lathe Production', category: 'torna' },
+    { id: 'f-4', image_url: '/images/lathe-chuck.jpg', title_tr: 'Hassas Torna İşleme Aşaması', title_en: 'Precision Lathe Machining Stage', category: 'torna' }
   ]
 
   const filteredPhotos = category === 'all'
@@ -163,7 +163,7 @@ export default function GallerySection({ gallery = [], videos = [], loading = fa
                     height={360}
                   />
                 ) : (
-                  <video src={item.video_url} className="w-full h-full object-cover" muted preload="none" />
+                  <video src={item.video_url} className="w-full h-full object-cover" autoPlay muted loop playsInline preload="metadata" />
                 )}
                 <a
                   href={item.video_url}

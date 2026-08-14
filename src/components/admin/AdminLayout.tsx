@@ -138,7 +138,7 @@ export default function AdminLayout() {
             <span className="font-semibold text-sm">Admin Panel</span>
           </div>
 
-          <div className="p-4 sm:p-6 lg:p-8 max-w-6xl">
+          <div className="p-4 sm:p-6 lg:p-8 w-full">
             <Outlet />
           </div>
         </main>

@@ -13,6 +13,7 @@ export interface HeroContent {
   subtitle_en: string | null
   video_url: string | null
   image_url: string | null
+  background_image: string | null
   cta_primary_tr: string
   cta_primary_en: string
   cta_secondary_tr: string
@@ -40,6 +41,7 @@ export interface Machine {
   name_en: string
   description_tr: string | null
   description_en: string | null
+  category: 'torna' | 'freze' | 'kaynak' | 'diger' | string
   specs: Record<string, string>
   image_url: string | null
   sort_order: number

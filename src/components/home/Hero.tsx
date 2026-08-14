@@ -22,18 +22,22 @@ export default function Hero({ content }: HeroProps) {
   const videoUrl = content?.video_url ||
     'https://assets.mixkit.co/videos/preview/mixkit-close-up-of-a-cnc-machine-cutting-metal-4933-large.mp4'
 
+  const backgroundImage = content?.background_image || '/images/factory-exterior.jpg'
+
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      <div className="absolute inset-0 z-0">
+      <div
+        className="absolute inset-0 z-0"
+        style={!content?.video_url ? { backgroundImage: `url(${backgroundImage})`, backgroundSize: 'cover', backgroundPosition: 'center' } : undefined}
+      >
         <video
           autoPlay
           muted
           loop
           playsInline
           className="w-full h-full object-cover"
-          // Hero videosu LCP öğesi — eager + yüksek fetchpriority
           preload="metadata"
-          poster={content?.image_url || '/images/factory-exterior.jpg'}
+          poster={content?.image_url || backgroundImage}
         >
           <source src={videoUrl} type="video/mp4" />
         </video>

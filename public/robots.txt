@@ -1,5 +1,24 @@
+# Aydın Torna CNC - https://aydintornacnc.com.tr
+# Robots.txt
+
 User-agent: *
 Allow: /
 Disallow: /admin/
+Disallow: /admin/login
+Disallow: /api/
 
+# Kötü niyetli botları engelle
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Crawl-delay: 10
+
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /
+
+# Sitemap
 Sitemap: https://aydintornacnc.com.tr/sitemap.xml
