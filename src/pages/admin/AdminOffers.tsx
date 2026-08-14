@@ -95,14 +95,14 @@ export default function AdminOffers() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="w-full min-h-screen p-6 overflow-x-auto space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="heading-md">{t('admin.offers')}</h1>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+      <div className="flex flex-col md:flex-row gap-6 items-start w-full">
         {/* Teklif listesi tablosu */}
-        <div className={`lg:col-span-${selected ? '2' : '3'} transition-all duration-300`}>
+        <div className={`transition-all duration-300 \${selected ? 'flex-1 min-w-0' : 'w-full'}`}>
           <Card className="p-0 overflow-hidden border border-neutral-200 dark:border-neutral-800">
             {loading ? (
               <div className="p-8 space-y-4">
@@ -117,7 +117,7 @@ export default function AdminOffers() {
               </div>
             ) : (
               <div className="overflow-x-auto">
-                <table className="w-full border-collapse text-left text-sm">
+                <table className="w-full table-auto min-w-[800px] border-collapse text-left text-sm">
                   <thead>
                     <tr className="bg-neutral-50 dark:bg-neutral-900 border-b border-neutral-200 dark:border-neutral-800 text-neutral-500 font-semibold">
                       <th className="p-4 whitespace-nowrap">Tarih</th>
@@ -178,7 +178,7 @@ export default function AdminOffers() {
 
         {/* Teklif detay kartı */}
         {selected && (
-          <Card className="sticky top-6 border border-neutral-200 dark:border-neutral-800 flex flex-col gap-4">
+          <Card className="w-full md:w-2/3 sticky top-6 border border-neutral-200 dark:border-neutral-800 flex flex-col gap-4">
             <div className="flex items-center justify-between border-b border-neutral-100 dark:border-neutral-800 pb-3">
               <div>
                 <h3 className="font-semibold text-lg text-neutral-900 dark:text-white">{selected.full_name}</h3>

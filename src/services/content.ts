@@ -48,11 +48,13 @@ export async function fetchServices(): Promise<Service[]> {
 
 export async function fetchMachines(): Promise<Machine[]> {
   try {
-    const { data, error } = await supabase
-      .from('machines')
-      .select('*')
-      .eq('is_active', true)
-      .order('sort_order')
+    const { data, error } = await Promise.resolve(
+      supabase
+        .from('machines')
+        .select('*')
+        .eq('is_active', true)
+        .order('sort_order')
+    ).catch(() => ({ data: [], error: null }))
     if (error) console.error('[content] fetchMachines:', error.message)
     return data || []
   } catch (err) {

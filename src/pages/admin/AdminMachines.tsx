@@ -23,13 +23,26 @@ export default function AdminMachines() {
   const [loading, setLoading] = useState(true)
 
   const load = async () => {
-    const { data, error } = await supabase.from('machines').select('*').order('sort_order')
-    if (error) console.error('[AdminMachines] load:', error.message)
-    setItems(data || [])
-    setLoading(false)
+    try {
+      const { data, error } = await Promise.resolve(
+        supabase
+          .from('machines')
+          .select('*')
+          .order('sort_order')
+      ).catch(() => ({ data: [], error: null }))
+      if (error) console.error('[AdminMachines] load:', error.message)
+      setItems(data || [])
+    } catch (err) {
+      console.error('[AdminMachines] load error:', err)
+      setItems([])
+    } finally {
+      setLoading(false)
+    }
   }
 
-  useEffect(() => { load() }, [])
+  useEffect(() => {
+    load().catch(() => {})
+  }, [])
 
   const handleSpecsChange = (val: string) => {
     setSpecsJson(val)
@@ -58,13 +71,14 @@ export default function AdminMachines() {
 
     try {
       const payload = { ...editing, specs }
-      const { error } = editing.id
-        ? await supabase.from('machines').update(payload).eq('id', editing.id)
-        : await supabase.from('machines').insert(payload)
+      const query = editing.id
+        ? supabase.from('machines').update(payload).eq('id', editing.id)
+        : supabase.from('machines').insert(payload)
+      const { error } = await Promise.resolve(query).catch(() => ({ error: { message: 'Message channel closed or network error' } as any }))
       if (error) throw error
       success(t('admin.saved'))
       setEditing(null)
-      load()
+      load().catch(() => {})
     } catch (err) {
       toastError('Kayıt başarısız', err instanceof Error ? err.message : 'Hata oluştu')
     }
@@ -73,10 +87,15 @@ export default function AdminMachines() {
   const remove = async (id: string) => {
     if (!confirm(t('admin.confirmDelete'))) return
     try {
-      const { error } = await supabase.from('machines').delete().eq('id', id)
+      const { error } = await Promise.resolve(
+        supabase
+          .from('machines')
+          .delete()
+          .eq('id', id)
+      ).catch(() => ({ error: { message: 'Message channel closed or network error' } as any }))
       if (error) throw error
       success('Makine silindi.')
-      load()
+      load().catch(() => {})
     } catch (err) {
       toastError('Silme başarısız', err instanceof Error ? err.message : 'Hata oluştu')
     }
