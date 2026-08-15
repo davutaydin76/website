@@ -88,10 +88,9 @@ export function isValidFileExtension(fileName: string): boolean {
  * galeri kategori eşleşmelerini güvenilir hale getirir.
  * Örn: "CNC Torna" → "torna", "Kaynak & İmalat" → "kaynak"
  */
-export function normalizeCategorySlug(value: string): string {
-  return value
+export const normalize = (str: string) =>
+  (str || '')
     .toLowerCase()
-    // Türkçe karakterleri ASCII karşılıklarıyla değiştir
     .replace(/ı/g, 'i')
     .replace(/İ/gi, 'i')
     .replace(/ğ/g, 'g')
@@ -104,20 +103,23 @@ export function normalizeCategorySlug(value: string): string {
     .replace(/Ö/g, 'o')
     .replace(/ç/g, 'c')
     .replace(/Ç/g, 'c')
-    // Boşluk, tire, &, / gibi ayırıcıları temizle
     .replace(/[^a-z0-9]/g, '')
+
+export function normalizeCategorySlug(value: string): string {
+  return normalize(value)
 }
 
 /**
  * Bir galeri öğesinin kategorisinin seçili filtreyle eşleşip eşleşmediğini kontrol eder.
  * Hem tam eşleşme hem de normalize edilmiş içerme kontrolü yapar.
  */
-export function matchesCategory(itemCategory: string, selectedCategory: string): boolean {
-  if (selectedCategory === 'all') return true
-  const normItem = normalizeCategorySlug(itemCategory)
-  const normSelected = normalizeCategorySlug(selectedCategory)
+export function matchesCategory(itemCategory: string | undefined | null, selectedCategory: string): boolean {
+  if (!selectedCategory || selectedCategory === 'all') return true
+  const normItem = normalize(itemCategory || '')
+  const normSelected = normalize(selectedCategory)
   return normItem === normSelected || normItem.includes(normSelected) || normSelected.includes(normItem)
 }
+
 
 export const GALLERY_CATEGORIES = [
   { id: 'all', tr: 'Tümü', en: 'All' },

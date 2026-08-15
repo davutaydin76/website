@@ -1,15 +1,13 @@
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { motion, AnimatePresence } from 'framer-motion'
-import { X, ArrowLeft } from 'lucide-react'
+import { X, ArrowLeft, Play } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import SEO from '@/components/seo/SEO'
 import { SkeletonGalleryItem, SkeletonVideoItem } from '@/components/ui/Skeleton'
 import { fetchGallery, fetchVideos, fetchSeo } from '@/services/content'
-import { GALLERY_CATEGORIES, getLocalizedField, matchesCategory, normalizeCategorySlug } from '@/lib/utils'
+import { GALLERY_CATEGORIES, getLocalizedField, normalize } from '@/lib/utils'
 import type { GalleryItem, VideoItem, SeoSettings } from '@/types'
-
-const ITEMS_PER_PAGE = 12
 
 export default function GalleryPage() {
   const { t, i18n } = useTranslation()
@@ -19,29 +17,43 @@ export default function GalleryPage() {
   const [gallery, setGallery] = useState<GalleryItem[]>([])
   const [videos, setVideos] = useState<VideoItem[]>([])
   const [seo, setSeo] = useState<SeoSettings | null>(null)
-  const [page, setPage] = useState(1)
   const [loading, setLoading] = useState(true)
   const [selectedPhoto, setSelectedPhoto] = useState<GalleryItem | null>(null)
-
-  const loadData = useCallback(async () => {
-    setLoading(true)
-    // category slug'ı normalize ederek veritabanı sorgusunu güvenilir hale getir
-    const normalizedCat = category === 'all' ? undefined : normalizeCategorySlug(category)
-    const [g, v, s] = await Promise.all([
-      fetchGallery(normalizedCat),
-      fetchVideos(normalizedCat),
-      fetchSeo('gallery'),
-    ])
-    setGallery(g)
-    setVideos(v)
-    setSeo(s)
-    setLoading(false)
-    setPage(1)
-  }, [category])
+  const scrollContainerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
+    async function loadData() {
+      setLoading(true)
+      const [g, v, s] = await Promise.all([
+        fetchGallery(),
+        fetchVideos(),
+        fetchSeo('gallery'),
+      ])
+      setGallery(g)
+      setVideos(v)
+      setSeo(s)
+      setLoading(false)
+    }
     loadData()
-  }, [loadData])
+  }, [])
+
+  // Mouse tekerleği ile yatay kaydırma
+  useEffect(() => {
+    const el = scrollContainerRef.current
+    if (!el) return
+
+    const handleWheel = (e: WheelEvent) => {
+      if (e.deltaY !== 0) {
+        e.preventDefault()
+        el.scrollLeft += e.deltaY * 1.1
+      }
+    }
+
+    el.addEventListener('wheel', handleWheel, { passive: false })
+    return () => {
+      el.removeEventListener('wheel', handleWheel)
+    }
+  }, [tab, category, loading])
 
   const defaultPhotos: GalleryItem[] = [
     { id: 'f-1', image_url: '/images/factory-exterior.jpg', title_tr: 'Aydın Torna Dış Görünüm', title_en: 'Aydın Torna Exterior View', category: 'genel', sort_order: 0, is_active: true, created_at: '' },
@@ -50,24 +62,18 @@ export default function GalleryPage() {
     { id: 'f-4', image_url: '/images/lathe-chuck.jpg', title_tr: 'Hassas Torna İşleme Aşaması', title_en: 'Precision Lathe Machining Stage', category: 'torna', sort_order: 3, is_active: true, created_at: '' },
   ]
 
-  // Normalize edilmiş kategori filtresi – büyük/küçük harf ve Türkçe karakter sorunlarını çözer
   const sourcePhotos = gallery.length > 0 ? gallery : defaultPhotos
-  const displayPhotos = sourcePhotos.filter((g) => matchesCategory(g.category, category))
-  const displayVideos = videos.filter((v) => matchesCategory(v.category, category))
 
-  const items = tab === 'photos' ? displayPhotos : displayVideos
-  const visibleItems = items.slice(0, page * ITEMS_PER_PAGE)
-  const hasMore = visibleItems.length < items.length
+  // Normalize edilmiş kategori filtreleme
+  const matchesFilter = (itemCat: string | undefined | null) => {
+    if (!category || category === 'all') return true
+    const normItem = normalize(itemCat || '')
+    const normSelected = normalize(category)
+    return normItem === normSelected || normItem.includes(normSelected) || normSelected.includes(normItem)
+  }
 
-  // Kolaj desenleri – asimetrik row-span ve genişlik ataması
-  const COLLAGE_PATTERNS = [
-    { rowSpan: 'row-span-2', widthClass: 'w-[220px] md:w-[340px]' },
-    { rowSpan: 'row-span-1', widthClass: 'w-[160px] md:w-[240px]' },
-    { rowSpan: 'row-span-1', widthClass: 'w-[190px] md:w-[280px]' },
-    { rowSpan: 'row-span-2', widthClass: 'w-[180px] md:w-[300px]' },
-    { rowSpan: 'row-span-1', widthClass: 'w-[200px] md:w-[260px]' },
-    { rowSpan: 'row-span-1', widthClass: 'w-[170px] md:w-[220px]' },
-  ]
+  const filteredPhotos = sourcePhotos.filter((g) => matchesFilter(g.category))
+  const filteredVideos = videos.filter((v) => matchesFilter(v.category))
 
   return (
     <>
@@ -97,7 +103,7 @@ export default function GalleryPage() {
               {(['photos', 'videos'] as const).map((t_) => (
                 <button
                   key={t_}
-                  onClick={() => { setTab(t_); setPage(1) }}
+                  onClick={() => setTab(t_)}
                   className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
                     tab === t_
                       ? 'bg-neutral-900 text-white dark:bg-white dark:text-neutral-900'
@@ -129,9 +135,9 @@ export default function GalleryPage() {
           {/* Skeleton loading state */}
           {loading ? (
             tab === 'photos' ? (
-              <div className="h-[520px] md:h-[620px] overflow-hidden">
-                <div className="flex gap-3 h-full">
-                  {Array.from({ length: 9 }).map((_, i) => (
+              <div className="h-[540px] md:h-[620px] overflow-hidden flex flex-col justify-center">
+                <div className="grid grid-rows-3 grid-flow-col gap-3 md:gap-4 h-full auto-cols-[220px] md:auto-cols-[300px]">
+                  {Array.from({ length: 12 }).map((_, i) => (
                     <SkeletonGalleryItem key={i} />
                   ))}
                 </div>
@@ -143,45 +149,40 @@ export default function GalleryPage() {
                 ))}
               </div>
             )
-          ) : items.length === 0 ? (
-            <p className="text-center text-muted py-20">{t('gallery.noItems')}</p>
           ) : tab === 'photos' ? (
-            /*
-             * ─── 3 SATIRLI YATAY KAYAN KOLAJ ─────────────────────────────────
-             * - Sabit yükseklik → sayfa dikeyde uzamaz
-             * - overflow-x-auto + no-scrollbar → yatay kaydırma, gizli scrollbar
-             * - snap-x snap-mandatory → parmak snap geçişi
-             * - grid-rows-3 grid-flow-col → öğeler sütunlara soldan sağa dolar
-             */
-            <div className="h-[520px] md:h-[620px] overflow-x-auto overflow-y-hidden no-scrollbar snap-x snap-mandatory touch-pan-x">
-              <AnimatePresence>
-                <motion.div
-                  layout
-                  className="grid grid-rows-3 grid-flow-col gap-3 md:gap-4 h-full auto-cols-[minmax(180px,auto)] md:auto-cols-[minmax(280px,auto)]"
-                >
-                  {visibleItems.map((item, index) => {
-                    const photo = item as GalleryItem
-                    const pattern = COLLAGE_PATTERNS[index % COLLAGE_PATTERNS.length]
+            filteredPhotos.length > 0 ? (
+              /*
+               * ─── 3 SATIRLI SABİT KILAVUZ (FIXED ROW TRACKS) YATAY GALERİ ───────
+               * - Dış Kapsayıcı: h-[540px] md:h-[620px] overflow-x-auto overflow-y-hidden no-scrollbar snap-x snap-mandatory flex flex-col justify-center
+               * - Grid İçi: grid grid-rows-3 grid-flow-col gap-3 md:gap-4 h-full auto-cols-[220px] md:auto-cols-[300px]
+               * - Her 4. görsel (index % 4 === 0) col-span-2, row-span-1 sabit kalarak dikeyde asla çakışma yapmaz.
+               */
+              <div
+                ref={scrollContainerRef}
+                className="h-[540px] md:h-[620px] overflow-x-auto overflow-y-hidden no-scrollbar snap-x snap-mandatory flex flex-col justify-center overscroll-x-contain touch-pan-x py-1"
+              >
+                <div className="grid grid-rows-3 grid-flow-col gap-3 md:gap-4 h-full auto-cols-[220px] md:auto-cols-[300px]">
+                  {filteredPhotos.map((photo, index) => {
+                    const isWide = index % 4 === 0
                     return (
                       <motion.div
                         key={photo.id}
-                        layout
-                        initial={{ opacity: 0, scale: 0.92 }}
+                        initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0, scale: 0.92 }}
-                        transition={{ duration: 0.3, delay: index * 0.04 }}
-                        className={`${pattern.rowSpan} ${pattern.widthClass} snap-start cursor-pointer group`}
+                        transition={{ duration: 0.25, delay: Math.min(index * 0.02, 0.3) }}
+                        className={`${isWide ? 'col-span-2' : 'col-span-1'} row-span-1 snap-start cursor-pointer group w-full h-full select-none`}
                         onClick={() => setSelectedPhoto(photo)}
                       >
-                        <div className="relative overflow-hidden rounded-2xl bg-neutral-100 dark:bg-neutral-800 border border-neutral-200/50 dark:border-neutral-800/50 shadow-sm h-full w-full">
+                        <div className="w-full h-full relative rounded-xl overflow-hidden bg-neutral-900 border border-neutral-800 shadow-sm">
                           <img
                             src={photo.image_url}
-                            alt={getLocalizedField(photo, 'title', lang) || 'Galeri görseli'}
-                            className="w-full h-full object-cover group-hover:scale-[1.05] transition-transform duration-500"
+                            alt={getLocalizedField(photo, 'title', lang) || 'Aydın Torna CNC'}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                             loading="lazy"
                             decoding="async"
                           />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/0 to-black/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-3">
+                          {/* Hover overlay */}
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-3">
                             <p className="text-white text-xs font-semibold tracking-wider bg-black/60 backdrop-blur-sm px-2.5 py-1 rounded-full uppercase line-clamp-1">
                               {getLocalizedField(photo, 'title', lang) || (lang === 'tr' ? 'Büyüt' : 'Zoom')}
                             </p>
@@ -190,24 +191,32 @@ export default function GalleryPage() {
                       </motion.div>
                     )
                   })}
-                </motion.div>
-              </AnimatePresence>
-            </div>
-          ) : (
+                </div>
+              </div>
+            ) : (
+              <p className="text-center text-muted py-20">{t('gallery.noItems')}</p>
+            )
+          ) : filteredVideos.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {visibleItems.map((item, i) => {
-                const video = item as VideoItem
-                return (
-                  <motion.div
-                    key={video.id}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: (i % ITEMS_PER_PAGE) * 0.03 }}
-                    className="rounded-2xl overflow-hidden aspect-video bg-neutral-100 dark:bg-neutral-800"
-                  >
+              {filteredVideos.map((video, i) => (
+                <motion.div
+                  key={video.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.04 }}
+                  className="relative rounded-2xl overflow-hidden aspect-video bg-neutral-900 border border-neutral-800 group"
+                >
+                  {video.thumbnail_url ? (
+                    <img
+                      src={video.thumbnail_url}
+                      alt={getLocalizedField(video, 'title', lang) || 'Video'}
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  ) : (
                     <video
                       src={video.video_url}
-                      poster={video.thumbnail_url || undefined}
                       autoPlay
                       muted
                       loop
@@ -215,21 +224,23 @@ export default function GalleryPage() {
                       preload="metadata"
                       className="w-full h-full object-cover"
                     />
-                  </motion.div>
-                )
-              })}
+                  )}
+                  <a
+                    href={video.video_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={getLocalizedField(video, 'title', lang) || 'Videoyu oynat'}
+                    className="absolute inset-0 flex items-center justify-center bg-black/30 group-hover:bg-black/50 transition-colors"
+                  >
+                    <div className="w-14 h-14 rounded-full bg-white/90 flex items-center justify-center">
+                      <Play className="w-6 h-6 text-neutral-900 ml-1" />
+                    </div>
+                  </a>
+                </motion.div>
+              ))}
             </div>
-          )}
-
-          {hasMore && !loading && (
-            <div className="text-center mt-10">
-              <button
-                onClick={() => setPage((p) => p + 1)}
-                className="px-6 py-3 rounded-full border border-neutral-200 dark:border-neutral-800 text-sm font-medium hover:bg-neutral-50 dark:hover:bg-neutral-900 transition-colors"
-              >
-                {t('gallery.loadMore')}
-              </button>
-            </div>
+          ) : (
+            <p className="text-center text-muted py-20">{t('gallery.noItems')}</p>
           )}
         </div>
       </div>
@@ -278,3 +289,4 @@ export default function GalleryPage() {
     </>
   )
 }
+
