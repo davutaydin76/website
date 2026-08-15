@@ -12,6 +12,7 @@ export const supabase = createClient(
   supabaseAnonKey || 'placeholder-key'
 )
 
-export const SITE_URL = import.meta.env.VITE_SITE_URL || 'https://aydintornacnc.com.tr'
+export const SITE_URL = import.meta.env.VITE_SITE_URL || 'https://aydintornacnc.com'
 export const COMPANY_NAME = 'Aydın Torna CNC'
 export const COMPANY_LOCATION = 'Kocaeli Dilovası'
+

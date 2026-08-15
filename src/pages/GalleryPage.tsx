@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom'
 import SEO from '@/components/seo/SEO'
 import { SkeletonGalleryItem, SkeletonVideoItem } from '@/components/ui/Skeleton'
 import { fetchGallery, fetchVideos, fetchSeo } from '@/services/content'
-import { GALLERY_CATEGORIES, getLocalizedField } from '@/lib/utils'
+import { GALLERY_CATEGORIES, getLocalizedField, matchesCategory, normalizeCategorySlug } from '@/lib/utils'
 import type { GalleryItem, VideoItem, SeoSettings } from '@/types'
 
 const ITEMS_PER_PAGE = 12
@@ -25,9 +25,11 @@ export default function GalleryPage() {
 
   const loadData = useCallback(async () => {
     setLoading(true)
+    // category slug'ı normalize ederek veritabanı sorgusunu güvenilir hale getir
+    const normalizedCat = category === 'all' ? undefined : normalizeCategorySlug(category)
     const [g, v, s] = await Promise.all([
-      fetchGallery(category === 'all' ? undefined : category),
-      fetchVideos(category === 'all' ? undefined : category),
+      fetchGallery(normalizedCat),
+      fetchVideos(normalizedCat),
       fetchSeo('gallery'),
     ])
     setGallery(g)
@@ -41,17 +43,31 @@ export default function GalleryPage() {
     loadData()
   }, [loadData])
 
-  const defaultPhotos = [
-    { id: 'f-1', image_url: '/images/factory-exterior.jpg', title_tr: 'Aydın Torna Dış Görünüm', title_en: 'Aydın Torna Exterior View', category: 'genel' },
-    { id: 'f-2', image_url: '/images/long-lathe.jpg', title_tr: '7.5 Metre CNC Torna Tezgahı', title_en: '7.5m CNC Lathe Machine', category: 'torna' },
-    { id: 'f-3', image_url: '/images/lathe-workpiece.jpg', title_tr: 'Ağır Sanayi CNC Torna İmalatı', title_en: 'Heavy Duty CNC Lathe Production', category: 'torna' },
-    { id: 'f-4', image_url: '/images/lathe-chuck.jpg', title_tr: 'Hassas Torna İşleme Aşaması', title_en: 'Precision Lathe Machining Stage', category: 'torna' }
+  const defaultPhotos: GalleryItem[] = [
+    { id: 'f-1', image_url: '/images/factory-exterior.jpg', title_tr: 'Aydın Torna Dış Görünüm', title_en: 'Aydın Torna Exterior View', category: 'genel', sort_order: 0, is_active: true, created_at: '' },
+    { id: 'f-2', image_url: '/images/long-lathe.jpg', title_tr: '7.5 Metre CNC Torna Tezgahı', title_en: '7.5m CNC Lathe Machine', category: 'torna', sort_order: 1, is_active: true, created_at: '' },
+    { id: 'f-3', image_url: '/images/lathe-workpiece.jpg', title_tr: 'Ağır Sanayi CNC Torna İmalatı', title_en: 'Heavy Duty CNC Lathe Production', category: 'torna', sort_order: 2, is_active: true, created_at: '' },
+    { id: 'f-4', image_url: '/images/lathe-chuck.jpg', title_tr: 'Hassas Torna İşleme Aşaması', title_en: 'Precision Lathe Machining Stage', category: 'torna', sort_order: 3, is_active: true, created_at: '' },
   ]
 
-  const displayPhotos = gallery.length > 0 ? gallery : defaultPhotos
-  const items = tab === 'photos' ? displayPhotos : videos
+  // Normalize edilmiş kategori filtresi – büyük/küçük harf ve Türkçe karakter sorunlarını çözer
+  const sourcePhotos = gallery.length > 0 ? gallery : defaultPhotos
+  const displayPhotos = sourcePhotos.filter((g) => matchesCategory(g.category, category))
+  const displayVideos = videos.filter((v) => matchesCategory(v.category, category))
+
+  const items = tab === 'photos' ? displayPhotos : displayVideos
   const visibleItems = items.slice(0, page * ITEMS_PER_PAGE)
   const hasMore = visibleItems.length < items.length
+
+  // Kolaj desenleri – asimetrik row-span ve genişlik ataması
+  const COLLAGE_PATTERNS = [
+    { rowSpan: 'row-span-2', widthClass: 'w-[220px] md:w-[340px]' },
+    { rowSpan: 'row-span-1', widthClass: 'w-[160px] md:w-[240px]' },
+    { rowSpan: 'row-span-1', widthClass: 'w-[190px] md:w-[280px]' },
+    { rowSpan: 'row-span-2', widthClass: 'w-[180px] md:w-[300px]' },
+    { rowSpan: 'row-span-1', widthClass: 'w-[200px] md:w-[260px]' },
+    { rowSpan: 'row-span-1', widthClass: 'w-[170px] md:w-[220px]' },
+  ]
 
   return (
     <>
@@ -113,10 +129,12 @@ export default function GalleryPage() {
           {/* Skeleton loading state */}
           {loading ? (
             tab === 'photos' ? (
-              <div className="columns-1 sm:columns-2 lg:columns-3 gap-4 space-y-4">
-                {Array.from({ length: 9 }).map((_, i) => (
-                  <SkeletonGalleryItem key={i} />
-                ))}
+              <div className="h-[520px] md:h-[620px] overflow-hidden">
+                <div className="flex gap-3 h-full">
+                  {Array.from({ length: 9 }).map((_, i) => (
+                    <SkeletonGalleryItem key={i} />
+                  ))}
+                </div>
               </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -128,40 +146,53 @@ export default function GalleryPage() {
           ) : items.length === 0 ? (
             <p className="text-center text-muted py-20">{t('gallery.noItems')}</p>
           ) : tab === 'photos' ? (
-            <motion.div layout className="columns-1 sm:columns-2 lg:columns-3 gap-4 space-y-4">
-              {visibleItems.map((item) => {
-                const photo = item as GalleryItem
-                return (
-                  <motion.div
-                    key={photo.id}
-                    layout
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.9 }}
-                    transition={{ duration: 0.3 }}
-                    className="break-inside-avoid cursor-pointer group"
-                    onClick={() => setSelectedPhoto(photo)}
-                  >
-                    <div className="relative overflow-hidden rounded-2xl bg-neutral-100 dark:bg-neutral-800 border border-neutral-200/50 dark:border-neutral-800/50 shadow-sm">
-                      <img
-                        src={photo.image_url}
-                        alt={getLocalizedField(photo, 'title', lang) || 'Galeri görseli'}
-                        className="w-full h-auto object-cover group-hover:scale-[1.03] transition-transform duration-300"
-                        loading="lazy"
-                        decoding="async"
-                        width={600}
-                        height={400}
-                      />
-                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 flex items-end p-4">
-                        <p className="text-white text-xs font-semibold tracking-wider opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/60 backdrop-blur-sm px-2.5 py-1 rounded-full uppercase">
-                          {lang === 'tr' ? 'Büyüt' : 'Zoom'}
-                        </p>
-                      </div>
-                    </div>
-                  </motion.div>
-                )
-              })}
-            </motion.div>
+            /*
+             * ─── 3 SATIRLI YATAY KAYAN KOLAJ ─────────────────────────────────
+             * - Sabit yükseklik → sayfa dikeyde uzamaz
+             * - overflow-x-auto + no-scrollbar → yatay kaydırma, gizli scrollbar
+             * - snap-x snap-mandatory → parmak snap geçişi
+             * - grid-rows-3 grid-flow-col → öğeler sütunlara soldan sağa dolar
+             */
+            <div className="h-[520px] md:h-[620px] overflow-x-auto overflow-y-hidden no-scrollbar snap-x snap-mandatory touch-pan-x">
+              <AnimatePresence>
+                <motion.div
+                  layout
+                  className="grid grid-rows-3 grid-flow-col gap-3 md:gap-4 h-full auto-cols-[minmax(180px,auto)] md:auto-cols-[minmax(280px,auto)]"
+                >
+                  {visibleItems.map((item, index) => {
+                    const photo = item as GalleryItem
+                    const pattern = COLLAGE_PATTERNS[index % COLLAGE_PATTERNS.length]
+                    return (
+                      <motion.div
+                        key={photo.id}
+                        layout
+                        initial={{ opacity: 0, scale: 0.92 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.92 }}
+                        transition={{ duration: 0.3, delay: index * 0.04 }}
+                        className={`${pattern.rowSpan} ${pattern.widthClass} snap-start cursor-pointer group`}
+                        onClick={() => setSelectedPhoto(photo)}
+                      >
+                        <div className="relative overflow-hidden rounded-2xl bg-neutral-100 dark:bg-neutral-800 border border-neutral-200/50 dark:border-neutral-800/50 shadow-sm h-full w-full">
+                          <img
+                            src={photo.image_url}
+                            alt={getLocalizedField(photo, 'title', lang) || 'Galeri görseli'}
+                            className="w-full h-full object-cover group-hover:scale-[1.05] transition-transform duration-500"
+                            loading="lazy"
+                            decoding="async"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/0 to-black/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-3">
+                            <p className="text-white text-xs font-semibold tracking-wider bg-black/60 backdrop-blur-sm px-2.5 py-1 rounded-full uppercase line-clamp-1">
+                              {getLocalizedField(photo, 'title', lang) || (lang === 'tr' ? 'Büyüt' : 'Zoom')}
+                            </p>
+                          </div>
+                        </div>
+                      </motion.div>
+                    )
+                  })}
+                </motion.div>
+              </AnimatePresence>
+            </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {visibleItems.map((item, i) => {

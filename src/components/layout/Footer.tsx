@@ -34,7 +34,7 @@ export default function Footer() {
               <li className="flex items-center gap-2">
                 <Mail className="w-4 h-4 text-accent" />
                 <a href={`mailto:${import.meta.env.VITE_COMPANY_EMAIL}`} className="hover:text-accent transition-colors">
-                  {import.meta.env.VITE_COMPANY_EMAIL || 'info@aydintornacnc.com.tr'}
+                  {import.meta.env.VITE_COMPANY_EMAIL || 'd.aydintorna@gmail.com'}
                 </a>
               </li>
               <li className="flex items-start gap-2">

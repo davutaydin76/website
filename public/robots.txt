@@ -1,4 +1,4 @@
-# Aydın Torna CNC - https://aydintornacnc.com.tr
+# Aydın Torna CNC - https://aydintornacnc.com
 # Robots.txt
 
 User-agent: *
@@ -21,4 +21,5 @@ User-agent: DotBot
 Disallow: /
 
 # Sitemap
-Sitemap: https://aydintornacnc.com.tr/sitemap.xml
+Sitemap: https://aydintornacnc.com/sitemap.xml
+

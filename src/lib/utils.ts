@@ -83,6 +83,42 @@ export function isValidFileExtension(fileName: string): boolean {
   return allowed.includes(ext)
 }
 
+/**
+ * Türkçe karakterleri ve büyük/küçük harf farklılıklarını normalize ederek
+ * galeri kategori eşleşmelerini güvenilir hale getirir.
+ * Örn: "CNC Torna" → "torna", "Kaynak & İmalat" → "kaynak"
+ */
+export function normalizeCategorySlug(value: string): string {
+  return value
+    .toLowerCase()
+    // Türkçe karakterleri ASCII karşılıklarıyla değiştir
+    .replace(/ı/g, 'i')
+    .replace(/İ/gi, 'i')
+    .replace(/ğ/g, 'g')
+    .replace(/Ğ/g, 'g')
+    .replace(/ü/g, 'u')
+    .replace(/Ü/g, 'u')
+    .replace(/ş/g, 's')
+    .replace(/Ş/g, 's')
+    .replace(/ö/g, 'o')
+    .replace(/Ö/g, 'o')
+    .replace(/ç/g, 'c')
+    .replace(/Ç/g, 'c')
+    // Boşluk, tire, &, / gibi ayırıcıları temizle
+    .replace(/[^a-z0-9]/g, '')
+}
+
+/**
+ * Bir galeri öğesinin kategorisinin seçili filtreyle eşleşip eşleşmediğini kontrol eder.
+ * Hem tam eşleşme hem de normalize edilmiş içerme kontrolü yapar.
+ */
+export function matchesCategory(itemCategory: string, selectedCategory: string): boolean {
+  if (selectedCategory === 'all') return true
+  const normItem = normalizeCategorySlug(itemCategory)
+  const normSelected = normalizeCategorySlug(selectedCategory)
+  return normItem === normSelected || normItem.includes(normSelected) || normSelected.includes(normItem)
+}
+
 export const GALLERY_CATEGORIES = [
   { id: 'all', tr: 'Tümü', en: 'All' },
   { id: 'torna', tr: 'CNC Torna', en: 'CNC Lathe' },

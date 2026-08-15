@@ -56,4 +56,18 @@
   .text-balance {
     text-wrap: balance;
   }
+
+  /* Scrollbar'ı gizle – galeri yatay kaydırma için */
+  .no-scrollbar {
+    -ms-overflow-style: none;  /* IE/Edge */
+    scrollbar-width: none;     /* Firefox */
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;             /* Chrome/Safari/Opera */
+  }
+
+  /* Dokunmatik kaydırma iyileştirme */
+  .touch-pan-x {
+    touch-action: pan-x;
+  }
 }
