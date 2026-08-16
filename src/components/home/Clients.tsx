@@ -6,7 +6,14 @@ interface ClientsProps {
   clients?: Client[]
 }
 
-const fallbackBrands = [
+interface BrandItem {
+  id: string
+  name: string
+  logo_url?: string | null
+  website?: string | null
+}
+
+const fallbackBrands: BrandItem[] = [
   { id: 'fb-1', name: 'RÖHM Germany', website: 'https://www.roehm.biz/' },
   { id: 'fb-2', name: 'SIEMENS', website: 'https://www.siemens.com/' },
   { id: 'fb-3', name: 'FAGOR', website: 'https://www.fagorautomation.com/' },
@@ -17,125 +24,80 @@ const fallbackBrands = [
 
 export default function Clients({ clients }: ClientsProps) {
   const { t } = useTranslation()
-  const list = clients?.length ? clients : fallbackBrands
+  const baseList: BrandItem[] = clients?.length ? clients : fallbackBrands
+
+  // Logolar az sayıda olsa bile sağda boşluk kalmaması için çoğalt
+  const repeatCount = Math.max(2, Math.ceil(12 / baseList.length))
+  const singleSet: BrandItem[] = Array.from({ length: repeatCount }).flatMap(() => baseList)
+  const displayList: BrandItem[] = [...singleSet, ...singleSet]
 
   return (
-    <section className="bg-neutral-950 dark:bg-neutral-950 py-16 overflow-hidden border-y border-neutral-900 relative">
-      {/* Yan taraflardaki yumuşak siyah geçiş fade efekti */}
-      <div className="absolute left-0 top-0 bottom-0 w-16 sm:w-32 bg-gradient-to-r from-neutral-950 to-transparent z-10 pointer-events-none" />
-      <div className="absolute right-0 top-0 bottom-0 w-16 sm:w-32 bg-gradient-to-l from-neutral-950 to-transparent z-10 pointer-events-none" />
+    <section className="bg-zinc-950 py-16 md:py-20 overflow-hidden border-y border-zinc-900 relative">
+      {/* Sol ve sağ kenar karartma yumuşak geçiş efektleri (Fade Gradients) */}
+      <div className="pointer-events-none absolute inset-y-0 left-0 w-24 md:w-40 bg-gradient-to-r from-zinc-950 to-transparent z-10" />
+      <div className="pointer-events-none absolute inset-y-0 right-0 w-24 md:w-40 bg-gradient-to-l from-zinc-950 to-transparent z-10" />
 
-      <div className="container-max mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="container-max mx-auto px-4 sm:px-6 lg:px-8 mb-10">
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
-          className="text-center mb-10"
+          className="text-center"
         >
           <h2 className="text-xl sm:text-2xl font-semibold tracking-tight text-white mb-2">
             {t('clients.title') || 'Çalıştığımız Markalar'}
           </h2>
-          <p className="text-neutral-500 text-sm max-w-lg mx-auto">
+          <p className="text-zinc-400 text-sm max-w-lg mx-auto">
             {t('clients.subtitle') || 'Yüksek hassasiyetli imalatta güvendiğimiz ve iş birliği yaptığımız teknolojiler'}
           </p>
         </motion.div>
+      </div>
 
-        {/* Sonsuz Kayan Bant (Infinite Marquee) */}
-        <div className="relative w-full overflow-hidden py-4 flex items-center">
-          <motion.div
-            className="flex gap-16 flex-nowrap shrink-0 pr-16 items-center"
-            animate={{ x: ['0%', '-50%'] }}
-            transition={{
-              ease: 'linear',
-              duration: 20,
-              repeat: Infinity,
-            }}
-          >
-            {/* Birinci set */}
-            {list.map((item) => (
-              <div key={`${item.id}-1`} className="flex-shrink-0">
-                {item.website ? (
-                  <a
-                    href={item.website}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="block group"
-                  >
-                    {'logo_url' in item && item.logo_url ? (
-                      <img
-                        src={item.logo_url}
-                        alt={item.name}
-                        className="h-10 max-w-[150px] object-contain opacity-50 group-hover:opacity-100 group-hover:scale-105 transition-all duration-300 filter invert dark:invert-0"
-                        loading="lazy"
-                      />
-                    ) : (
-                      <div className="h-10 px-6 rounded-lg bg-white/5 border border-white/10 text-white/40 group-hover:text-white group-hover:bg-white/10 group-hover:border-orange-500/50 font-bold uppercase tracking-widest text-xs flex items-center justify-center transition-all duration-300">
-                        {item.name}
-                      </div>
-                    )}
-                  </a>
+      {/* Sonsuz Kayan Bant (Infinite Marquee) */}
+      <div className="relative w-full overflow-hidden py-2 flex items-center">
+        <div className="flex w-max gap-4 md:gap-6 animate-marquee hover:[animation-play-state:paused] items-center">
+          {displayList.map((item, index) => {
+            const hasLogo = 'logo_url' in item && item.logo_url
+
+            const content = (
+              <div className="min-w-[180px] md:min-w-[220px] h-[90px] md:h-[110px] p-4 md:p-6 bg-zinc-900/70 border border-zinc-800 rounded-2xl flex items-center justify-center backdrop-blur-sm transition-all duration-300 hover:border-orange-500/50 hover:bg-zinc-800/80 hover:scale-105 group select-none shadow-sm">
+                {hasLogo ? (
+                  <img
+                    src={item.logo_url!}
+                    alt={item.name}
+                    className="max-h-[50px] md:max-h-[65px] max-w-[140px] md:max-w-[170px] w-auto h-auto object-contain filter grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-300"
+                    loading="lazy"
+                  />
                 ) : (
-                  <div>
-                    {'logo_url' in item && item.logo_url ? (
-                      <img
-                        src={item.logo_url}
-                        alt={item.name}
-                        className="h-10 max-w-[150px] object-contain opacity-50 filter invert dark:invert-0"
-                        loading="lazy"
-                      />
-                    ) : (
-                      <div className="h-10 px-6 rounded-lg bg-white/5 border border-white/10 text-white/40 font-bold uppercase tracking-widest text-xs flex items-center justify-center">
-                        {item.name}
-                      </div>
-                    )}
-                  </div>
+                  <span className="text-sm md:text-base font-bold text-zinc-400 group-hover:text-white uppercase tracking-wider text-center transition-colors duration-300">
+                    {item.name}
+                  </span>
                 )}
               </div>
-            ))}
+            )
 
-            {/* İkinci set (sonsuz döngü için kopya) */}
-            {list.map((item) => (
-              <div key={`${item.id}-2`} className="flex-shrink-0">
-                {item.website ? (
-                  <a
-                    href={item.website}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="block group"
-                  >
-                    {'logo_url' in item && item.logo_url ? (
-                      <img
-                        src={item.logo_url}
-                        alt={item.name}
-                        className="h-10 max-w-[150px] object-contain opacity-50 group-hover:opacity-100 group-hover:scale-105 transition-all duration-300 filter invert dark:invert-0"
-                        loading="lazy"
-                      />
-                    ) : (
-                      <div className="h-10 px-6 rounded-lg bg-white/5 border border-white/10 text-white/40 group-hover:text-white group-hover:bg-white/10 group-hover:border-orange-500/50 font-bold uppercase tracking-widest text-xs flex items-center justify-center transition-all duration-300">
-                        {item.name}
-                      </div>
-                    )}
-                  </a>
-                ) : (
-                  <div>
-                    {'logo_url' in item && item.logo_url ? (
-                      <img
-                        src={item.logo_url}
-                        alt={item.name}
-                        className="h-10 max-w-[150px] object-contain opacity-50 filter invert dark:invert-0"
-                        loading="lazy"
-                      />
-                    ) : (
-                      <div className="h-10 px-6 rounded-lg bg-white/5 border border-white/10 text-white/40 font-bold uppercase tracking-widest text-xs flex items-center justify-center">
-                        {item.name}
-                      </div>
-                    )}
-                  </div>
-                )}
+            if (item.website) {
+              return (
+                <a
+                  key={`${item.id}-${index}`}
+                  href={item.website}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block flex-shrink-0"
+                  aria-label={item.name}
+                >
+                  {content}
+                </a>
+              )
+            }
+
+            return (
+              <div key={`${item.id}-${index}`} className="flex-shrink-0">
+                {content}
               </div>
-            ))}
-          </motion.div>
+            )
+          })}
         </div>
       </div>
     </section>

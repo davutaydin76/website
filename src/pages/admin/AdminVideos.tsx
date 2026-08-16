@@ -75,8 +75,9 @@ export default function AdminVideos() {
     setUploading(true)
     setUploadProgress(0)
     try {
-      const ext = file.name.split('.').pop()?.toLowerCase() || 'mp4'
-      const path = `videos/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.-]/g, '_')}.${ext}`
+      const fileExt = file.name.split('.').pop()?.toLowerCase() || 'mp4'
+      const fileName = `video-${Date.now()}.${fileExt}`
+      const path = `${fileName}`
 
       // Progress simulation (Supabase JS v2 doesn't expose upload progress directly)
       const progressInterval = setInterval(() => {
@@ -90,12 +91,16 @@ export default function AdminVideos() {
       clearInterval(progressInterval)
       setUploadProgress(100)
 
-      if (error) throw error
+      if (error) {
+        console.error('Video yükleme hatası:', error.message, (error as any).details, (error as any).hint)
+        throw error
+      }
 
       const { data: urlData } = supabase.storage.from('videos').getPublicUrl(path)
       setEditing((prev) => ({ ...prev, video_url: urlData.publicUrl }))
       success('Video yüklendi!')
-    } catch (err) {
+    } catch (err: any) {
+      console.error('Video yükleme hatası:', err?.message, err?.details, err?.hint)
       toastError('Yükleme hatası', err instanceof Error ? err.message : 'Bilinmeyen hata')
     } finally {
       setUploading(false)
@@ -106,21 +111,61 @@ export default function AdminVideos() {
 
   const save = async () => {
     if (!editing) return
-    if (!editing.video_url) {
+    if (!editing.video_url || !editing.video_url.trim()) {
       toastError('Video URL zorunludur', 'Lütfen video yükleyin veya URL girin.')
       return
     }
 
+    const titleTr = (editing.title_tr || '').trim()
+    const titleEn = (editing.title_en || '').trim()
+    const videoUrl = editing.video_url.trim()
+    const thumbnailUrl = (editing.thumbnail_url || '').trim()
+    const category = editing.category || 'genel'
+    const sortOrder = Number(editing.sort_order ?? 0)
+    const isActive = editing.is_active !== undefined ? Boolean(editing.is_active) : true
+
+    // Supabase 'videos' tablosuna gönderilen senkronize payload
+    const payload: Record<string, any> = {
+      video_url: videoUrl,
+      title_tr: titleTr || null,
+      title_en: titleEn || null,
+      title: titleTr || titleEn || null, // fallback uyumluluğu için
+      category: category,
+      sort_order: isNaN(sortOrder) ? 0 : sortOrder,
+      is_active: isActive,
+    }
+
+    if (thumbnailUrl) {
+      payload.thumbnail_url = thumbnailUrl
+    }
+
+    // Tanımsız (undefined) alanları temizle
+    Object.keys(payload).forEach((key) => {
+      if (payload[key] === undefined) {
+        delete payload[key]
+      }
+    })
+
     try {
-      const { error } = editing.id
-        ? await supabase.from('videos').update(editing).eq('id', editing.id)
-        : await supabase.from('videos').insert(editing)
-      if (error) throw error
+      if (editing.id) {
+        const { error } = await supabase.from('videos').update(payload).eq('id', editing.id)
+        if (error) {
+          console.error('Video kayıt hatası:', error.message, error.details, error.hint)
+          throw error
+        }
+      } else {
+        const { error } = await supabase.from('videos').insert(payload)
+        if (error) {
+          console.error('Video kayıt hatası:', error.message, error.details, error.hint)
+          throw error
+        }
+      }
       success(t('admin.saved'))
       setEditing(null)
       load()
-    } catch (err) {
-      toastError('Kayıt başarısız', err instanceof Error ? err.message : 'Hata oluştu')
+    } catch (err: any) {
+      console.error('Video kayıt hatası:', err?.message, err?.details, err?.hint)
+      toastError('Kayıt başarısız', err?.message || 'Hata oluştu')
     }
   }
 
@@ -128,10 +173,14 @@ export default function AdminVideos() {
     if (!confirm(t('admin.confirmDelete'))) return
     try {
       const { error } = await supabase.from('videos').delete().eq('id', id)
-      if (error) throw error
+      if (error) {
+        console.error('Video silme hatası:', error.message, error.details, error.hint)
+        throw error
+      }
       success('Video silindi.')
       load()
-    } catch (err) {
+    } catch (err: any) {
+      console.error('Video silme hatası:', err?.message, err?.details, err?.hint)
       toastError('Silme başarısız', err instanceof Error ? err.message : 'Hata oluştu')
     }
   }
@@ -142,10 +191,14 @@ export default function AdminVideos() {
         .from('videos')
         .update({ is_active: !item.is_active })
         .eq('id', item.id)
-      if (error) throw error
+      if (error) {
+        console.error('Video durum güncelleme hatası:', error.message, error.details, error.hint)
+        throw error
+      }
       success(item.is_active ? 'Video pasife alındı.' : 'Video aktif edildi.')
       load()
-    } catch (err) {
+    } catch (err: any) {
+      console.error('Video durum güncelleme hatası:', err?.message, err?.details, err?.hint)
       toastError('Güncelleme hatası', err instanceof Error ? err.message : 'Hata oluştu')
     }
   }
