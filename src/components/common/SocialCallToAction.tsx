@@ -7,7 +7,7 @@ const LINKEDIN_URL = 'https://www.linkedin.com/company/aydin-torna-cnc'
 const INSTAGRAM_URL = 'https://www.instagram.com/aydintornacnc'
 const WA_NUMBER = import.meta.env.VITE_WHATSAPP_NUMBER || '905058807700'
 
-/** LinkedIn markası SVG (flat beyaz) */
+/** LinkedIn markası SVG */
 function LinkedInIcon({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden="true">
@@ -16,7 +16,7 @@ function LinkedInIcon({ className }: { className?: string }) {
   )
 }
 
-/** Instagram markası SVG (flat beyaz) */
+/** Instagram markası SVG */
 function InstagramIcon({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden="true">
@@ -68,11 +68,11 @@ export default function SocialCallToAction() {
   return (
     <section
       aria-labelledby="social-cta-heading"
-      className="w-full bg-neutral-950 border-t border-neutral-800 py-16 md:py-20 overflow-hidden relative"
+      className="w-full bg-zinc-50 dark:bg-zinc-950 border-t border-zinc-200 dark:border-zinc-800 py-16 md:py-20 overflow-hidden relative transition-colors"
     >
       {/* Arka plan dekorasyon — hafif radial */}
       <div
-        className="pointer-events-none absolute inset-0 opacity-20"
+        className="pointer-events-none absolute inset-0 opacity-10 dark:opacity-20"
         style={{
           background:
             'radial-gradient(ellipse 80% 60% at 50% 0%, #F97316 0%, transparent 70%)',
@@ -89,18 +89,18 @@ export default function SocialCallToAction() {
             viewport={{ once: true }}
             transition={{ duration: 0.55 }}
           >
-            <span className="inline-block text-xs font-semibold tracking-[0.2em] uppercase text-accent mb-4 px-4 py-1.5 rounded-full bg-accent/10 border border-accent/20">
+            <span className="inline-block text-xs font-semibold tracking-[0.2em] uppercase text-accent-600 dark:text-accent mb-4 px-4 py-1.5 rounded-full bg-accent/10 border border-accent/20">
               {lang === 'tr' ? 'Bizi Takip Edin' : 'Follow Us'}
             </span>
             <h2
               id="social-cta-heading"
-              className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white leading-tight max-w-2xl"
+              className="text-2xl sm:text-3xl lg:text-4xl font-bold text-zinc-900 dark:text-white leading-tight max-w-2xl"
             >
               {lang === 'tr'
                 ? 'Her hafta yeni bir üretim hikayesi!'
                 : 'A new production story every week!'}
             </h2>
-            <p className="mt-4 text-neutral-400 text-base sm:text-lg max-w-xl mx-auto leading-relaxed">
+            <p className="mt-4 text-zinc-600 dark:text-zinc-400 text-base sm:text-lg max-w-xl mx-auto leading-relaxed">
               {lang === 'tr'
                 ? 'Bizi LinkedIn ve Instagram\'dan takip edin, ağır sanayi çözümlerimizi, CNC torna hikayelerimizi ve teknik içeriklerimizi keşfedin.'
                 : 'Follow us on LinkedIn and Instagram to discover our heavy industry solutions, CNC turning stories and technical content.'}
@@ -156,7 +156,7 @@ export default function SocialCallToAction() {
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ delay: 0.5 }}
-            className="text-xs text-neutral-600 mt-2"
+            className="text-xs text-zinc-500 dark:text-zinc-500 mt-2"
           >
             {lang === 'tr'
               ? 'Haftalık teknik içerik · Ağır sanayi projeleri · CNC torna ve freze çözümleri'

@@ -122,7 +122,7 @@ export default function ProductionDiarySection({ projects }: ProductionDiarySect
     <section
       id="production-diary"
       aria-labelledby="diary-heading"
-      className="section-padding bg-zinc-950 text-white"
+      className="section-padding bg-white dark:bg-zinc-950 text-zinc-900 dark:text-white border-t border-zinc-200 dark:border-zinc-900 transition-colors"
     >
       <div className="container-max mx-auto">
         {/* Başlık */}
@@ -133,18 +133,18 @@ export default function ProductionDiarySection({ projects }: ProductionDiarySect
           transition={{ duration: 0.4 }}
           className="text-center mb-12 md:mb-16"
         >
-          <span className="inline-block text-xs font-semibold tracking-[0.2em] uppercase text-accent mb-3">
+          <span className="inline-block text-xs font-semibold tracking-[0.2em] uppercase text-accent-600 dark:text-accent mb-3">
             {lang === 'tr' ? '1992’den Beri Üretim Hafızası' : 'Production Archive Since 1992'}
           </span>
           <h2
             id="diary-heading"
-            className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-white mb-3"
+            className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-zinc-900 dark:text-white mb-3"
           >
             {lang === 'tr'
               ? 'Üretim Günlüğü: B2B Başarı Hikayelerimiz'
               : 'Production Diary: B2B Case Studies'}
           </h2>
-          <p className="text-zinc-400 text-base max-w-2xl mx-auto leading-relaxed">
+          <p className="text-zinc-600 dark:text-zinc-400 text-base max-w-2xl mx-auto leading-relaxed">
             {lang === 'tr'
               ? 'Abartısız mühendislik diliyle gerçek atölye kayıtları. Ağır torna, çap, boy, malzeme ve teslimat detayları.'
               : 'Real shop-floor case studies in transparent engineering terms. Dimensions, tolerances, materials and lead times.'}
@@ -175,11 +175,11 @@ export default function ProductionDiarySection({ projects }: ProductionDiarySect
                 className="
                   min-w-[85vw] sm:min-w-[360px] md:min-w-0
                   snap-start flex flex-col
-                  bg-zinc-900/40 rounded-xl overflow-hidden
+                  bg-zinc-50 dark:bg-zinc-900/40 border border-zinc-200/90 dark:border-zinc-800/80 rounded-xl overflow-hidden shadow-sm
                 "
               >
                 {/* Medya Alanı */}
-                <div className="relative w-full aspect-[16/10] overflow-hidden bg-zinc-900 flex-shrink-0">
+                <div className="relative w-full aspect-[16/10] overflow-hidden bg-zinc-200 dark:bg-zinc-900 flex-shrink-0">
                   {isVideo && currentMediaUrl ? (
                     <div
                       className="w-full h-full cursor-pointer relative"
@@ -221,7 +221,7 @@ export default function ProductionDiarySection({ projects }: ProductionDiarySect
                       </div>
                     </div>
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center text-zinc-700">
+                    <div className="w-full h-full flex items-center justify-center text-zinc-400 dark:text-zinc-600">
                       <Icon className="w-10 h-10" aria-hidden="true" />
                     </div>
                   )}
@@ -250,29 +250,29 @@ export default function ProductionDiarySection({ projects }: ProductionDiarySect
                 {/* Kart Gövdesi */}
                 <div className="flex flex-col flex-1 p-5">
                   {/* Meta: Tarih, Sektör, Süre */}
-                  <div className="flex flex-wrap items-center gap-3 text-xs text-zinc-400 mb-2.5">
+                  <div className="flex flex-wrap items-center gap-3 text-xs text-zinc-500 dark:text-zinc-400 mb-2.5">
                     {project.completion_date && (
-                      <span className="inline-flex items-center gap-1 text-accent font-medium">
+                      <span className="inline-flex items-center gap-1 text-orange-600 dark:text-accent font-medium">
                         <CalendarDays className="w-3.5 h-3.5" />
                         {formatDate(project.completion_date)}
                       </span>
                     )}
                     {clientType && (
-                      <span className="inline-flex items-center gap-1 text-zinc-300">
-                        <Building2 className="w-3.5 h-3.5 text-zinc-500" />
+                      <span className="inline-flex items-center gap-1 text-zinc-700 dark:text-zinc-300">
+                        <Building2 className="w-3.5 h-3.5 text-zinc-400 dark:text-zinc-500" />
                         {clientType}
                       </span>
                     )}
                     {project.processing_time && (
-                      <span className="inline-flex items-center gap-1 text-zinc-400">
-                        <Clock className="w-3.5 h-3.5 text-zinc-500" />
+                      <span className="inline-flex items-center gap-1 text-zinc-500 dark:text-zinc-400">
+                        <Clock className="w-3.5 h-3.5 text-zinc-400 dark:text-zinc-500" />
                         {project.processing_time}
                       </span>
                     )}
                   </div>
 
                   {/* Başlık */}
-                  <h3 className="text-white font-semibold text-lg leading-snug mb-2.5">
+                  <h3 className="text-zinc-900 dark:text-white font-semibold text-lg leading-snug mb-2.5">
                     {title}
                   </h3>
 
@@ -282,7 +282,7 @@ export default function ProductionDiarySection({ projects }: ProductionDiarySect
                       {specs.map((spec, si) => (
                         <span
                           key={si}
-                          className="text-[11px] font-medium px-2 py-0.5 rounded bg-zinc-900 text-zinc-300"
+                          className="text-[11px] font-medium px-2 py-0.5 rounded bg-zinc-200/80 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 border border-zinc-300/50 dark:border-zinc-700/50"
                         >
                           {spec}
                         </span>
@@ -292,7 +292,7 @@ export default function ProductionDiarySection({ projects }: ProductionDiarySect
 
                   {/* Açıklama */}
                   {description && (
-                    <p className="text-zinc-400 text-sm leading-relaxed line-clamp-3 flex-1 mb-5">
+                    <p className="text-zinc-600 dark:text-zinc-400 text-sm leading-relaxed line-clamp-3 flex-1 mb-5">
                       {description}
                     </p>
                   )}
@@ -303,8 +303,8 @@ export default function ProductionDiarySection({ projects }: ProductionDiarySect
                     className="
                       mt-auto flex items-center justify-between gap-2
                       px-4 py-2.5 rounded-lg
-                      bg-zinc-800 hover:bg-zinc-700
-                      text-white text-xs font-semibold
+                      bg-zinc-200 hover:bg-zinc-300 dark:bg-zinc-800 dark:hover:bg-zinc-700
+                      text-zinc-900 dark:text-white text-xs font-semibold
                       transition-colors
                     "
                   >

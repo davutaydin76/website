@@ -51,7 +51,7 @@ export default function Contact({ contact }: ContactProps) {
   ]
 
   return (
-    <section id="contact" className="section-padding bg-zinc-950 text-white">
+    <section id="contact" className="section-padding bg-zinc-50 dark:bg-zinc-950 border-t border-zinc-200 dark:border-zinc-900 transition-colors">
       <div className="container-max mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 15 }}
@@ -60,26 +60,26 @@ export default function Contact({ contact }: ContactProps) {
           transition={{ duration: 0.4 }}
           className="text-center mb-12"
         >
-          <h2 className="heading-lg mb-3 text-white">{t('contact.title')}</h2>
-          <p className="text-zinc-400 text-lg max-w-2xl mx-auto">{t('contact.subtitle')}</p>
+          <h2 className="heading-lg mb-3 text-zinc-900 dark:text-white">{t('contact.title')}</h2>
+          <p className="text-zinc-600 dark:text-zinc-400 text-lg max-w-2xl mx-auto">{t('contact.subtitle')}</p>
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {items.map((item) => {
               const CardContent = (
-                <div className="h-full bg-zinc-900/40 rounded-xl p-5 flex flex-col justify-between">
+                <div className="h-full bg-white dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 flex flex-col justify-between shadow-sm">
                   <div>
-                    <div className="w-10 h-10 rounded-lg bg-zinc-900 flex items-center justify-center mb-3.5 text-accent">
+                    <div className="w-10 h-10 rounded-lg bg-orange-500/10 dark:bg-orange-500/15 flex items-center justify-center mb-3.5 text-orange-600 dark:text-orange-500">
                       <item.icon className="w-5 h-5" />
                     </div>
-                    <p className="text-xs text-zinc-400 mb-1">{item.label}</p>
-                    <p className="font-semibold text-white text-sm sm:text-base">
+                    <p className="text-xs text-zinc-500 dark:text-zinc-400 mb-1">{item.label}</p>
+                    <p className="font-semibold text-zinc-900 dark:text-white text-sm sm:text-base">
                       {item.value}
                     </p>
                   </div>
                   {item.href && (
-                    <div className="mt-4 text-xs font-semibold text-accent flex items-center gap-1">
+                    <div className="mt-4 text-xs font-semibold text-accent-600 dark:text-accent flex items-center gap-1">
                       <span>{lang === 'tr' ? 'Bağlantıyı Aç' : 'Open Link'}</span>
                       <span>→</span>
                     </div>
@@ -108,7 +108,7 @@ export default function Contact({ contact }: ContactProps) {
           </div>
 
           {mapsUrl && (
-            <div className="rounded-xl overflow-hidden bg-zinc-900 h-[360px]">
+            <div className="rounded-xl overflow-hidden bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 h-[360px] shadow-sm">
               <iframe
                 src={mapsUrl}
                 width="100%"

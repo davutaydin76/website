@@ -149,12 +149,12 @@ export default function DiaryPage() {
         }
       />
 
-      <div className="pt-24 lg:pt-32 bg-zinc-950 min-h-screen text-white">
+      <div className="pt-24 lg:pt-32 bg-white dark:bg-zinc-950 min-h-screen text-zinc-900 dark:text-white transition-colors">
         <div className="container-max mx-auto px-4 sm:px-6 lg:px-8 pb-16">
           <div className="mb-6">
             <Link
               to="/"
-              className="inline-flex items-center gap-2 text-sm font-medium text-zinc-400 hover:text-accent transition-colors"
+              className="inline-flex items-center gap-2 text-sm font-medium text-zinc-600 dark:text-zinc-400 hover:text-accent transition-colors"
             >
               <ArrowLeft className="w-4 h-4" />
               {lang === 'tr' ? 'Ana Sayfa' : 'Home'}
@@ -162,13 +162,13 @@ export default function DiaryPage() {
           </div>
 
           <div className="text-center max-w-3xl mx-auto mb-10">
-            <span className="inline-block text-xs font-semibold tracking-[0.2em] uppercase text-accent mb-3">
+            <span className="inline-block text-xs font-semibold tracking-[0.2em] uppercase text-accent-600 dark:text-accent mb-3">
               {lang === 'tr' ? '1992’den Beri Üretim Hafızamız' : 'Production Archive Since 1992'}
             </span>
-            <h1 className="heading-xl text-white mb-3">
+            <h1 className="heading-xl text-zinc-900 dark:text-white mb-3">
               {lang === 'tr' ? 'Üretim Günlüğü / Vaka Analizleri' : 'Production Diary / Case Studies'}
             </h1>
-            <p className="text-zinc-400 text-base leading-relaxed">
+            <p className="text-zinc-600 dark:text-zinc-400 text-base leading-relaxed">
               {lang === 'tr'
                 ? 'Binlerce iş parçasından seçilen kronolojik kayıtlar. Ağır torna, çap, boy, malzeme ve teslimat detaylarıyla şeffaf mühendislik arşivi.'
                 : 'Chronological archive of real parts machined since 1992. Transparent engineering records with dimensions and metallurgy.'}
@@ -178,18 +178,18 @@ export default function DiaryPage() {
           {/* Arama Çubuğu */}
           <div className="max-w-xl mx-auto mb-10">
             <div className="relative">
-              <Search className="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500" />
+              <Search className="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400 dark:text-zinc-500" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder={lang === 'tr' ? 'Parça adı, çap, malzeme (örn: şaft, 4140, flanş)...' : 'Search part, material, diameter...'}
-                className="w-full pl-11 pr-4 py-2.5 rounded-lg bg-zinc-900 border border-zinc-800 text-white placeholder:text-zinc-500 focus:outline-none focus:ring-1 focus:ring-accent text-sm"
+                className="w-full pl-11 pr-4 py-2.5 rounded-lg bg-zinc-100 dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-800 text-zinc-900 dark:text-white placeholder:text-zinc-500 focus:outline-none focus:ring-1 focus:ring-accent text-sm"
               />
               {searchQuery && (
                 <button
                   onClick={() => setSearchQuery('')}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-white"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-900 dark:text-zinc-500 dark:hover:text-white"
                   aria-label="Aramayı temizle"
                 >
                   <X className="w-4 h-4" />
@@ -202,11 +202,11 @@ export default function DiaryPage() {
           {loading ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {[1, 2, 3, 4, 5, 6].map((k) => (
-                <div key={k} className="h-96 rounded-xl bg-zinc-900 animate-pulse" />
+                <div key={k} className="h-96 rounded-xl bg-zinc-200 dark:bg-zinc-900 animate-pulse" />
               ))}
             </div>
           ) : filteredProjects.length === 0 ? (
-            <div className="text-center py-20 text-zinc-400">
+            <div className="text-center py-20 text-zinc-500 dark:text-zinc-400">
               <p className="text-base mb-2">{lang === 'tr' ? 'Aramanızla eşleşen proje bulunamadı.' : 'No projects matched your search.'}</p>
               <button
                 onClick={() => setSearchQuery('')}
@@ -236,11 +236,11 @@ export default function DiaryPage() {
                   <article
                     key={project.id}
                     className="
-                      flex flex-col bg-zinc-900/40 rounded-xl overflow-hidden
+                      flex flex-col bg-zinc-50 dark:bg-zinc-900/40 border border-zinc-200/90 dark:border-zinc-800/80 rounded-xl overflow-hidden shadow-sm
                     "
                   >
                     {/* Medya */}
-                    <div className="relative w-full aspect-[16/10] overflow-hidden bg-zinc-900 flex-shrink-0">
+                    <div className="relative w-full aspect-[16/10] overflow-hidden bg-zinc-200 dark:bg-zinc-900 flex-shrink-0">
                       {isVideo && currentMediaUrl ? (
                         <div
                           className="w-full h-full cursor-pointer relative"
@@ -282,7 +282,7 @@ export default function DiaryPage() {
                           </div>
                         </div>
                       ) : (
-                        <div className="w-full h-full flex items-center justify-center text-zinc-700">
+                        <div className="w-full h-full flex items-center justify-center text-zinc-400 dark:text-zinc-600">
                           <Wrench className="w-10 h-10" aria-hidden="true" />
                         </div>
                       )}
@@ -309,28 +309,28 @@ export default function DiaryPage() {
 
                     {/* İçerik */}
                     <div className="flex flex-col flex-1 p-5">
-                      <div className="flex flex-wrap items-center gap-3 text-xs text-zinc-400 mb-2.5">
+                      <div className="flex flex-wrap items-center gap-3 text-xs text-zinc-500 dark:text-zinc-400 mb-2.5">
                         {project.completion_date && (
-                          <span className="inline-flex items-center gap-1 text-accent font-medium">
+                          <span className="inline-flex items-center gap-1 text-orange-600 dark:text-accent font-medium">
                             <CalendarDays className="w-3.5 h-3.5" />
                             {formatDate(project.completion_date)}
                           </span>
                         )}
                         {clientType && (
-                          <span className="inline-flex items-center gap-1 text-zinc-300">
-                            <Building2 className="w-3.5 h-3.5 text-zinc-500" />
+                          <span className="inline-flex items-center gap-1 text-zinc-700 dark:text-zinc-300">
+                            <Building2 className="w-3.5 h-3.5 text-zinc-400 dark:text-zinc-500" />
                             {clientType}
                           </span>
                         )}
                         {project.processing_time && (
-                          <span className="inline-flex items-center gap-1 text-zinc-400">
-                            <Clock className="w-3.5 h-3.5 text-zinc-500" />
+                          <span className="inline-flex items-center gap-1 text-zinc-500 dark:text-zinc-400">
+                            <Clock className="w-3.5 h-3.5 text-zinc-400 dark:text-zinc-500" />
                             {project.processing_time}
                           </span>
                         )}
                       </div>
 
-                      <h3 className="text-white font-semibold text-lg leading-snug mb-2.5">
+                      <h3 className="text-zinc-900 dark:text-white font-semibold text-lg leading-snug mb-2.5">
                         {title}
                       </h3>
 
@@ -339,7 +339,7 @@ export default function DiaryPage() {
                           {specs.map((spec, si) => (
                             <span
                               key={si}
-                              className="text-[11px] font-medium px-2 py-0.5 rounded bg-zinc-900 text-zinc-300"
+                              className="text-[11px] font-medium px-2 py-0.5 rounded bg-zinc-200/80 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 border border-zinc-300/50 dark:border-zinc-700/50"
                             >
                               {spec}
                             </span>
@@ -348,7 +348,7 @@ export default function DiaryPage() {
                       )}
 
                       {description && (
-                        <p className="text-zinc-400 text-sm leading-relaxed line-clamp-3 flex-1 mb-5">
+                        <p className="text-zinc-600 dark:text-zinc-400 text-sm leading-relaxed line-clamp-3 flex-1 mb-5">
                           {description}
                         </p>
                       )}
@@ -359,8 +359,8 @@ export default function DiaryPage() {
                         className="
                           mt-auto flex items-center justify-between gap-2
                           px-4 py-2.5 rounded-lg
-                          bg-zinc-800 hover:bg-zinc-700
-                          text-white text-xs font-semibold
+                          bg-zinc-200 hover:bg-zinc-300 dark:bg-zinc-800 dark:hover:bg-zinc-700
+                          text-zinc-900 dark:text-white text-xs font-semibold
                           transition-colors
                         "
                       >

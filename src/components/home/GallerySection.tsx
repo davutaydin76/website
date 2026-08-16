@@ -90,7 +90,7 @@ export default function GallerySection({ gallery = [], videos = [], loading = fa
   const closeLightbox = () => setLightbox(null)
 
   return (
-    <section id="gallery" className="section-padding bg-zinc-950">
+    <section id="gallery" className="section-padding bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-white border-t border-zinc-200 dark:border-zinc-900 transition-colors">
       <div className="container-max mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 15 }}
@@ -99,8 +99,8 @@ export default function GallerySection({ gallery = [], videos = [], loading = fa
           transition={{ duration: 0.4 }}
           className="text-center mb-10"
         >
-          <h2 className="heading-lg mb-3 text-white">{t('gallery.title')}</h2>
-          <p className="text-zinc-400 text-lg max-w-2xl mx-auto">{t('gallery.subtitle')}</p>
+          <h2 className="heading-lg mb-3 text-zinc-900 dark:text-white">{t('gallery.title')}</h2>
+          <p className="text-zinc-600 dark:text-zinc-400 text-lg max-w-2xl mx-auto">{t('gallery.subtitle')}</p>
         </motion.div>
 
         {/* Kategori Butonları */}
@@ -112,7 +112,7 @@ export default function GallerySection({ gallery = [], videos = [], loading = fa
               className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
                 category === cat.id
                   ? 'bg-accent-600 text-white shadow-sm'
-                  : 'bg-zinc-800 text-zinc-100 hover:bg-zinc-700 hover:text-white border border-zinc-700/60'
+                  : 'bg-zinc-200 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-200 hover:bg-zinc-300 dark:hover:bg-zinc-700 hover:text-zinc-900 dark:hover:text-white border border-zinc-300/80 dark:border-zinc-700/60'
               }`}
             >
               {lang === 'tr' ? cat.tr : cat.en}
@@ -208,7 +208,7 @@ export default function GallerySection({ gallery = [], videos = [], loading = fa
 
         <div className="text-center mt-10">
           <Link to="/gallery">
-            <Button variant="outline" className="border-zinc-800 text-zinc-200 hover:bg-zinc-900">
+            <Button variant="outline">
               {t('gallery.loadMore')}
               <ArrowRight className="w-4 h-4" />
             </Button>

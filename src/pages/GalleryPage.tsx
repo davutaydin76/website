@@ -107,19 +107,19 @@ export default function GalleryPage() {
     <>
       <SEO page="gallery" seo={seo} />
 
-      <div className="pt-24 lg:pt-32 section-padding bg-zinc-950 min-h-screen text-white">
+      <div className="pt-24 lg:pt-32 section-padding bg-white dark:bg-zinc-950 min-h-screen text-zinc-900 dark:text-white transition-colors">
         <div className="container-max mx-auto">
           {/* Geri Dönüş Linki */}
           <div className="mb-6">
-            <Link to="/" className="inline-flex items-center gap-2 text-sm font-medium text-zinc-400 hover:text-accent transition-colors">
+            <Link to="/" className="inline-flex items-center gap-2 text-sm font-medium text-zinc-600 dark:text-zinc-400 hover:text-accent transition-colors">
               <ArrowLeft className="w-4 h-4" />
               {lang === 'tr' ? 'Ana Sayfa' : 'Home'}
             </Link>
           </div>
 
           <div className="text-center mb-10">
-            <h1 className="heading-xl mb-3 text-white">{t('gallery.title')}</h1>
-            <p className="text-zinc-400 text-lg max-w-2xl mx-auto">{t('gallery.subtitle')}</p>
+            <h1 className="heading-xl mb-3 text-zinc-900 dark:text-white">{t('gallery.title')}</h1>
+            <p className="text-zinc-600 dark:text-zinc-400 text-lg max-w-2xl mx-auto">{t('gallery.subtitle')}</p>
           </div>
 
           {/* Kategori Filtreleri */}
@@ -131,7 +131,7 @@ export default function GalleryPage() {
                 className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
                   category === cat.id
                     ? 'bg-accent-600 text-white shadow-sm'
-                    : 'bg-zinc-800 text-zinc-100 hover:bg-zinc-700 hover:text-white border border-zinc-700/60'
+                    : 'bg-zinc-200 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-200 hover:bg-zinc-300 dark:hover:bg-zinc-700 hover:text-zinc-900 dark:hover:text-white border border-zinc-300/80 dark:border-zinc-700/60'
                 }`}
               >
                 {lang === 'tr' ? cat.tr : cat.en}

@@ -88,7 +88,7 @@ export default function CapacitySection() {
   const lang = i18n.language as 'tr' | 'en'
 
   return (
-    <section id="capacity" className="section-padding bg-zinc-950 text-white">
+    <section id="capacity" className="section-padding bg-white dark:bg-zinc-950 text-zinc-900 dark:text-white border-t border-zinc-200 dark:border-zinc-900 transition-colors">
       <div className="container-max mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 15 }}
@@ -97,15 +97,15 @@ export default function CapacitySection() {
           transition={{ duration: 0.4 }}
           className="text-center mb-12"
         >
-          <span className="inline-block text-xs font-semibold tracking-[0.2em] uppercase text-accent mb-3">
+          <span className="inline-block text-xs font-semibold tracking-[0.2em] uppercase text-accent-600 dark:text-accent mb-3">
             {lang === 'tr' ? 'Teknik Altyapı' : 'Technical Infrastructure'}
           </span>
-          <h2 className="heading-lg mb-3 text-white">
+          <h2 className="heading-lg mb-3 text-zinc-900 dark:text-white">
             {lang === 'tr'
               ? 'Üretim Kapasitemiz & Global Vizyonumuz'
               : 'Manufacturing Capacity & Global Reach'}
           </h2>
-          <p className="text-zinc-400 text-lg max-w-2xl mx-auto">
+          <p className="text-zinc-600 dark:text-zinc-400 text-lg max-w-2xl mx-auto">
             {lang === 'tr'
               ? 'Ağır sanayi ve hassas imalatta 20+ yıllık deneyim. Verilerle desteklenen, abartısız teknik kapasite.'
               : '20+ years in heavy industry and precision machining. Data-backed, accurate technical capacity.'}
@@ -123,19 +123,19 @@ export default function CapacitySection() {
             return (
               <div
                 key={i}
-                className="h-full bg-zinc-900/40 rounded-xl p-6 flex flex-col justify-between"
+                className="h-full bg-zinc-50 dark:bg-zinc-900/40 border border-zinc-200/90 dark:border-zinc-800/80 rounded-xl p-6 flex flex-col justify-between shadow-sm"
               >
                 <div>
-                  <div className="w-10 h-10 rounded-lg bg-zinc-900 flex items-center justify-center mb-4 text-accent">
+                  <div className="w-10 h-10 rounded-lg bg-orange-500/10 dark:bg-orange-500/15 flex items-center justify-center mb-4 text-orange-600 dark:text-orange-500">
                     <Icon className="w-5 h-5" />
                   </div>
-                  <p className="text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-1">
+                  <p className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 mb-1">
                     {title}
                   </p>
-                  <h3 className="text-base font-bold text-white mb-2.5">
+                  <h3 className="text-base font-bold text-zinc-900 dark:text-white mb-2.5">
                     {value}
                   </h3>
-                  <p className="text-sm text-zinc-400 leading-relaxed">
+                  <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">
                     {detail}
                   </p>
                 </div>
@@ -144,7 +144,7 @@ export default function CapacitySection() {
           })}
         </div>
 
-        <p className="text-center text-xs text-zinc-500 mt-10 max-w-xl mx-auto">
+        <p className="text-center text-xs text-zinc-500 dark:text-zinc-500 mt-10 max-w-xl mx-auto">
           {lang === 'tr'
             ? '* Tüm kapasite değerleri mevcut tezgah parkuruna dayanmaktadır. Projeye özel değerlendirme için teknik ekibimizle iletişime geçin.'
             : '* All capacity values are based on current machine inventory. Contact our technical team for project-specific assessments.'}

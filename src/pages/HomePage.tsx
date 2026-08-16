@@ -133,7 +133,7 @@ export default function HomePage() {
       <Clients clients={clients} />
       <GallerySection gallery={gallery} videos={videos} loading={loading} />
 
-      <section id="quote-form" className="section-padding bg-zinc-950">
+      <section id="quote-form" className="section-padding bg-white dark:bg-zinc-950 border-t border-zinc-200 dark:border-zinc-900 transition-colors">
         <div className="container-max mx-auto">
           <OfferForm />
         </div>

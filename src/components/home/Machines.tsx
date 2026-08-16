@@ -20,7 +20,7 @@ export default function Machines({ machines }: MachinesProps) {
   const items = machines?.length ? machines : fallbackMachines
 
   return (
-    <section id="machines" className="section-padding bg-zinc-950">
+    <section id="machines" className="section-padding bg-zinc-50 dark:bg-zinc-950 border-t border-zinc-200 dark:border-zinc-900 transition-colors">
       <div className="container-max mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 15 }}
@@ -29,8 +29,8 @@ export default function Machines({ machines }: MachinesProps) {
           transition={{ duration: 0.4 }}
           className="text-center mb-12"
         >
-          <h2 className="heading-lg mb-4 text-white">{t('machines.title')}</h2>
-          <p className="text-zinc-400 text-lg max-w-2xl mx-auto">{t('machines.subtitle')}</p>
+          <h2 className="heading-lg mb-4 text-zinc-900 dark:text-white">{t('machines.title')}</h2>
+          <p className="text-zinc-600 dark:text-zinc-400 text-lg max-w-2xl mx-auto">{t('machines.subtitle')}</p>
         </motion.div>
 
         {/*
@@ -53,7 +53,7 @@ export default function Machines({ machines }: MachinesProps) {
                 className="flex-shrink-0 w-[85vw] sm:w-[60vw] md:w-auto snap-start flex flex-col"
               >
                 {'image_url' in machine && machine.image_url && (
-                  <div className="w-full aspect-[4/3] rounded-xl overflow-hidden mb-4 bg-zinc-900">
+                  <div className="w-full aspect-[4/3] rounded-xl overflow-hidden mb-4 bg-zinc-200 dark:bg-zinc-900">
                     <img
                       src={getOptimizedImageUrl(machine.image_url, 600, 70)}
                       alt={name}
@@ -67,8 +67,8 @@ export default function Machines({ machines }: MachinesProps) {
                 )}
                 <div className="flex items-start justify-between gap-4">
                   <div>
-                    <h3 className="font-semibold text-xl text-white mb-1.5">{name}</h3>
-                    {description && <p className="text-sm text-zinc-400 mb-3 leading-relaxed">{description}</p>}
+                    <h3 className="font-semibold text-xl text-zinc-900 dark:text-white mb-1.5">{name}</h3>
+                    {description && <p className="text-sm text-zinc-600 dark:text-zinc-400 mb-3 leading-relaxed">{description}</p>}
                   </div>
                   <div className="w-2 h-2 rounded-full bg-accent mt-2 flex-shrink-0" />
                 </div>
@@ -77,7 +77,7 @@ export default function Machines({ machines }: MachinesProps) {
                     {Object.entries(specs).map(([key, value]) => (
                       <span
                         key={key}
-                        className="px-3 py-1 text-xs font-medium rounded-md bg-zinc-900 text-zinc-300"
+                        className="px-3 py-1 text-xs font-medium rounded-md bg-zinc-200/80 dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 border border-zinc-300/60 dark:border-zinc-800"
                       >
                         {key.toUpperCase()}: {value}
                       </span>

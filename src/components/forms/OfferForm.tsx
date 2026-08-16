@@ -110,11 +110,11 @@ export default function OfferForm({ compact = false }: OfferFormProps) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
     >
-      <Card className={compact ? '' : 'max-w-2xl mx-auto bg-zinc-900/40 border-zinc-800'}>
+      <Card className={compact ? '' : 'max-w-2xl mx-auto bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800'}>
         {!compact && (
           <div className="mb-8 text-center">
-            <h2 className="heading-md mb-2 text-white">{t('offer.title')}</h2>
-            <p className="text-zinc-400">{t('offer.subtitle')}</p>
+            <h2 className="heading-md mb-2 text-zinc-900 dark:text-white">{t('offer.title')}</h2>
+            <p className="text-zinc-600 dark:text-zinc-400">{t('offer.subtitle')}</p>
           </div>
         )}
 

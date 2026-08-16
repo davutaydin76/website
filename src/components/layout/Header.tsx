@@ -96,7 +96,7 @@ export default function Header() {
               alt="Aydın Torna CNC Logo"
               width={32}
               height={32}
-              className="w-8 h-8 rounded-lg object-contain bg-black dark:bg-transparent"
+              className="w-8 h-8 rounded-lg object-contain bg-transparent"
             />
             <span
               className={cn(

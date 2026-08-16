@@ -62,7 +62,7 @@ export default function Services({ services }: ServicesProps) {
   const items = services?.length ? services : fallbackServices
 
   return (
-    <section id="services" className="section-padding bg-zinc-950 text-white">
+    <section id="services" className="section-padding bg-white dark:bg-zinc-950 text-zinc-900 dark:text-white transition-colors">
       <div className="container-max mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 15 }}
@@ -71,8 +71,8 @@ export default function Services({ services }: ServicesProps) {
           transition={{ duration: 0.4 }}
           className="text-center mb-12"
         >
-          <h2 className="heading-lg mb-3 text-white">{t('services.title')}</h2>
-          <p className="text-zinc-400 text-lg max-w-2xl mx-auto">{t('services.subtitle')}</p>
+          <h2 className="heading-lg mb-3 text-zinc-900 dark:text-white">{t('services.title')}</h2>
+          <p className="text-zinc-600 dark:text-zinc-400 text-lg max-w-2xl mx-auto">{t('services.subtitle')}</p>
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -88,17 +88,17 @@ export default function Services({ services }: ServicesProps) {
             return (
               <div
                 key={'id' in service ? String(service.id) : i}
-                className="h-full bg-zinc-900/40 rounded-xl p-6 flex flex-col justify-between"
+                className="h-full bg-zinc-50 dark:bg-zinc-900/40 border border-zinc-200/90 dark:border-zinc-800/80 rounded-xl p-6 flex flex-col justify-between shadow-sm"
               >
                 <div>
-                  <div className="w-10 h-10 rounded-lg bg-zinc-900 flex items-center justify-center mb-4 text-accent">
+                  <div className="w-10 h-10 rounded-lg bg-orange-500/10 dark:bg-orange-500/15 flex items-center justify-center mb-4 text-orange-600 dark:text-orange-500">
                     <Icon className="w-5 h-5" />
                   </div>
-                  <h3 className="font-semibold text-lg text-white mb-2">
+                  <h3 className="font-semibold text-lg text-zinc-900 dark:text-white mb-2">
                     {title}
                   </h3>
                   {description && (
-                    <p className="text-sm text-zinc-400 leading-relaxed">
+                    <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">
                       {description}
                     </p>
                   )}

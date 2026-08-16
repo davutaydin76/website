@@ -30,10 +30,10 @@ export default function Clients({ clients }: ClientsProps) {
   const displayList: BrandItem[] = [...baseList, ...baseList]
 
   return (
-    <section className="bg-zinc-950 py-12 md:py-16 overflow-hidden relative border-y border-zinc-900/60">
-      {/* Sol ve sağ kenar karartma geçişleri */}
-      <div className="pointer-events-none absolute inset-y-0 left-0 w-16 md:w-32 bg-gradient-to-r from-zinc-950 to-transparent z-10" />
-      <div className="pointer-events-none absolute inset-y-0 right-0 w-16 md:w-32 bg-gradient-to-l from-zinc-950 to-transparent z-10" />
+    <section className="bg-white dark:bg-zinc-950 py-12 md:py-16 overflow-hidden relative border-y border-zinc-200 dark:border-zinc-900 transition-colors">
+      {/* Sol ve sağ kenar karartma/aydınlatma geçişleri */}
+      <div className="pointer-events-none absolute inset-y-0 left-0 w-16 md:w-32 bg-gradient-to-r from-white dark:from-zinc-950 to-transparent z-10" />
+      <div className="pointer-events-none absolute inset-y-0 right-0 w-16 md:w-32 bg-gradient-to-l from-white dark:from-zinc-950 to-transparent z-10" />
 
       <div className="container-max mx-auto px-4 sm:px-6 lg:px-8 mb-8">
         <motion.div
@@ -43,10 +43,10 @@ export default function Clients({ clients }: ClientsProps) {
           transition={{ duration: 0.4 }}
           className="text-center"
         >
-          <h2 className="text-xl sm:text-2xl font-semibold tracking-tight text-white mb-2">
+          <h2 className="text-xl sm:text-2xl font-semibold tracking-tight text-zinc-900 dark:text-white mb-2">
             {t('clients.title') || 'Çalıştığımız Markalar'}
           </h2>
-          <p className="text-zinc-400 text-sm max-w-lg mx-auto">
+          <p className="text-zinc-600 dark:text-zinc-400 text-sm max-w-lg mx-auto">
             {t('clients.subtitle') || 'Yüksek hassasiyetli imalatta güvendiğimiz ve iş birliği yaptığımız teknolojiler'}
           </p>
         </motion.div>
@@ -59,7 +59,7 @@ export default function Clients({ clients }: ClientsProps) {
             const hasLogo = 'logo_url' in item && item.logo_url
 
             const content = (
-              <div className="h-10 md:h-12 flex items-center justify-center select-none opacity-80 hover:opacity-100 transition-opacity duration-200">
+              <div className="h-10 md:h-12 flex items-center justify-center select-none opacity-75 hover:opacity-100 dark:opacity-80 dark:hover:opacity-100 transition-opacity duration-200">
                 {hasLogo ? (
                   <img
                     src={item.logo_url!}
@@ -71,7 +71,7 @@ export default function Clients({ clients }: ClientsProps) {
                     decoding="async"
                   />
                 ) : (
-                  <span className="text-sm md:text-base font-bold text-zinc-300 uppercase tracking-widest text-center">
+                  <span className="text-sm md:text-base font-bold text-zinc-700 dark:text-zinc-300 uppercase tracking-widest text-center">
                     {item.name}
                   </span>
                 )}
