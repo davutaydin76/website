@@ -23,7 +23,7 @@ export default function Hero({ content }: HeroProps) {
   // Harici (mixkit.co vb.) bağlantılar kesinlikle kullanılmaz.
   const videoUrl = content?.video_url || null
 
-  const backgroundImage = content?.background_image || '/images/factory-exterior.jpg'
+  const backgroundImage = content?.background_image || '/images/factory-exterior.webp'
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">

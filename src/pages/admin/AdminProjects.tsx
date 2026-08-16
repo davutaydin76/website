@@ -345,7 +345,7 @@ export default function AdminProjects() {
           {/* ── TEKNİK ÖZETLER (SPECS) ── */}
           <div>
             <h3 className="text-sm font-semibold mb-3 text-neutral-600 dark:text-neutral-400 uppercase tracking-wide">⚙️ Teknik Özellikler (Pill'ler)</h3>
-            <p className="text-xs text-muted mb-3">Birden fazla özelliği <code className="bg-neutral-100 dark:bg-neutral-800 px-1 rounded">·</code> ile ayırın. Örn: <em>Ø1200mm · 4140 Çelik · ±0.02mm · 7500mm boy</em></p>
+            <p className="text-xs text-muted mb-3">Birden fazla özelliği <code className="bg-neutral-100 dark:bg-neutral-800 px-1 rounded">·</code> ile ayırın. Örn: <em>Ø1200mm · 4140 Çelik · ±0.02mm · 5500mm boy</em></p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Input id="proj-specs-tr" label="Teknik Özet (TR)"
                 placeholder="Ø240mm · AISI 4340 · Ra 0.8µm · ±0.02mm"

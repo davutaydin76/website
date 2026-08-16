@@ -19,8 +19,8 @@ const capacityCards: CapacityCard[] = [
     icon: Ruler,
     titleTr: 'Ağır İşleme Kapasitesi',
     titleEn: 'Heavy Duty Turning',
-    valueTr: '7500 mm işleme boyu',
-    valueEn: '7500 mm machining length',
+    valueTr: '5500 mm işleme boyu',
+    valueEn: '5500 mm machining length',
     detailTr:
       'Ayna önü (swing over bed) maks. Ø1200 mm, kater üzeri (swing over carriage) maks. Ø800 mm çap işleme kapasitesi.',
     detailEn:

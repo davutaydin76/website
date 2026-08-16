@@ -8,16 +8,16 @@ Aydın Torna CNC, Kocaeli'nin Dilovası ilçesinde faaliyet gösteren, 20 yılı
 
 ## Hizmetler
 
-- CNC Torna İşlemleri (Ø10 mm – Ø1200 mm arası, 7500 mm boy kapasitesi)
-- CNC Freze & İşleme Merkezi (3 eksen – 5 eksen)
-- Endüstriyel Kaynak (MIG/MAG, TIG, Elektrik Ark)
-- Prototip ve Seri Parça İmalat
-- Teknik Çizim & Mühendislik Desteği
+- CNC Torna İşlemleri (Ø10 mm – Ø1200 mm arası, 5500 mm boy kapasitesi)
+- CNC Freze & İşleme Merkezi (3 ve 5 eksenli dik işleme)
+- Kaynak & İmalat (MIG/MAG/TIG)
+- Prototip İmalat & Seri Talaşlı Üretim
+- CMM Hassas Ölçüm & Kalite Kontrol
 
 ## Makine Parkuru
 
-- CNC Torna 1300x800 — SIEMENS/FAGOR kontrolcülü
-- CNC Torna 7500x900-1200 — Ağır sanayi kapasitesi
+- CNC Torna 1300x800 — Hassas torna işleri
+- CNC Torna 5500x900-1200 — Ağır sanayi kapasitesi
 - İşleme Merkezi (3-5 eksen)
 - Kaynak sistemleri (MIG/MAG/TIG)
 

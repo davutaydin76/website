@@ -13,8 +13,10 @@ export default function Footer() {
           <div>
             <div className="flex items-center gap-2 mb-4">
               <img
-                src="/logo.png"
+                src="/logo.webp"
                 alt="Aydın Torna CNC Logo"
+                width={32}
+                height={32}
                 className="w-8 h-8 rounded-lg object-contain bg-black dark:bg-transparent"
               />
               <span className="font-semibold text-lg">Aydın Torna CNC</span>
@@ -23,7 +25,7 @@ export default function Footer() {
           </div>
 
           <div>
-            <h4 className="font-semibold mb-4">{t('nav.contact')}</h4>
+            <h3 className="font-semibold text-base mb-4 text-white">{t('nav.contact')}</h3>
             <ul className="space-y-3 text-sm text-muted">
               <li className="flex items-center gap-2">
                 <Phone className="w-4 h-4 text-accent" />
@@ -52,7 +54,7 @@ export default function Footer() {
           </div>
 
           <div>
-            <h4 className="font-semibold mb-4">{t('nav.home')}</h4>
+            <h3 className="font-semibold text-base mb-4 text-white">{t('nav.home')}</h3>
             <ul className="space-y-2 text-sm text-muted">
               <li><Link to="/" className="hover:text-accent transition-colors">{t('nav.home')}</Link></li>
               <li><Link to="/gallery" className="hover:text-accent transition-colors">{t('nav.gallery')}</Link></li>

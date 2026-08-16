@@ -92,8 +92,10 @@ export default function Header() {
         <div className="flex items-center justify-between h-16 lg:h-20">
           <Link to="/" className="flex items-center gap-2 group">
             <img
-              src="/logo.png"
+              src="/logo.webp"
               alt="Aydın Torna CNC Logo"
+              width={32}
+              height={32}
               className="w-8 h-8 rounded-lg object-contain bg-black dark:bg-transparent"
             />
             <span

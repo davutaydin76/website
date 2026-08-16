@@ -172,25 +172,19 @@ export async function getFileUrl(storedPath: string): Promise<string> {
 }
 
 /**
- * Supabase Storage URL'lerine otomatik dönüşüm parametreleri ekler.
- * Yerel URL'ler (/images/...) veya harici URL'ler olduğu gibi döndürülür.
- * 2.5MB+ devasa görseller tarayıcıya WebP + sıkıştırılmış formatta (?width=600&quality=70&format=webp) gelir.
+ * Görsel URL'sini güvenli şekilde döndürür.
+ * Supabase Free Plan'da 'Image Transformation' kısıtlaması nedeniyle
+ * URL parametresi eklenmez, orijinal ve ham URL doğrudan döndürülür.
  *
  * @param url - Ham görsel URL'si
- * @param width - İstenen genişlik (varsayılan: 600)
- * @param quality - Sıkıştırma kalitesi (varsayılan: 70)
+ * @param _width - Opsiyonel genişlik parametresi (uyumluluk için)
+ * @param _quality - Opsiyonel kalite parametresi (uyumluluk için)
  */
 export function getOptimizedImageUrl(
   url: string | undefined | null,
-  width = 600,
-  quality = 70
+  _width?: number,
+  _quality?: number
 ): string {
   if (!url) return ''
-  // Yerel veya harici (Supabase dışı) URL'leri dönüştürme
-  if (!url.includes('supabase.co')) return url
-  // Zaten transform parametresi varsa olduğu gibi döndür
-  if (url.includes('width=') || url.includes('transform')) return url
-  // Supabase Image Transformation API
-  const separator = url.includes('?') ? '&' : '?'
-  return `${url}${separator}width=${width}&quality=${quality}&format=webp`
+  return url
 }

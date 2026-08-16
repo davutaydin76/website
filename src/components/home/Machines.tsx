@@ -8,10 +8,10 @@ interface MachinesProps {
 }
 
 const fallbackMachines = [
-  { name_tr: 'CNC Torna 1300x800', name_en: 'CNC Lathe 1300x800', image_url: '/images/lathe-workpiece.jpg', specs: { x: '1300mm', z: '800mm' } },
-  { name_tr: 'CNC Torna 7500x900-1200', name_en: 'CNC Lathe 7500x900-1200', image_url: '/images/long-lathe.jpg', specs: { x: '7500mm', z: '900-1200mm' } },
-  { name_tr: 'İşleme Merkezi', name_en: 'Machining Center', image_url: '/images/lathe-chuck.jpg', specs: { axes: '3-5' } },
-  { name_tr: 'Kaynak Sistemleri', name_en: 'Welding Systems', image_url: '/images/factory-exterior.jpg', specs: { type: 'MIG/MAG/TIG' } },
+  { name_tr: 'CNC Torna 1300x800', name_en: 'CNC Lathe 1300x800', image_url: '/images/lathe-workpiece.webp', specs: { x: '1300mm', z: '800mm' } },
+  { name_tr: 'CNC Torna 5500x900-1200', name_en: 'CNC Lathe 5500x900-1200', image_url: '/images/long-lathe.webp', specs: { x: '5500mm', z: '900-1200mm' } },
+  { name_tr: 'İşleme Merkezi', name_en: 'Machining Center', image_url: '/images/lathe-chuck.webp', specs: { axes: '3-5' } },
+  { name_tr: 'Kaynak Sistemleri', name_en: 'Welding Systems', image_url: '/images/factory-exterior.webp', specs: { type: 'MIG/MAG/TIG' } },
 ]
 
 export default function Machines({ machines }: MachinesProps) {

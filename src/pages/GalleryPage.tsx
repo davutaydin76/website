@@ -71,10 +71,10 @@ export default function GalleryPage() {
   }, [lightbox])
 
   const defaultPhotos: GalleryItem[] = [
-    { id: 'f-1', image_url: '/images/factory-exterior.jpg', title_tr: 'Aydın Torna Dış Görünüm', title_en: 'Aydın Torna Exterior View', category: 'genel', sort_order: 0, is_active: true, created_at: '' },
-    { id: 'f-2', image_url: '/images/long-lathe.jpg', title_tr: '7.5 Metre CNC Torna Tezgahı', title_en: '7.5m CNC Lathe Machine', category: 'torna', sort_order: 1, is_active: true, created_at: '' },
-    { id: 'f-3', image_url: '/images/lathe-workpiece.jpg', title_tr: 'Ağır Sanayi CNC Torna İmalatı', title_en: 'Heavy Duty CNC Lathe Production', category: 'torna', sort_order: 2, is_active: true, created_at: '' },
-    { id: 'f-4', image_url: '/images/lathe-chuck.jpg', title_tr: 'Hassas Torna İşleme Aşaması', title_en: 'Precision Lathe Machining Stage', category: 'torna', sort_order: 3, is_active: true, created_at: '' },
+    { id: 'f-1', image_url: '/images/factory-exterior.webp', title_tr: 'Aydın Torna Dış Görünüm', title_en: 'Aydın Torna Exterior View', category: 'genel', sort_order: 0, is_active: true, created_at: '' },
+    { id: 'f-2', image_url: '/images/long-lathe.webp', title_tr: '5.5 Metre CNC Torna Tezgahı', title_en: '5.5m CNC Lathe Machine', category: 'torna', sort_order: 1, is_active: true, created_at: '' },
+    { id: 'f-3', image_url: '/images/lathe-workpiece.webp', title_tr: 'Ağır Sanayi CNC Torna İmalatı', title_en: 'Heavy Duty CNC Lathe Production', category: 'torna', sort_order: 2, is_active: true, created_at: '' },
+    { id: 'f-4', image_url: '/images/lathe-chuck.webp', title_tr: 'Hassas Torna İşleme Aşaması', title_en: 'Precision Lathe Machining Stage', category: 'torna', sort_order: 3, is_active: true, created_at: '' },
   ]
 
   const sourcePhotos = gallery.length > 0 ? gallery : defaultPhotos
@@ -128,10 +128,10 @@ export default function GalleryPage() {
               <button
                 key={cat.id}
                 onClick={() => setCategory(cat.id)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+                className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
                   category === cat.id
-                    ? 'bg-accent-600 text-white'
-                    : 'bg-zinc-900 text-zinc-400 hover:bg-zinc-800 hover:text-white'
+                    ? 'bg-accent-600 text-white shadow-sm'
+                    : 'bg-zinc-800 text-zinc-100 hover:bg-zinc-700 hover:text-white border border-zinc-700/60'
                 }`}
               >
                 {lang === 'tr' ? cat.tr : cat.en}

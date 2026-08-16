@@ -26,9 +26,8 @@ export default function Clients({ clients }: ClientsProps) {
   const { t } = useTranslation()
   const baseList: BrandItem[] = clients?.length ? clients : fallbackBrands
 
-  const repeatCount = Math.max(2, Math.ceil(12 / baseList.length))
-  const singleSet: BrandItem[] = Array.from({ length: repeatCount }).flatMap(() => baseList)
-  const displayList: BrandItem[] = [...singleSet, ...singleSet]
+  // DOM boyutunu hafif tutmak için yalnızca 2 kopya kullanılır
+  const displayList: BrandItem[] = [...baseList, ...baseList]
 
   return (
     <section className="bg-zinc-950 py-12 md:py-16 overflow-hidden relative border-y border-zinc-900/60">

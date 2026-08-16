@@ -37,8 +37,8 @@ const fallbackProjects: ProjectData[] = [
       'Büyük bir gemi ana tahrik sistemi için 6 metre boyunda şaft revizyonu. Salgı ve balans testleri sıfır toleransla tamamlandı. CNC ağır torna tezgahımızda tek bağlamada işlendi.',
     description_en:
       '6-meter marine main propulsion shaft revision. Runout and balance tests verified with tight tolerances on our heavy CNC lathe.',
-    media_urls: ['/images/long-lathe.jpg'],
-    cover_image_url: '/images/long-lathe.jpg',
+    media_urls: ['/images/long-lathe.webp'],
+    cover_image_url: '/images/long-lathe.webp',
     is_active: true,
     sort_order: 0,
     meta_keywords: 'gemi şaftı torna, marine shaft machining, kocaeli cnc torna',
@@ -58,8 +58,8 @@ const fallbackProjects: ProjectData[] = [
       'Ayna önü (swing over bed) Ø1200mm kapasitemizin sınırında ağır tip talaş kaldırma. Sızdırmazlık yüzeyleri ve cıvata delik eksenleri CMM kalite kontrol raporuyla onaylandı.',
     description_en:
       'Heavy turning at the limits of our Ø1200mm swing-over-bed capacity. Sealing surfaces and bolt circles CMM verified.',
-    media_urls: ['/images/lathe-chuck.jpg'],
-    cover_image_url: '/images/lathe-chuck.jpg',
+    media_urls: ['/images/lathe-chuck.webp'],
+    cover_image_url: '/images/lathe-chuck.webp',
     is_active: true,
     sort_order: 1,
     meta_keywords: 'büyük flanş imalatı, large flange machining, ağır sanayi torna',
@@ -79,8 +79,8 @@ const fallbackProjects: ProjectData[] = [
       'Türbin kademesi için kompleks geometrili prototip işleme. 5 eksen işleme merkezimizde hassas yüzey tarama ve CAD/CAM modelleme desteğiyle tamamlandı.',
     description_en:
       'Complex geometry prototype for energy turbine stages. Processed on 5-axis center with CAD/CAM simulation.',
-    media_urls: ['/images/lathe-workpiece.jpg'],
-    cover_image_url: '/images/lathe-workpiece.jpg',
+    media_urls: ['/images/lathe-workpiece.webp'],
+    cover_image_url: '/images/lathe-workpiece.webp',
     is_active: true,
     sort_order: 2,
     meta_keywords: 'prototip imalat, 5 eksen frezeleme, enerji sektörü cnc',

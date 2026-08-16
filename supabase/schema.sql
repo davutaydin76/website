@@ -225,7 +225,7 @@ INSERT INTO services (title_tr, title_en, description_tr, description_en, icon, 
 
 INSERT INTO machines (name_tr, name_en, description_tr, description_en, specs, sort_order) VALUES
 ('CNC Torna 1300x800', 'CNC Lathe 1300x800', 'Orta boy parçalar için ideal', 'Ideal for medium-sized parts', '{"x": "1300mm", "z": "800mm"}', 1),
-('CNC Torna 7500x900-1200', 'CNC Lathe 7500x900-1200', 'Büyük boy parça işleme kapasitesi', 'Large part machining capacity', '{"x": "7500mm", "z": "900-1200mm"}', 2),
+('CNC Torna 5500x900-1200', 'CNC Lathe 5500x900-1200', 'Büyük boy parça işleme kapasitesi', 'Large part machining capacity', '{"x": "5500mm", "z": "900-1200mm"}', 2),
 ('İşleme Merkezi', 'Machining Center', 'Çok eksenli hassas işleme', 'Multi-axis precision machining', '{"axes": "3-5"}', 3),
 ('Kaynak Sistemleri', 'Welding Systems', 'Modern kaynak ekipmanları', 'Modern welding equipment', '{"type": "MIG/MAG/TIG"}', 4);
 
