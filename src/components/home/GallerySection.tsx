@@ -14,12 +14,10 @@ interface GallerySectionProps {
   loading?: boolean
 }
 
-/** Galeri öğesi — fotoğraf veya video olabilir */
 type UnifiedItem =
   | { kind: 'photo'; data: GalleryItem }
   | { kind: 'video'; data: VideoItem }
 
-/** Lightbox içeriği */
 type LightboxItem =
   | { kind: 'photo'; item: GalleryItem }
   | { kind: 'video'; item: VideoItem }
@@ -31,7 +29,6 @@ export default function GallerySection({ gallery = [], videos = [], loading = fa
   const [lightbox, setLightbox] = useState<LightboxItem | null>(null)
   const scrollContainerRef = useRef<HTMLDivElement>(null)
 
-  // Mouse tekerleği ile yatay kaydırma
   useEffect(() => {
     const el = scrollContainerRef.current
     if (!el) return
@@ -49,7 +46,6 @@ export default function GallerySection({ gallery = [], videos = [], loading = fa
     }
   }, [category, loading])
 
-  // ESC ile lightbox kapat
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       if (e.key === 'Escape') setLightbox(null)
@@ -67,7 +63,6 @@ export default function GallerySection({ gallery = [], videos = [], loading = fa
 
   const sourcePhotos = gallery.length > 0 ? gallery : defaultPhotos
 
-  // Normalize edilmiş kategori karşılaştırması
   const matchesFilter = useCallback((itemCat: string | undefined | null) => {
     if (!category || category === 'all') return true
     const normItem = normalize(itemCat || '')
@@ -75,11 +70,9 @@ export default function GallerySection({ gallery = [], videos = [], loading = fa
     return normItem === normSelected || normItem.includes(normSelected) || normSelected.includes(normItem)
   }, [category])
 
-  // Fotoğraf ve videoları tek birleşik listede karıştır
   const filteredPhotos = sourcePhotos.filter((g) => matchesFilter(g.category))
   const filteredVideos = videos.filter((v) => matchesFilter(v.category))
 
-  // Videoları fotoğraflar arasına serpiştir (her 3 fotoğraftan sonra 1 video)
   const unified: UnifiedItem[] = []
   let vi = 0
   filteredPhotos.forEach((photo, i) => {
@@ -88,7 +81,6 @@ export default function GallerySection({ gallery = [], videos = [], loading = fa
       unified.push({ kind: 'video', data: filteredVideos[vi++] })
     }
   })
-  // Kalan videoları sona ekle
   while (vi < filteredVideos.length) {
     unified.push({ kind: 'video', data: filteredVideos[vi++] })
   }
@@ -98,28 +90,29 @@ export default function GallerySection({ gallery = [], videos = [], loading = fa
   const closeLightbox = () => setLightbox(null)
 
   return (
-    <section id="gallery" className="section-padding">
+    <section id="gallery" className="section-padding bg-zinc-950">
       <div className="container-max mx-auto">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 15 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-12"
+          transition={{ duration: 0.4 }}
+          className="text-center mb-10"
         >
-          <h2 className="heading-lg mb-4">{t('gallery.title')}</h2>
-          <p className="text-muted text-lg">{t('gallery.subtitle')}</p>
+          <h2 className="heading-lg mb-3 text-white">{t('gallery.title')}</h2>
+          <p className="text-zinc-400 text-lg max-w-2xl mx-auto">{t('gallery.subtitle')}</p>
         </motion.div>
 
-        {/* Kategori Filtreleri */}
+        {/* Kategori Butonları */}
         <div className="flex flex-wrap gap-2 justify-center mb-8">
           {GALLERY_CATEGORIES.map((cat) => (
             <button
               key={cat.id}
               onClick={() => setCategory(cat.id)}
-              className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
                 category === cat.id
-                  ? 'bg-accent text-white'
-                  : 'bg-neutral-100 dark:bg-neutral-800 text-muted hover:bg-neutral-200 dark:hover:bg-neutral-700'
+                  ? 'bg-accent-600 text-white'
+                  : 'bg-zinc-900 text-zinc-400 hover:bg-zinc-800 hover:text-white'
               }`}
             >
               {lang === 'tr' ? cat.tr : cat.en}
@@ -129,7 +122,7 @@ export default function GallerySection({ gallery = [], videos = [], loading = fa
 
         {/* Loading Skeleton */}
         {loading ? (
-          <div className="h-[540px] md:h-[620px] overflow-hidden flex flex-col justify-center">
+          <div className="h-[520px] md:h-[580px] overflow-hidden flex flex-col justify-center">
             <div className="grid grid-rows-3 grid-flow-col gap-3 md:gap-4 h-full auto-cols-[220px] md:auto-cols-[300px]">
               {Array.from({ length: 9 }).map((_, i) => (
                 <SkeletonGalleryItem key={i} />
@@ -137,14 +130,10 @@ export default function GallerySection({ gallery = [], videos = [], loading = fa
             </div>
           </div>
         ) : unified.length > 0 ? (
-          /*
-           * ─── 3 SATIRLI SABİT KILAVUZ YATAY BİRLEŞİK GALERİ ────────────────
-           * Fotoğraflar ve videolar tek akışta. Videolar GIF gibi sessiz çalar.
-           * Tıklanınca lightbox açılır — yeni sekme kesinlikle açılmaz.
-           */
+          /* 3 Satırlı Düz ve Çerçevesiz Yatay Akış */
           <div
             ref={scrollContainerRef}
-            className="h-[540px] md:h-[620px] overflow-x-auto overflow-y-hidden no-scrollbar snap-x snap-mandatory flex flex-col justify-center overscroll-x-contain touch-pan-x py-1"
+            className="h-[520px] md:h-[580px] overflow-x-auto overflow-y-hidden no-scrollbar snap-x snap-mandatory flex flex-col justify-center overscroll-x-contain touch-pan-x"
           >
             <div className="grid grid-rows-3 grid-flow-col gap-3 md:gap-4 h-full auto-cols-[220px] md:auto-cols-[300px]">
               {unified.map((item, index) => {
@@ -153,53 +142,41 @@ export default function GallerySection({ gallery = [], videos = [], loading = fa
 
                 if (item.kind === 'photo') {
                   return (
-                    <motion.div
+                    <div
                       key={key}
-                      initial={{ opacity: 0, scale: 0.95 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      transition={{ duration: 0.25, delay: Math.min(index * 0.03, 0.3) }}
-                      className={`${isWide ? 'col-span-2' : 'col-span-1'} row-span-1 snap-start cursor-pointer group w-full h-full select-none`}
+                      className={`${isWide ? 'col-span-2' : 'col-span-1'} row-span-1 snap-start cursor-pointer w-full h-full select-none rounded-lg overflow-hidden bg-zinc-900`}
                       onClick={() => handlePhotoClick(item.data)}
                     >
-                      <div className="w-full h-full relative rounded-xl overflow-hidden bg-neutral-900 border border-neutral-800 shadow-sm">
+                      <div className="w-full h-full relative">
                         <img
-                          src={getOptimizedImageUrl(item.data.image_url, 600)}
+                          src={getOptimizedImageUrl(item.data.image_url, 600, 70)}
                           alt={getLocalizedField(item.data, 'title', lang) || 'Aydın Torna CNC'}
                           width={isWide ? 600 : 300}
                           height={200}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                          className="w-full h-full object-cover"
                           loading="lazy"
                           decoding="async"
                         />
-                        {/* Hover Overlay */}
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-3">
-                          <p className="text-white text-xs font-semibold tracking-wider bg-black/60 backdrop-blur-sm px-2.5 py-1 rounded-full uppercase line-clamp-1">
-                            {getLocalizedField(item.data, 'title', lang) || (lang === 'tr' ? 'Büyüt' : 'Zoom')}
-                          </p>
-                        </div>
                       </div>
-                    </motion.div>
+                    </div>
                   )
                 }
 
                 // Video kartı — GIF gibi sessiz autoPlay, tıklanınca modal
                 return (
-                  <motion.div
+                  <div
                     key={key}
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.25, delay: Math.min(index * 0.03, 0.3) }}
-                    className={`${isWide ? 'col-span-2' : 'col-span-1'} row-span-1 snap-start cursor-pointer group w-full h-full select-none`}
+                    className={`${isWide ? 'col-span-2' : 'col-span-1'} row-span-1 snap-start cursor-pointer w-full h-full select-none rounded-lg overflow-hidden bg-zinc-900`}
                     onClick={() => handleVideoClick(item.data)}
                   >
-                    <div className="w-full h-full relative rounded-xl overflow-hidden bg-neutral-900 border border-neutral-800 shadow-sm">
+                    <div className="w-full h-full relative">
                       {item.data.thumbnail_url ? (
                         <img
-                          src={getOptimizedImageUrl(item.data.thumbnail_url, 600)}
+                          src={getOptimizedImageUrl(item.data.thumbnail_url, 600, 70)}
                           alt={getLocalizedField(item.data, 'title', lang) || 'Video önizleme'}
                           width={300}
                           height={200}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                          className="w-full h-full object-cover"
                           loading="lazy"
                           decoding="async"
                         />
@@ -213,28 +190,25 @@ export default function GallerySection({ gallery = [], videos = [], loading = fa
                           preload="metadata"
                           aria-hidden="true"
                           tabIndex={-1}
-                          className="w-full h-full object-cover pointer-events-none group-hover:scale-105 transition-transform duration-500"
+                          className="w-full h-full object-cover pointer-events-none"
                         />
                       )}
-                      {/* Video göstergesi */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-3">
-                        <span className="text-white text-xs font-semibold tracking-wider bg-black/60 backdrop-blur-sm px-2.5 py-1 rounded-full uppercase">
-                          {lang === 'tr' ? '▶ Video' : '▶ Video'}
-                        </span>
+                      <div className="absolute bottom-2 left-2 bg-black/70 px-2 py-0.5 rounded text-white text-[10px] font-semibold">
+                        ▶ Video
                       </div>
                     </div>
-                  </motion.div>
+                  </div>
                 )
               })}
             </div>
           </div>
         ) : (
-          <p className="text-center text-muted py-12">{t('gallery.noItems')}</p>
+          <p className="text-center text-zinc-400 py-12">{t('gallery.noItems')}</p>
         )}
 
         <div className="text-center mt-10">
           <Link to="/gallery">
-            <Button variant="outline">
+            <Button variant="outline" className="border-zinc-800 text-zinc-200 hover:bg-zinc-900">
               {t('gallery.loadMore')}
               <ArrowRight className="w-4 h-4" />
             </Button>
@@ -250,29 +224,23 @@ export default function GallerySection({ gallery = [], videos = [], loading = fa
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={closeLightbox}
-            className="fixed inset-0 z-[9999] bg-black/90 backdrop-blur-md flex items-center justify-center p-4"
+            className="fixed inset-0 z-[9999] bg-black/95 flex items-center justify-center p-4"
           >
-            <motion.div
-              initial={{ scale: 0.9, y: 20 }}
-              animate={{ scale: 1, y: 0 }}
-              exit={{ scale: 0.9, y: 20 }}
+            <div
               onClick={(e) => e.stopPropagation()}
-              className="relative max-w-4xl w-full max-h-[90vh] bg-neutral-900 border border-neutral-800 rounded-2xl overflow-hidden flex flex-col shadow-2xl"
+              className="relative max-w-4xl w-full bg-zinc-950 rounded-xl overflow-hidden flex flex-col border border-zinc-800"
             >
               {lightbox.kind === 'photo' ? (
                 <>
                   <img
-                    src={getOptimizedImageUrl(lightbox.item.image_url, 1200)}
+                    src={getOptimizedImageUrl(lightbox.item.image_url, 1200, 75)}
                     alt={getLocalizedField(lightbox.item, 'title', lang) || 'Galeri görseli'}
                     className="max-h-[75vh] w-auto object-contain mx-auto"
                   />
-                  <div className="p-6 bg-neutral-950 text-white border-t border-neutral-800">
+                  <div className="p-5 bg-zinc-950 text-white border-t border-zinc-800">
                     <h3 className="font-semibold text-lg">
                       {getLocalizedField(lightbox.item, 'title', lang) || (lang === 'tr' ? lightbox.item.title_tr : lightbox.item.title_en) || 'Aydın Torna CNC'}
                     </h3>
-                    <p className="text-xs text-neutral-400 mt-1 uppercase tracking-widest">
-                      {lang === 'tr' ? 'Kategori' : 'Category'}: {lightbox.item.category ? t(`gallery.categories.${lightbox.item.category}`, lightbox.item.category) : ''}
-                    </p>
                   </div>
                 </>
               ) : (
@@ -284,7 +252,7 @@ export default function GallerySection({ gallery = [], videos = [], loading = fa
                     playsInline
                     className="max-h-[75vh] w-full object-contain bg-black"
                   />
-                  <div className="p-6 bg-neutral-950 text-white border-t border-neutral-800">
+                  <div className="p-5 bg-zinc-950 text-white border-t border-zinc-800">
                     <h3 className="font-semibold text-lg">
                       {getLocalizedField(lightbox.item, 'title', lang) || (lang === 'tr' ? lightbox.item.title_tr : lightbox.item.title_en) || 'Aydın Torna CNC'}
                     </h3>
@@ -293,12 +261,12 @@ export default function GallerySection({ gallery = [], videos = [], loading = fa
               )}
               <button
                 onClick={closeLightbox}
-                className="absolute top-4 right-4 w-10 h-10 rounded-full bg-black/60 text-white hover:bg-black/80 flex items-center justify-center transition-colors border border-white/10"
+                className="absolute top-3 right-3 w-8 h-8 rounded-full bg-black/80 text-white flex items-center justify-center"
                 aria-label="Kapat"
               >
-                <X className="w-5 h-5" />
+                <X className="w-4 h-4" />
               </button>
-            </motion.div>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

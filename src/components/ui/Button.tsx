@@ -9,13 +9,13 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const variants = {
   primary:
-    'bg-neutral-900 text-white hover:bg-neutral-800 dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-100',
+    'bg-neutral-900 text-white hover:bg-neutral-800 dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-100 font-semibold',
   secondary:
-    'bg-accent text-white hover:bg-accent-600',
+    'bg-accent-600 text-white hover:bg-accent-700 font-semibold shadow-sm',
   ghost:
-    'bg-transparent hover:bg-neutral-100 dark:hover:bg-neutral-800',
+    'bg-transparent hover:bg-neutral-100 dark:hover:bg-neutral-800 font-medium',
   outline:
-    'border border-neutral-300 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-900',
+    'border border-neutral-300 dark:border-neutral-700 text-neutral-800 dark:text-neutral-100 hover:bg-neutral-100 dark:hover:bg-neutral-900 font-medium',
 }
 
 const sizes = {

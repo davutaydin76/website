@@ -8,8 +8,6 @@ import {
   ArrowLeft,
   ArrowRight,
   Wrench,
-  Ruler,
-  Zap,
   X,
   ChevronLeft,
   ChevronRight,
@@ -20,10 +18,8 @@ import { Link } from 'react-router-dom'
 import SEO from '@/components/seo/SEO'
 import SocialCallToAction from '@/components/common/SocialCallToAction'
 import { fetchProjects } from '@/services/content'
-import { getOptimizedImageUrl, getWhatsAppLink } from '@/lib/utils'
+import { getOptimizedImageUrl } from '@/lib/utils'
 import type { ProjectData } from '@/types'
-
-const WA_NUMBER = import.meta.env.VITE_WHATSAPP_NUMBER || '905058807700'
 
 const fallbackDiaryProjects: ProjectData[] = [
   {
@@ -89,37 +85,7 @@ const fallbackDiaryProjects: ProjectData[] = [
     sort_order: 2,
     meta_keywords: 'prototip imalat, 5 eksen frezeleme, enerji sektörü cnc',
   },
-  {
-    id: 'fp-4',
-    created_at: '2025-06-12T10:00:00Z',
-    completion_date: '2025-06-12',
-    title_tr: 'Ağır Haddehane Silindir Yatakları',
-    title_en: 'Heavy Rolling Mill Bearing Blocks',
-    specs_tr: 'Ø800mm Delik İçi İşleme · GGG-50 Sfero Döküm · H7 Tolerans',
-    specs_en: 'Ø800mm Bore Turning · GGG-50 Ductile Iron · H7 Tolerance',
-    client_type_tr: 'Demir-çelik haddecisi',
-    client_type_en: 'Steel rolling mill contractor',
-    processing_time: '5 iş günü',
-    description_tr:
-      'Ağır sanayi hadde silindir rulman yataklarının hassas tornalanması ve honlanması. Vinç altyapımızla 3 tonluk blok parçalar emniyetle işlenip sevk edildi.',
-    description_en:
-      'Machining and boring of rolling mill bearing housings with H7 tolerance control.',
-    media_urls: ['/images/factory-exterior.jpg'],
-    cover_image_url: '/images/factory-exterior.jpg',
-    is_active: true,
-    sort_order: 3,
-    meta_keywords: 'hadde yatağı torna, ağır talaşlı imalat, dilovası cnc',
-  },
 ]
-
-const PILL_COLORS = [
-  'bg-accent/10 text-accent border-accent/20',
-  'bg-blue-500/10 text-blue-400 border-blue-500/20',
-  'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
-  'bg-purple-500/10 text-purple-400 border-purple-500/20',
-]
-
-const ICONS = [Wrench, Ruler, Zap]
 
 function isVideoUrl(url?: string | null) {
   if (!url) return false
@@ -153,7 +119,6 @@ export default function DiaryPage() {
     load()
   }, [])
 
-  // ESC ile Lightbox kapat
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') setLightboxProject(null)
@@ -162,7 +127,6 @@ export default function DiaryPage() {
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [lightboxProject])
 
-  // Arama filtreleme
   const filteredProjects = projects.filter((p) => {
     if (!searchQuery.trim()) return true
     const q = searchQuery.toLowerCase()
@@ -185,28 +149,26 @@ export default function DiaryPage() {
         }
       />
 
-      <div className="pt-24 lg:pt-32 bg-neutral-950 min-h-screen text-white">
+      <div className="pt-24 lg:pt-32 bg-zinc-950 min-h-screen text-white">
         <div className="container-max mx-auto px-4 sm:px-6 lg:px-8 pb-16">
-          {/* Geri Dönüş Linki */}
           <div className="mb-6">
             <Link
               to="/"
-              className="inline-flex items-center gap-2 text-sm font-medium text-neutral-400 hover:text-accent transition-colors"
+              className="inline-flex items-center gap-2 text-sm font-medium text-zinc-400 hover:text-accent transition-colors"
             >
               <ArrowLeft className="w-4 h-4" />
               {lang === 'tr' ? 'Ana Sayfa' : 'Home'}
             </Link>
           </div>
 
-          {/* Başlık Bölümü */}
-          <div className="text-center max-w-3xl mx-auto mb-12">
-            <span className="inline-block text-xs font-semibold tracking-[0.2em] uppercase text-accent mb-4 px-4 py-1.5 rounded-full bg-accent/10 border border-accent/20">
+          <div className="text-center max-w-3xl mx-auto mb-10">
+            <span className="inline-block text-xs font-semibold tracking-[0.2em] uppercase text-accent mb-3">
               {lang === 'tr' ? '1992’den Beri Üretim Hafızamız' : 'Production Archive Since 1992'}
             </span>
-            <h1 className="heading-xl text-white mb-4">
+            <h1 className="heading-xl text-white mb-3">
               {lang === 'tr' ? 'Üretim Günlüğü / Vaka Analizleri' : 'Production Diary / Case Studies'}
             </h1>
-            <p className="text-neutral-400 text-base sm:text-lg leading-relaxed">
+            <p className="text-zinc-400 text-base leading-relaxed">
               {lang === 'tr'
                 ? 'Binlerce iş parçasından seçilen kronolojik kayıtlar. Ağır torna, çap, boy, malzeme ve teslimat detaylarıyla şeffaf mühendislik arşivi.'
                 : 'Chronological archive of real parts machined since 1992. Transparent engineering records with dimensions and metallurgy.'}
@@ -214,20 +176,20 @@ export default function DiaryPage() {
           </div>
 
           {/* Arama Çubuğu */}
-          <div className="max-w-xl mx-auto mb-12">
+          <div className="max-w-xl mx-auto mb-10">
             <div className="relative">
-              <Search className="w-5 h-5 absolute left-4 top-1/2 -translate-y-1/2 text-neutral-500" />
+              <Search className="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder={lang === 'tr' ? 'Parça adı, çap, malzeme (örn: şaft, 4140, flanş)...' : 'Search part, material, diameter (e.g. shaft, 4140, flange)...'}
-                className="w-full pl-12 pr-4 py-3 rounded-2xl bg-neutral-900 border border-neutral-800 text-white placeholder:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent text-sm"
+                placeholder={lang === 'tr' ? 'Parça adı, çap, malzeme (örn: şaft, 4140, flanş)...' : 'Search part, material, diameter...'}
+                className="w-full pl-11 pr-4 py-2.5 rounded-lg bg-zinc-900 border border-zinc-800 text-white placeholder:text-zinc-500 focus:outline-none focus:ring-1 focus:ring-accent text-sm"
               />
               {searchQuery && (
                 <button
                   onClick={() => setSearchQuery('')}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-neutral-500 hover:text-white"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-white"
                   aria-label="Aramayı temizle"
                 >
                   <X className="w-4 h-4" />
@@ -236,16 +198,16 @@ export default function DiaryPage() {
             </div>
           </div>
 
-          {/* Kronolojik Liste / Grid */}
+          {/* Grid */}
           {loading ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {[1, 2, 3, 4, 5, 6].map((k) => (
-                <div key={k} className="h-96 rounded-2xl bg-neutral-900 animate-pulse border border-neutral-800" />
+                <div key={k} className="h-96 rounded-xl bg-zinc-900 animate-pulse" />
               ))}
             </div>
           ) : filteredProjects.length === 0 ? (
-            <div className="text-center py-20 text-neutral-400">
-              <p className="text-lg mb-2">{lang === 'tr' ? 'Aramanızla eşleşen proje bulunamadı.' : 'No projects matched your search.'}</p>
+            <div className="text-center py-20 text-zinc-400">
+              <p className="text-base mb-2">{lang === 'tr' ? 'Aramanızla eşleşen proje bulunamadı.' : 'No projects matched your search.'}</p>
               <button
                 onClick={() => setSearchQuery('')}
                 className="text-accent underline text-sm"
@@ -254,9 +216,8 @@ export default function DiaryPage() {
               </button>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredProjects.map((project, i) => {
-                const Icon = ICONS[i % ICONS.length]
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+              {filteredProjects.map((project) => {
                 const title = lang === 'tr' ? project.title_tr : (project.title_en || project.title_tr)
                 const description = lang === 'tr' ? project.description_tr : (project.description_en || project.description_tr)
                 const clientType = lang === 'tr' ? project.client_type_tr : (project.client_type_en || project.client_type_tr)
@@ -271,23 +232,15 @@ export default function DiaryPage() {
                 const currentMediaUrl = allMedia[currentMediaIdx] || project.cover_image_url
                 const isVideo = isVideoUrl(currentMediaUrl)
 
-                const waMsg = `Merhaba, "${project.title_tr}" projeniz hakkında bilgi almak istiyorum.`
-                const waLink = getWhatsAppLink(WA_NUMBER, waMsg)
-
                 return (
-                  <motion.article
+                  <article
                     key={project.id}
-                    initial={{ opacity: 0, y: 24 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.35, delay: Math.min(i * 0.05, 0.3) }}
                     className="
-                      flex flex-col bg-neutral-900 border border-neutral-800/90 rounded-2xl overflow-hidden
-                      hover:border-neutral-700 hover:shadow-2xl hover:shadow-black/70
-                      transition-all duration-300 group
+                      flex flex-col bg-zinc-900/40 rounded-xl overflow-hidden
                     "
                   >
-                    {/* Medya Alanı */}
-                    <div className="relative w-full aspect-[16/10] overflow-hidden bg-neutral-950 flex-shrink-0">
+                    {/* Medya */}
+                    <div className="relative w-full aspect-[16/10] overflow-hidden bg-zinc-900 flex-shrink-0">
                       {isVideo && currentMediaUrl ? (
                         <div
                           className="w-full h-full cursor-pointer relative"
@@ -302,11 +255,11 @@ export default function DiaryPage() {
                             preload="metadata"
                             aria-hidden="true"
                             tabIndex={-1}
-                            className="w-full h-full object-cover pointer-events-none group-hover:scale-105 transition-transform duration-500"
+                            className="w-full h-full object-cover pointer-events-none"
                           />
-                          <div className="absolute inset-0 bg-black/30 hover:bg-black/10 transition-colors flex items-center justify-center">
-                            <span className="bg-black/70 backdrop-blur-md text-white text-[11px] font-semibold px-3 py-1 rounded-full uppercase tracking-wider border border-white/20">
-                              ▶ Video Önizleme
+                          <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
+                            <span className="bg-black/80 text-white text-[11px] font-semibold px-2.5 py-1 rounded">
+                              ▶ Video
                             </span>
                           </div>
                         </div>
@@ -316,32 +269,26 @@ export default function DiaryPage() {
                           onClick={() => setLightboxProject({ project, index: currentMediaIdx })}
                         >
                           <img
-                            src={getOptimizedImageUrl(currentMediaUrl, 600)}
+                            src={getOptimizedImageUrl(currentMediaUrl, 600, 70)}
                             alt={title}
                             width={600}
                             height={375}
                             loading="lazy"
                             decoding="async"
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                            className="w-full h-full object-cover"
                           />
-                          <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity bg-black/60 backdrop-blur-md p-1.5 rounded-lg text-white">
-                            <Maximize2 className="w-4 h-4" />
+                          <div className="absolute top-2.5 right-2.5 bg-black/60 p-1 rounded text-white opacity-80">
+                            <Maximize2 className="w-3.5 h-3.5" />
                           </div>
                         </div>
                       ) : (
-                        <div className="w-full h-full flex items-center justify-center text-neutral-700">
-                          <Icon className="w-12 h-12" aria-hidden="true" />
+                        <div className="w-full h-full flex items-center justify-center text-zinc-700">
+                          <Wrench className="w-10 h-10" aria-hidden="true" />
                         </div>
                       )}
 
-                      {/* Rozet */}
-                      <div className="absolute top-3 left-3 w-8 h-8 rounded-lg bg-accent/90 backdrop-blur-sm flex items-center justify-center shadow-lg text-white">
-                        <Icon className="w-4 h-4" aria-hidden="true" />
-                      </div>
-
-                      {/* Çoklu Medya Noktaları */}
                       {allMedia.length > 1 && (
-                        <div className="absolute bottom-2.5 left-1/2 -translate-x-1/2 flex items-center gap-1 bg-black/60 backdrop-blur-md px-2 py-1 rounded-full z-10">
+                        <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex items-center gap-1 bg-black/60 px-2 py-0.5 rounded-full z-10">
                           {allMedia.map((_, mi) => (
                             <button
                               key={mi}
@@ -350,8 +297,8 @@ export default function DiaryPage() {
                                 e.stopPropagation()
                                 setActiveMediaIndex((prev) => ({ ...prev, [project.id]: mi }))
                               }}
-                              className={`w-1.5 h-1.5 rounded-full transition-all ${
-                                currentMediaIdx === mi ? 'bg-accent w-3.5' : 'bg-white/50'
+                              className={`w-1.5 h-1.5 rounded-full ${
+                                currentMediaIdx === mi ? 'bg-accent w-3' : 'bg-white/40'
                               }`}
                               aria-label={`Görsel ${mi + 1}`}
                             />
@@ -361,9 +308,8 @@ export default function DiaryPage() {
                     </div>
 
                     {/* İçerik */}
-                    <div className="flex flex-col flex-1 p-5 sm:p-6">
-                      {/* Meta */}
-                      <div className="flex flex-wrap items-center gap-3 text-xs text-neutral-400 mb-3">
+                    <div className="flex flex-col flex-1 p-5">
+                      <div className="flex flex-wrap items-center gap-3 text-xs text-zinc-400 mb-2.5">
                         {project.completion_date && (
                           <span className="inline-flex items-center gap-1 text-accent font-medium">
                             <CalendarDays className="w-3.5 h-3.5" />
@@ -371,33 +317,29 @@ export default function DiaryPage() {
                           </span>
                         )}
                         {clientType && (
-                          <span className="inline-flex items-center gap-1 text-neutral-300">
-                            <Building2 className="w-3.5 h-3.5 text-neutral-500" />
+                          <span className="inline-flex items-center gap-1 text-zinc-300">
+                            <Building2 className="w-3.5 h-3.5 text-zinc-500" />
                             {clientType}
                           </span>
                         )}
                         {project.processing_time && (
-                          <span className="inline-flex items-center gap-1 text-neutral-400">
-                            <Clock className="w-3.5 h-3.5 text-neutral-500" />
+                          <span className="inline-flex items-center gap-1 text-zinc-400">
+                            <Clock className="w-3.5 h-3.5 text-zinc-500" />
                             {project.processing_time}
                           </span>
                         )}
                       </div>
 
-                      {/* Başlık */}
-                      <h3 className="text-white font-bold text-lg leading-snug mb-3 group-hover:text-accent transition-colors duration-200">
+                      <h3 className="text-white font-semibold text-lg leading-snug mb-2.5">
                         {title}
                       </h3>
 
-                      {/* Spec Pills */}
                       {specs.length > 0 && (
-                        <div className="flex flex-wrap gap-1.5 mb-4">
+                        <div className="flex flex-wrap gap-1.5 mb-3">
                           {specs.map((spec, si) => (
                             <span
                               key={si}
-                              className={`text-[10px] sm:text-[11px] font-medium px-2.5 py-1 rounded-md border ${
-                                PILL_COLORS[si % PILL_COLORS.length]
-                              }`}
+                              className="text-[11px] font-medium px-2 py-0.5 rounded bg-zinc-900 text-zinc-300"
                             >
                               {spec}
                             </span>
@@ -405,34 +347,28 @@ export default function DiaryPage() {
                         </div>
                       )}
 
-                      {/* Açıklama */}
                       {description && (
-                        <p className="text-neutral-400 text-sm leading-relaxed line-clamp-3 flex-1 mb-5">
+                        <p className="text-zinc-400 text-sm leading-relaxed line-clamp-3 flex-1 mb-5">
                           {description}
                         </p>
                       )}
 
-                      {/* WhatsApp CTA */}
-                      <a
-                        href={waLink}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        aria-label={`"${title}" projesi hakkında WhatsApp'tan teklif al`}
+                      {/* Teklif Al — Doğrudan /offer sayfasına */}
+                      <Link
+                        to="/offer"
                         className="
                           mt-auto flex items-center justify-between gap-2
-                          px-4 py-3 rounded-xl
-                          bg-neutral-800/80 hover:bg-accent
-                          text-neutral-200 hover:text-white
-                          text-xs sm:text-sm font-semibold
-                          border border-neutral-700/60 hover:border-accent
-                          transition-all duration-200 group/btn
+                          px-4 py-2.5 rounded-lg
+                          bg-zinc-800 hover:bg-zinc-700
+                          text-white text-xs font-semibold
+                          transition-colors
                         "
                       >
-                        <span>{lang === 'tr' ? 'Detay & Fiyat Sor' : 'Inquire Details & Quote'}</span>
-                        <ArrowRight className="w-4 h-4 flex-shrink-0 group-hover/btn:translate-x-1 transition-transform duration-200" />
-                      </a>
+                        <span>{lang === 'tr' ? 'Teklif İste' : 'Request Quote'}</span>
+                        <ArrowRight className="w-3.5 h-3.5 flex-shrink-0" />
+                      </Link>
                     </div>
-                  </motion.article>
+                  </article>
                 )
               })}
             </div>
@@ -451,14 +387,11 @@ export default function DiaryPage() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setLightboxProject(null)}
-            className="fixed inset-0 z-[9999] bg-black/95 backdrop-blur-md flex items-center justify-center p-4"
+            className="fixed inset-0 z-[9999] bg-black/95 flex items-center justify-center p-4"
           >
-            <motion.div
-              initial={{ scale: 0.9, y: 20 }}
-              animate={{ scale: 1, y: 0 }}
-              exit={{ scale: 0.9, y: 20 }}
+            <div
               onClick={(e) => e.stopPropagation()}
-              className="relative max-w-4xl w-full bg-neutral-900 border border-neutral-800 rounded-2xl overflow-hidden flex flex-col shadow-2xl"
+              className="relative max-w-4xl w-full bg-zinc-950 rounded-xl overflow-hidden flex flex-col border border-zinc-800"
             >
               {(() => {
                 const { project, index } = lightboxProject
@@ -472,18 +405,17 @@ export default function DiaryPage() {
 
                 return (
                   <>
-                    <div className="relative bg-black flex items-center justify-center min-h-[300px] max-h-[70vh] overflow-hidden">
+                    <div className="relative bg-black flex items-center justify-center min-h-[280px] max-h-[70vh] overflow-hidden">
                       {isVid ? (
                         <video src={activeUrl} controls autoPlay playsInline className="max-h-[70vh] w-full object-contain" />
                       ) : (
                         <img
-                          src={getOptimizedImageUrl(activeUrl, 1200)}
+                          src={getOptimizedImageUrl(activeUrl, 1200, 75)}
                           alt={pTitle}
                           className="max-h-[70vh] w-auto object-contain mx-auto"
                         />
                       )}
 
-                      {/* Çoklu Medya Gezinme */}
                       {allMedia.length > 1 && (
                         <>
                           <button
@@ -494,7 +426,7 @@ export default function DiaryPage() {
                                 index: (index - 1 + allMedia.length) % allMedia.length,
                               })
                             }
-                            className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/60 hover:bg-black/90 text-white flex items-center justify-center border border-white/10"
+                            className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/70 hover:bg-black text-white flex items-center justify-center"
                             aria-label="Önceki Medya"
                           >
                             <ChevronLeft className="w-5 h-5" />
@@ -507,7 +439,7 @@ export default function DiaryPage() {
                                 index: (index + 1) % allMedia.length,
                               })
                             }
-                            className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/60 hover:bg-black/90 text-white flex items-center justify-center border border-white/10"
+                            className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/70 hover:bg-black text-white flex items-center justify-center"
                             aria-label="Sonraki Medya"
                           >
                             <ChevronRight className="w-5 h-5" />
@@ -516,9 +448,9 @@ export default function DiaryPage() {
                       )}
                     </div>
 
-                    <div className="p-6 bg-neutral-950 text-white border-t border-neutral-800">
-                      <div className="flex items-center justify-between gap-4 mb-2">
-                        <h3 className="font-bold text-lg sm:text-xl">{pTitle}</h3>
+                    <div className="p-5 bg-zinc-950 text-white border-t border-zinc-800">
+                      <div className="flex items-center justify-between gap-4 mb-1.5">
+                        <h3 className="font-semibold text-lg">{pTitle}</h3>
                         {project.completion_date && (
                           <span className="text-xs text-accent font-medium">
                             {formatDate(project.completion_date)}
@@ -526,12 +458,12 @@ export default function DiaryPage() {
                         )}
                       </div>
                       {project.specs_tr && (
-                        <p className="text-xs text-neutral-400 mb-2 font-mono">
+                        <p className="text-xs text-zinc-400 mb-2 font-mono">
                           {lang === 'tr' ? project.specs_tr : (project.specs_en || project.specs_tr)}
                         </p>
                       )}
                       {project.description_tr && (
-                        <p className="text-sm text-neutral-300 leading-relaxed">
+                        <p className="text-sm text-zinc-300 leading-relaxed">
                           {lang === 'tr' ? project.description_tr : (project.description_en || project.description_tr)}
                         </p>
                       )}
@@ -539,15 +471,15 @@ export default function DiaryPage() {
 
                     <button
                       onClick={() => setLightboxProject(null)}
-                      className="absolute top-4 right-4 w-10 h-10 rounded-full bg-black/70 hover:bg-black text-white flex items-center justify-center transition-colors border border-white/10"
+                      className="absolute top-3 right-3 w-8 h-8 rounded-full bg-black/80 text-white flex items-center justify-center"
                       aria-label="Kapat"
                     >
-                      <X className="w-5 h-5" />
+                      <X className="w-4 h-4" />
                     </button>
                   </>
                 )
               })()}
-            </motion.div>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

@@ -55,22 +55,60 @@ const emptyProject: EditableProject = {
   meta_keywords: '',
 }
 
-// ─── Otomatik Çeviri ──────────────────────────────────────────────────────────
+// ─── Otomatik Çeviri (Güvenlik Katmanlı & Çoklu Sağlayıcı) ───────────────────
 async function translateText(text: string, target: 'en' | 'tr' = 'en'): Promise<string> {
-  if (!text.trim()) return ''
+  const cleanText = text.trim()
+  if (!cleanText) return ''
+
+  // 1. Birincil: MyMemory API (Hızlı, ücretsiz, auth gerektirmez, 400 atmaz)
   try {
+    const controller = new AbortController()
+    const timeoutId = setTimeout(() => controller.abort(), 4000)
+    const langPair = target === 'en' ? 'tr|en' : 'en|tr'
+    const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(cleanText.slice(0, 500))}&langpair=${langPair}`
+
+    const res = await fetch(url, { signal: controller.signal })
+    clearTimeout(timeoutId)
+
+    if (res.ok) {
+      const data = await res.json()
+      if (data?.responseData?.translatedText && !data.responseData.translatedText.startsWith('MYMEMORY WARNING')) {
+        return data.responseData.translatedText
+      }
+    }
+  } catch {
+    // MyMemory zaman aşımına uğrarsa sonraki sağlayıcıya geç
+  }
+
+  // 2. İkincil: LibreTranslate (Yedek)
+  try {
+    const controller = new AbortController()
+    const timeoutId = setTimeout(() => controller.abort(), 4000)
+
     const res = await fetch(LIBRE_TRANSLATE_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ q: text, source: target === 'en' ? 'tr' : 'en', target, format: 'text' }),
+      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+      body: JSON.stringify({
+        q: cleanText,
+        source: target === 'en' ? 'tr' : 'en',
+        target,
+        format: 'text',
+      }),
+      signal: controller.signal,
     })
-    if (!res.ok) throw new Error(`HTTP ${res.status}`)
-    const data = await res.json()
-    return (data.translatedText as string) || ''
+    clearTimeout(timeoutId)
+
+    if (res.ok) {
+      const data = await res.json()
+      if (data?.translatedText) {
+        return data.translatedText
+      }
+    }
   } catch {
-    // Fallback: boş dön, kullanıcı elle doldurur
-    return ''
+    // Güvenli hata yakalama — konsola 400 basmadan sessizce boş döner
   }
+
+  return ''
 }
 
 // ─── Yardımcı: Video mu? ──────────────────────────────────────────────────────

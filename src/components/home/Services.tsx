@@ -4,7 +4,6 @@ import {
   RotateCw, Layers, Sparkles, ShieldCheck,
   CircleDot, Box, Settings, Puzzle, Flame, Zap, Cog
 } from 'lucide-react'
-import Card from '@/components/ui/Card'
 import { getLocalizedField } from '@/lib/utils'
 import type { Service } from '@/types'
 
@@ -63,17 +62,17 @@ export default function Services({ services }: ServicesProps) {
   const items = services?.length ? services : fallbackServices
 
   return (
-    <section id="services" className="section-padding bg-neutral-50 dark:bg-neutral-950/20">
+    <section id="services" className="section-padding bg-zinc-950 text-white">
       <div className="container-max mx-auto">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 15 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          transition={{ duration: 0.4 }}
+          className="text-center mb-12"
         >
-          <h2 className="heading-lg mb-4">{t('services.title')}</h2>
-          <p className="text-muted text-lg max-w-2xl mx-auto">{t('services.subtitle')}</p>
+          <h2 className="heading-lg mb-3 text-white">{t('services.title')}</h2>
+          <p className="text-zinc-400 text-lg max-w-2xl mx-auto">{t('services.subtitle')}</p>
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -87,31 +86,24 @@ export default function Services({ services }: ServicesProps) {
               : lang === 'tr' ? service.description_tr : service.description_en
 
             return (
-              <motion.div
+              <div
                 key={'id' in service ? String(service.id) : i}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: i * 0.05 }}
-                className="h-full"
+                className="h-full bg-zinc-900/40 rounded-xl p-6 flex flex-col justify-between"
               >
-                <Card
-                  className="h-full group bg-white/80 dark:bg-zinc-900/60 border border-neutral-200 dark:border-zinc-800 backdrop-blur-sm hover:border-orange-500/50 hover:bg-neutral-50 dark:hover:bg-zinc-900/90 hover:-translate-y-1 transition-all duration-300 p-6"
-                >
-                  {/* İkon kutusu - Turuncu/Accent gradient ve çerçeve */}
-                  <div className="w-12 h-12 rounded-xl bg-orange-500/10 text-orange-500 border border-orange-500/20 flex items-center justify-center mb-5 transition-transform group-hover:scale-110 duration-300">
-                    <Icon className="w-6 h-6" />
+                <div>
+                  <div className="w-10 h-10 rounded-lg bg-zinc-900 flex items-center justify-center mb-4 text-accent">
+                    <Icon className="w-5 h-5" />
                   </div>
-                  <h3 className="font-semibold text-lg text-neutral-900 dark:text-white mb-2 group-hover:text-orange-500 transition-colors">
+                  <h3 className="font-semibold text-lg text-white mb-2">
                     {title}
                   </h3>
                   {description && (
-                    <p className="text-sm text-muted leading-relaxed">
+                    <p className="text-sm text-zinc-400 leading-relaxed">
                       {description}
                     </p>
                   )}
-                </Card>
-              </motion.div>
+                </div>
+              </div>
             )
           })}
         </div>

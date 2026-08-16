@@ -146,7 +146,7 @@ export async function uploadFile(
   file: File
 ): Promise<string | null> {
   const { error } = await supabase.storage.from(bucket).upload(path, file, {
-    cacheControl: '3600',
+    cacheControl: '31536000', // 1 yıl (public, max-age=31536000)
     upsert: false,
   })
   if (error) {
@@ -174,16 +174,16 @@ export async function getFileUrl(storedPath: string): Promise<string> {
 /**
  * Supabase Storage URL'lerine otomatik dönüşüm parametreleri ekler.
  * Yerel URL'ler (/images/...) veya harici URL'ler olduğu gibi döndürülür.
- * Böylece 2.5MB+ görseller tarayıcıya WebP + sıkıştırılmış formatta gelir.
+ * 2.5MB+ devasa görseller tarayıcıya WebP + sıkıştırılmış formatta (?width=600&quality=70&format=webp) gelir.
  *
  * @param url - Ham görsel URL'si
- * @param width - İstenen genişlik (varsayılan: 800)
- * @param quality - Sıkıştırma kalitesi 1-100 (varsayılan: 80)
+ * @param width - İstenen genişlik (varsayılan: 600)
+ * @param quality - Sıkıştırma kalitesi (varsayılan: 70)
  */
 export function getOptimizedImageUrl(
   url: string | undefined | null,
-  width = 800,
-  quality = 80
+  width = 600,
+  quality = 70
 ): string {
   if (!url) return ''
   // Yerel veya harici (Supabase dışı) URL'leri dönüştürme

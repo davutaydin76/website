@@ -26,23 +26,22 @@ export default function Clients({ clients }: ClientsProps) {
   const { t } = useTranslation()
   const baseList: BrandItem[] = clients?.length ? clients : fallbackBrands
 
-  // Logolar az sayıda olsa bile sağda boşluk kalmaması için çoğalt
   const repeatCount = Math.max(2, Math.ceil(12 / baseList.length))
   const singleSet: BrandItem[] = Array.from({ length: repeatCount }).flatMap(() => baseList)
   const displayList: BrandItem[] = [...singleSet, ...singleSet]
 
   return (
-    <section className="bg-zinc-950 py-14 md:py-18 overflow-hidden border-y border-zinc-900/60 relative">
-      {/* Sol ve sağ kenar karartma yumuşak geçiş efektleri (Fade Gradients) */}
-      <div className="pointer-events-none absolute inset-y-0 left-0 w-20 md:w-36 bg-gradient-to-r from-zinc-950 to-transparent z-10" />
-      <div className="pointer-events-none absolute inset-y-0 right-0 w-20 md:w-36 bg-gradient-to-l from-zinc-950 to-transparent z-10" />
+    <section className="bg-zinc-950 py-12 md:py-16 overflow-hidden relative border-y border-zinc-900/60">
+      {/* Sol ve sağ kenar karartma geçişleri */}
+      <div className="pointer-events-none absolute inset-y-0 left-0 w-16 md:w-32 bg-gradient-to-r from-zinc-950 to-transparent z-10" />
+      <div className="pointer-events-none absolute inset-y-0 right-0 w-16 md:w-32 bg-gradient-to-l from-zinc-950 to-transparent z-10" />
 
       <div className="container-max mx-auto px-4 sm:px-6 lg:px-8 mb-8">
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.4 }}
           className="text-center"
         >
           <h2 className="text-xl sm:text-2xl font-semibold tracking-tight text-white mb-2">
@@ -54,43 +53,26 @@ export default function Clients({ clients }: ClientsProps) {
         </motion.div>
       </div>
 
-      {/* Sonsuz Kayan Bant (Infinite Marquee)
-          Hover'da tamamen durmasın — yalnızca yavaşlasın.
-          CSS animasyon süresi geçiş (transition-all) ile sağlanır.  */}
+      {/* Sade, düz, bordersız ve kutusuz kayan marka logoları */}
       <div className="relative w-full overflow-hidden py-2 flex items-center">
-        <div
-          className="flex w-max gap-3 md:gap-4 animate-marquee items-center
-            hover:[animation-duration:80s] [animation-duration:35s]
-            transition-[animation-duration] duration-700"
-        >
+        <div className="flex w-max gap-8 md:gap-12 animate-marquee items-center [animation-duration:35s]">
           {displayList.map((item, index) => {
             const hasLogo = 'logo_url' in item && item.logo_url
 
             const content = (
-              <div
-                className="
-                  min-w-[140px] md:min-w-[170px]
-                  h-[65px] md:h-[80px]
-                  px-4 py-3
-                  bg-zinc-900/40 border border-zinc-800/60 rounded-xl
-                  flex items-center justify-center
-                  transition-all duration-300
-                  hover:border-orange-500/40 hover:bg-zinc-800/60 hover:scale-105
-                  group select-none shadow-sm
-                "
-              >
+              <div className="h-10 md:h-12 flex items-center justify-center select-none opacity-80 hover:opacity-100 transition-opacity duration-200">
                 {hasLogo ? (
                   <img
                     src={item.logo_url!}
                     alt={item.name}
                     width={130}
-                    height={50}
-                    className="max-h-[40px] md:max-h-[50px] max-w-[110px] md:max-w-[140px] w-auto h-auto object-contain opacity-90 group-hover:opacity-100 transition-opacity duration-300"
+                    height={48}
+                    className="max-h-10 md:max-h-12 max-w-[130px] md:max-w-[160px] w-auto h-auto object-contain"
                     loading="lazy"
                     decoding="async"
                   />
                 ) : (
-                  <span className="text-sm md:text-sm font-bold text-zinc-300 group-hover:text-white uppercase tracking-wider text-center transition-colors duration-300">
+                  <span className="text-sm md:text-base font-bold text-zinc-300 uppercase tracking-widest text-center">
                     {item.name}
                   </span>
                 )}

@@ -104,16 +104,17 @@ export default function OfferForm({ compact = false }: OfferFormProps) {
 
   return (
     <motion.form
+      id="offer"
       onSubmit={handleSubmit(onSubmit)}
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 15 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
     >
-      <Card className={compact ? '' : 'max-w-2xl mx-auto'}>
+      <Card className={compact ? '' : 'max-w-2xl mx-auto bg-zinc-900/40 border-zinc-800'}>
         {!compact && (
           <div className="mb-8 text-center">
-            <h2 className="heading-md mb-2">{t('offer.title')}</h2>
-            <p className="text-muted">{t('offer.subtitle')}</p>
+            <h2 className="heading-md mb-2 text-white">{t('offer.title')}</h2>
+            <p className="text-zinc-400">{t('offer.subtitle')}</p>
           </div>
         )}
 

@@ -1,7 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import { motion } from 'framer-motion'
 import { Phone, Mail, MessageCircle, MapPin } from 'lucide-react'
-import Card from '@/components/ui/Card'
 import { getWhatsAppLink } from '@/lib/utils'
 import type { ContactSettings } from '@/types'
 
@@ -52,96 +51,64 @@ export default function Contact({ contact }: ContactProps) {
   ]
 
   return (
-    <section id="contact" className="section-padding bg-neutral-50 dark:bg-neutral-950/50">
+    <section id="contact" className="section-padding bg-zinc-950 text-white">
       <div className="container-max mx-auto">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 15 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
+          transition={{ duration: 0.4 }}
           className="text-center mb-12"
         >
-          <h2 className="heading-lg mb-4">{t('contact.title')}</h2>
-          <p className="text-muted text-lg">{t('contact.subtitle')}</p>
+          <h2 className="heading-lg mb-3 text-white">{t('contact.title')}</h2>
+          <p className="text-zinc-400 text-lg max-w-2xl mx-auto">{t('contact.subtitle')}</p>
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {items.map((item, i) => {
-              const isWhatsapp = item.label === t('contact.whatsapp')
+            {items.map((item) => {
               const CardContent = (
-                <Card
-                  hover
-                  className={`h-full flex flex-col justify-between p-6 transition-all duration-300 ${
-                    isWhatsapp
-                      ? 'group-hover:bg-[#25D366]/10 group-hover:border-[#25D366]/50'
-                      : ''
-                  }`}
-                >
+                <div className="h-full bg-zinc-900/40 rounded-xl p-5 flex flex-col justify-between">
                   <div>
-                    <item.icon
-                      className={`w-6 h-6 mb-4 transition-colors duration-300 ${
-                        isWhatsapp
-                          ? 'text-accent group-hover:text-[#25D366]'
-                          : 'text-accent'
-                      }`}
-                    />
-                    <p className="text-sm text-neutral-400 dark:text-neutral-500 mb-1">{item.label}</p>
-                    <p
-                      className={`font-semibold text-neutral-950 dark:text-white leading-relaxed text-sm sm:text-base transition-colors duration-300 ${
-                        isWhatsapp ? 'group-hover:text-[#25D366]' : ''
-                      }`}
-                    >
+                    <div className="w-10 h-10 rounded-lg bg-zinc-900 flex items-center justify-center mb-3.5 text-accent">
+                      <item.icon className="w-5 h-5" />
+                    </div>
+                    <p className="text-xs text-zinc-400 mb-1">{item.label}</p>
+                    <p className="font-semibold text-white text-sm sm:text-base">
                       {item.value}
                     </p>
                   </div>
                   {item.href && (
-                    <div
-                      className={`mt-4 text-xs font-semibold flex items-center gap-1 transition-colors duration-300 ${
-                        isWhatsapp
-                          ? 'text-[#25D366] group-hover:text-[#25D366]'
-                          : 'text-accent group-hover:text-accent/80'
-                      }`}
-                    >
+                    <div className="mt-4 text-xs font-semibold text-accent flex items-center gap-1">
                       <span>{lang === 'tr' ? 'Bağlantıyı Aç' : 'Open Link'}</span>
                       <span>→</span>
                     </div>
                   )}
-                </Card>
+                </div>
               )
 
               return (
-                <motion.div
-                  key={item.label}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.1 }}
-                  className="h-full"
-                >
+                <div key={item.label} className="h-full">
                   {item.href ? (
                     <a
                       href={item.href}
                       target={item.target || '_self'}
                       rel={item.target === '_blank' ? 'noopener noreferrer' : undefined}
-                      className="block h-full group"
+                      className="block h-full"
+                      aria-label={`${item.label}: ${item.value}`}
                     >
                       {CardContent}
                     </a>
                   ) : (
                     CardContent
                   )}
-                </motion.div>
+                </div>
               )
             })}
           </div>
 
           {mapsUrl && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="rounded-2xl overflow-hidden border border-neutral-200 dark:border-neutral-800 h-[400px] shadow-sm"
-            >
+            <div className="rounded-xl overflow-hidden bg-zinc-900 h-[360px]">
               <iframe
                 src={mapsUrl}
                 width="100%"
@@ -152,7 +119,7 @@ export default function Contact({ contact }: ContactProps) {
                 referrerPolicy="no-referrer-when-downgrade"
                 title="Aydın Torna CNC Konum"
               />
-            </motion.div>
+            </div>
           )}
         </div>
       </div>
