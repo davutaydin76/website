@@ -19,8 +19,9 @@ export default function Hero({ content }: HeroProps) {
   const ctaPrimary = (content ? getLocalizedField(content, 'cta_primary', lang) : null) || t('hero.get_quote') || t('hero.ctaPrimary') || (lang === 'tr' ? 'Teklif Al' : 'Get Quote')
   const ctaSecondary = (content ? getLocalizedField(content, 'cta_secondary', lang) : null) || t('hero.our_services') || t('hero.ctaSecondary') || (lang === 'tr' ? 'Hizmetlerimiz' : 'Our Services')
 
-  const videoUrl = content?.video_url ||
-    'https://assets.mixkit.co/videos/preview/mixkit-close-up-of-a-cnc-machine-cutting-metal-4933-large.mp4'
+  // Yalnızca Supabase/yerel güvenli kaynaktan gelen video URL kullanılır.
+  // Harici (mixkit.co vb.) bağlantılar kesinlikle kullanılmaz.
+  const videoUrl = content?.video_url || null
 
   const backgroundImage = content?.background_image || '/images/factory-exterior.jpg'
 
@@ -28,19 +29,29 @@ export default function Hero({ content }: HeroProps) {
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       <div
         className="absolute inset-0 z-0"
-        style={!content?.video_url ? { backgroundImage: `url(${backgroundImage})`, backgroundSize: 'cover', backgroundPosition: 'center' } : undefined}
+        style={
+          !videoUrl
+            ? { backgroundImage: `url(${backgroundImage})`, backgroundSize: 'cover', backgroundPosition: 'center' }
+            : undefined
+        }
       >
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
-          className="w-full h-full object-cover"
-          preload="metadata"
-          poster={content?.image_url || backgroundImage}
-        >
-          <source src={videoUrl} type="video/mp4" />
-        </video>
+        {videoUrl ? (
+          /* Arka plan videosu — yalnızca güvenli kaynaktan (Supabase/yerel).
+             aria-hidden ve tabIndex=-1 ile ekran okuyuculardan gizlenir. */
+          <video
+            autoPlay
+            muted
+            loop
+            playsInline
+            aria-hidden="true"
+            tabIndex={-1}
+            className="w-full h-full object-cover"
+            preload="metadata"
+            poster={content?.image_url || backgroundImage}
+          >
+            <source src={videoUrl} type="video/mp4" />
+          </video>
+        ) : null}
         <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/80" />
       </div>
 

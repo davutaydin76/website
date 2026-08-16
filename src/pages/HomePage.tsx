@@ -3,9 +3,12 @@ import SEO from '@/components/seo/SEO'
 import Hero from '@/components/home/Hero'
 import Services from '@/components/home/Services'
 import Machines from '@/components/home/Machines'
+import CapacitySection from '@/components/home/CapacitySection'
+import ProductionDiarySection from '@/components/home/ProductionDiarySection'
 import Clients from '@/components/home/Clients'
 import Counters from '@/components/home/Counters'
 import GallerySection from '@/components/home/GallerySection'
+import SocialCallToAction from '@/components/common/SocialCallToAction'
 import OfferForm from '@/components/forms/OfferForm'
 import Contact from '@/components/home/Contact'
 import {
@@ -23,6 +26,7 @@ import {
   fetchVideos,
   fetchSeo,
   fetchContactSettings,
+  fetchProjects,
 } from '@/services/content'
 import type {
   HeroContent,
@@ -34,6 +38,7 @@ import type {
   VideoItem,
   SeoSettings,
   ContactSettings,
+  ProjectData,
 } from '@/types'
 
 export default function HomePage() {
@@ -47,6 +52,7 @@ export default function HomePage() {
   const [videos, setVideos] = useState<VideoItem[]>([])
   const [seo, setSeo] = useState<SeoSettings | null>(null)
   const [contact, setContact] = useState<ContactSettings | undefined>(undefined)
+  const [projects, setProjects] = useState<ProjectData[]>([])
 
   useEffect(() => {
     Promise.all([
@@ -59,8 +65,9 @@ export default function HomePage() {
       fetchVideos(),
       fetchSeo('home'),
       fetchContactSettings(),
+      fetchProjects(),
     ])
-      .then(([h, s, m, c, cnt, g, v, seoData, contactData]) => {
+      .then(([h, s, m, c, cnt, g, v, seoData, contactData, proj]) => {
         setHero(h)
         setServices(s)
         setMachines(m)
@@ -70,6 +77,7 @@ export default function HomePage() {
         setVideos(v)
         setSeo(seoData)
         setContact(contactData)
+        setProjects(proj)
       })
       .catch(console.error)
       .finally(() => setLoading(false))
@@ -111,6 +119,15 @@ export default function HomePage() {
       ) : (
         <Machines machines={machines} />
       )}
+
+      {/* Üretim Kapasitesi & Global Vizyon — Makineler ile Referanslar arasında */}
+      <CapacitySection />
+
+      {/* Üretim Günlüğü: B2B Başarı Hikayeleri */}
+      <ProductionDiarySection projects={projects} />
+
+      {/* Sosyal Medya Çağrısı */}
+      <SocialCallToAction />
 
       <Counters counters={counters} />
       <Clients clients={clients} />

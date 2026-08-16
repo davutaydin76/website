@@ -3,7 +3,7 @@ import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import {
   LayoutDashboard, Image, Wrench, Cog, Users, FileText,
-  Search, Settings, LogOut, Video, Sparkles, Menu, X,
+  Search, Settings, LogOut, Video, Sparkles, Menu, X, BookOpen,
 } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useAuth } from '@/contexts/AuthContext'
@@ -17,6 +17,7 @@ const navItems = [
   { to: '/admin/gallery', icon: Image, labelKey: 'admin.gallery' },
   { to: '/admin/videos', icon: Video, labelKey: 'admin.videos' },
   { to: '/admin/clients', icon: Users, labelKey: 'admin.clients' },
+  { to: '/admin/projects', icon: BookOpen, labelKey: 'admin.projects' },
   { to: '/admin/offers', icon: FileText, labelKey: 'admin.offers' },
   { to: '/admin/seo', icon: Search, labelKey: 'admin.seo' },
   { to: '/admin/settings', icon: Settings, labelKey: 'admin.settings' },

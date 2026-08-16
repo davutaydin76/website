@@ -118,18 +118,22 @@ export default function OfferForm({ compact = false }: OfferFormProps) {
         )}
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {/* Explicit id'ler: label/htmlFor bağlantısı garantili (WCAG AA) */}
           <Input
+            id="offer-full-name"
             label={t('offer.fullName')}
             error={errors.full_name ? t('validation.required') : undefined}
             autoComplete="name"
             {...register('full_name')}
           />
           <Input
+            id="offer-company"
             label={t('offer.company')}
             autoComplete="organization"
             {...register('company')}
           />
           <Input
+            id="offer-phone"
             label={t('offer.phone')}
             type="tel"
             autoComplete="tel"
@@ -137,6 +141,7 @@ export default function OfferForm({ compact = false }: OfferFormProps) {
             {...register('phone')}
           />
           <Input
+            id="offer-email"
             label={t('offer.email')}
             type="email"
             autoComplete="email"
@@ -146,22 +151,30 @@ export default function OfferForm({ compact = false }: OfferFormProps) {
         </div>
 
         <div className="mt-4">
-          <Textarea label={t('offer.description')} {...register('description')} />
+          <Textarea
+            id="offer-description"
+            label={t('offer.description')}
+            {...register('description')}
+          />
         </div>
 
-        {/* Dosya yükleme alanı */}
+        {/* Dosya yükleme alanı — erişilebilir label/id bağlantısı */}
         <div className="mt-4">
-          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1.5">
+          <label
+            htmlFor="offer-file-upload"
+            className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1.5"
+          >
             {t('offer.files')}
           </label>
           <label
+            htmlFor="offer-file-upload"
             className={`flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-xl cursor-pointer transition-colors ${
               fileError
                 ? 'border-red-300 dark:border-red-700 bg-red-50/50 dark:bg-red-950/10'
                 : 'border-neutral-200 dark:border-neutral-700 hover:border-accent'
             }`}
           >
-            <Upload className="w-8 h-8 text-muted mb-2" />
+            <Upload className="w-8 h-8 text-muted mb-2" aria-hidden="true" />
             <span className="text-sm text-muted">{t('offer.filesHint')}</span>
             <span className="text-xs text-muted mt-0.5">PDF, DWG, DXF, STEP, STP, ONECNC — maks. 10 MB</span>
             {files.length > 0 && (
@@ -170,15 +183,17 @@ export default function OfferForm({ compact = false }: OfferFormProps) {
               </span>
             )}
             <input
+              id="offer-file-upload"
               type="file"
               multiple
               accept={getAcceptedFileTypes()}
               onChange={handleFileChange}
               className="hidden"
+              aria-label={t('offer.files')}
             />
           </label>
           {fileError && (
-            <p className="mt-1.5 text-xs text-red-500">{fileError}</p>
+            <p className="mt-1.5 text-xs text-red-500" role="alert">{fileError}</p>
           )}
         </div>
 

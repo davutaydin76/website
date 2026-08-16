@@ -1,0 +1,492 @@
+import { useState, useEffect } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { useTranslation } from 'react-i18next'
+import {
+  CalendarDays,
+  Clock,
+  Building2,
+  ArrowRight,
+  Wrench,
+  Ruler,
+  Zap,
+  X,
+  ChevronLeft,
+  ChevronRight,
+  Maximize2
+} from 'lucide-react'
+import { getOptimizedImageUrl, getWhatsAppLink } from '@/lib/utils'
+import type { ProjectData } from '@/types'
+
+interface ProductionDiarySectionProps {
+  projects?: ProjectData[]
+}
+
+const WA_NUMBER = import.meta.env.VITE_WHATSAPP_NUMBER || '905058807700'
+
+/** Supabase'de veri yokken gösterilecek varsayılan örnek projeler */
+const fallbackProjects: ProjectData[] = [
+  {
+    id: 'fp-1',
+    created_at: '2026-01-15T09:00:00Z',
+    completion_date: '2026-01-15',
+    title_tr: '6 Metre Gemi Şaftı Revizyonu',
+    title_en: '6-Meter Marine Shaft Revision',
+    specs_tr: 'Ø240mm x 6000mm · AISI 4340 Çelik · Ra 0.8µm · ±0.02mm',
+    specs_en: 'Ø240mm x 6000mm · AISI 4340 Steel · Ra 0.8µm · ±0.02mm',
+    client_type_tr: "Tuzla'da bir tersane",
+    client_type_en: 'A shipyard in Tuzla',
+    processing_time: '4 iş günü',
+    description_tr:
+      'Büyük bir gemi ana tahrik sistemi için 6 metre boyunda şaft revizyonu. Salgı ve balans testleri sıfır toleransla tamamlandı. CNC ağır torna tezgahımızda tek bağlamada işlendi.',
+    description_en:
+      '6-meter marine main propulsion shaft revision. Runout and balance tests verified with tight tolerances on our heavy CNC lathe.',
+    media_urls: ['/images/long-lathe.jpg'],
+    cover_image_url: '/images/long-lathe.jpg',
+    is_active: true,
+    sort_order: 0,
+    meta_keywords: 'gemi şaftı torna, marine shaft machining, kocaeli cnc torna',
+  },
+  {
+    id: 'fp-2',
+    created_at: '2025-11-20T14:00:00Z',
+    completion_date: '2025-11-20',
+    title_tr: 'Özel Ø1200 mm Ağır Flanş İmalatı',
+    title_en: 'Custom Ø1200 mm Heavy Flange Machining',
+    specs_tr: 'Ø1200mm Dış Çap · EN 10083-2 · CMM Ölçüm Raporlu',
+    specs_en: 'Ø1200mm Outer Dia · EN 10083-2 · CMM Certified',
+    client_type_tr: 'Petrokimya ve rafineri yüklenicisi',
+    client_type_en: 'Petrochemical & refinery contractor',
+    processing_time: '2 iş günü',
+    description_tr:
+      'Ayna önü (swing over bed) Ø1200mm kapasitemizin sınırında ağır tip talaş kaldırma. Sızdırmazlık yüzeyleri ve cıvata delik eksenleri CMM kalite kontrol raporuyla onaylandı.',
+    description_en:
+      'Heavy turning at the limits of our Ø1200mm swing-over-bed capacity. Sealing surfaces and bolt circles CMM verified.',
+    media_urls: ['/images/lathe-chuck.jpg'],
+    cover_image_url: '/images/lathe-chuck.jpg',
+    is_active: true,
+    sort_order: 1,
+    meta_keywords: 'büyük flanş imalatı, large flange machining, ağır sanayi torna',
+  },
+  {
+    id: 'fp-3',
+    created_at: '2025-09-08T11:30:00Z',
+    completion_date: '2025-09-08',
+    title_tr: 'Karmaşık Enerji Türbin Rotoru Prototipi',
+    title_en: 'Complex Energy Turbine Rotor Prototype',
+    specs_tr: '5 Eksen Frezeleme · Titanyum / Nikel Alaşımı · Prototip',
+    specs_en: '5-Axis Milling · Titanium / Nickel Alloy · Prototype',
+    client_type_tr: 'Rüzgar & hidroelektrik türbin üreticisi',
+    client_type_en: 'Wind & hydro turbine manufacturer',
+    processing_time: '6 iş günü',
+    description_tr:
+      'Türbin kademesi için kompleks geometrili prototip işleme. 5 eksen işleme merkezimizde hassas yüzey tarama ve CAD/CAM modelleme desteğiyle tamamlandı.',
+    description_en:
+      'Complex geometry prototype for energy turbine stages. Processed on 5-axis center with CAD/CAM simulation.',
+    media_urls: ['/images/lathe-workpiece.jpg'],
+    cover_image_url: '/images/lathe-workpiece.jpg',
+    is_active: true,
+    sort_order: 2,
+    meta_keywords: 'prototip imalat, 5 eksen frezeleme, enerji sektörü cnc',
+  },
+]
+
+const PILL_COLORS = [
+  'bg-accent/10 text-accent border-accent/20',
+  'bg-blue-500/10 text-blue-400 border-blue-500/20',
+  'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
+  'bg-purple-500/10 text-purple-400 border-purple-500/20',
+]
+
+const ICONS = [Wrench, Ruler, Zap]
+
+function isVideoUrl(url?: string | null) {
+  if (!url) return false
+  return /\.(mp4|webm|mov|avi|mkv)(\?|$)/i.test(url)
+}
+
+function formatDate(iso: string | null | undefined): string {
+  if (!iso) return ''
+  const d = new Date(iso)
+  if (isNaN(d.getTime())) return ''
+  return `${d.getDate().toString().padStart(2, '0')}.${(d.getMonth() + 1).toString().padStart(2, '0')}.${d.getFullYear()}`
+}
+
+export default function ProductionDiarySection({ projects }: ProductionDiarySectionProps) {
+  const { i18n } = useTranslation()
+  const lang = i18n.language as 'tr' | 'en'
+
+  const [activeMediaIndex, setActiveMediaIndex] = useState<{ [key: string]: number }>({})
+  const [lightboxProject, setLightboxProject] = useState<{ project: ProjectData; index: number } | null>(null)
+
+  const displayProjects = projects && projects.length > 0 ? projects : fallbackProjects
+
+  // ESC ile lightbox kapat
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setLightboxProject(null)
+    }
+    if (lightboxProject) {
+      window.addEventListener('keydown', handleKeyDown)
+    }
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [lightboxProject])
+
+  return (
+    <section
+      id="production-diary"
+      aria-labelledby="diary-heading"
+      className="section-padding bg-neutral-950 border-t border-neutral-900 overflow-hidden"
+    >
+      <div className="container-max mx-auto">
+        {/* Başlık */}
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.55 }}
+          className="text-center mb-12 md:mb-16"
+        >
+          <span className="inline-block text-xs font-semibold tracking-[0.2em] uppercase text-accent mb-4 px-4 py-1.5 rounded-full bg-accent/10 border border-accent/20">
+            {lang === 'tr' ? '1992’den Beri Üretim Hafızası' : 'Production Archive Since 1992'}
+          </span>
+          <h2
+            id="diary-heading"
+            className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight mb-4"
+          >
+            {lang === 'tr'
+              ? 'Üretim Günlüğü: B2B Başarı Hikayelerimiz'
+              : 'Production Diary: B2B Case Studies'}
+          </h2>
+          <p className="text-neutral-400 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
+            {lang === 'tr'
+              ? 'Abartısız mühendislik diliyle gerçek atölye kayıtları. Ağır torna, çap, boy, malzeme ve teslimat detayları.'
+              : 'Real shop-floor case studies in transparent engineering terms. Dimensions, tolerances, materials and lead times.'}
+          </p>
+        </motion.div>
+
+        {/* Proje Kartları (Mobilde Yatay Carousel - Desktop'ta Grid) */}
+        <div className="flex md:grid md:grid-cols-2 lg:grid-cols-3 gap-6 overflow-x-auto md:overflow-visible snap-x snap-mandatory no-scrollbar pb-4 md:pb-0 px-2 md:px-0">
+          {displayProjects.slice(0, 6).map((project, i) => {
+            const Icon = ICONS[i % ICONS.length]
+            const title = lang === 'tr' ? project.title_tr : (project.title_en || project.title_tr)
+            const description = lang === 'tr' ? project.description_tr : (project.description_en || project.description_tr)
+            const clientType = lang === 'tr' ? project.client_type_tr : (project.client_type_en || project.client_type_tr)
+            const specsRaw = lang === 'tr' ? project.specs_tr : (project.specs_en || project.specs_tr)
+            const specs = specsRaw ? specsRaw.split('·').map((s) => s.trim()).filter(Boolean) : []
+
+            const allMedia = [
+              ...(project.cover_image_url ? [project.cover_image_url] : []),
+              ...(project.media_urls || []).filter((u) => u !== project.cover_image_url),
+            ]
+            const currentMediaIdx = activeMediaIndex[project.id] || 0
+            const currentMediaUrl = allMedia[currentMediaIdx] || project.cover_image_url
+            const isVideo = isVideoUrl(currentMediaUrl)
+
+            const waMsg = `Merhaba, "${project.title_tr}" projeniz hakkında bilgi almak istiyorum.`
+            const waLink = getWhatsAppLink(WA_NUMBER, waMsg)
+
+            return (
+              <motion.article
+                key={project.id}
+                initial={{ opacity: 0, y: 28 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.08, duration: 0.45 }}
+                className="
+                  min-w-[85vw] sm:min-w-[380px] md:min-w-0
+                  snap-start flex flex-col
+                  bg-neutral-900 border border-neutral-800/80 rounded-2xl overflow-hidden
+                  hover:border-neutral-700 hover:shadow-2xl hover:shadow-black/60
+                  transition-all duration-300 group
+                "
+              >
+                {/* Medya Alanı (GIF video veya Optimize Resim) */}
+                <div className="relative w-full aspect-[16/10] overflow-hidden bg-neutral-950 flex-shrink-0">
+                  {isVideo && currentMediaUrl ? (
+                    <div
+                      className="w-full h-full cursor-pointer relative"
+                      onClick={() => setLightboxProject({ project, index: currentMediaIdx })}
+                    >
+                      <video
+                        src={currentMediaUrl}
+                        autoPlay
+                        muted
+                        loop
+                        playsInline
+                        preload="metadata"
+                        aria-hidden="true"
+                        tabIndex={-1}
+                        className="w-full h-full object-cover pointer-events-none group-hover:scale-105 transition-transform duration-500"
+                      />
+                      <div className="absolute inset-0 bg-black/30 hover:bg-black/10 transition-colors flex items-center justify-center">
+                        <span className="bg-black/70 backdrop-blur-md text-white text-[11px] font-semibold px-3 py-1 rounded-full uppercase tracking-wider border border-white/20">
+                          ▶ Video Önizleme
+                        </span>
+                      </div>
+                    </div>
+                  ) : currentMediaUrl ? (
+                    <div
+                      className="w-full h-full cursor-pointer relative"
+                      onClick={() => setLightboxProject({ project, index: currentMediaIdx })}
+                    >
+                      <img
+                        src={getOptimizedImageUrl(currentMediaUrl, 600)}
+                        alt={title}
+                        width={600}
+                        height={375}
+                        loading="lazy"
+                        decoding="async"
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                      <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity bg-black/60 backdrop-blur-md p-1.5 rounded-lg text-white">
+                        <Maximize2 className="w-4 h-4" />
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-neutral-700">
+                      <Icon className="w-12 h-12" aria-hidden="true" />
+                    </div>
+                  )}
+
+                  {/* Kategori / İkon Rozeti */}
+                  <div className="absolute top-3 left-3 w-8 h-8 rounded-lg bg-accent/90 backdrop-blur-sm flex items-center justify-center shadow-lg text-white">
+                    <Icon className="w-4 h-4" aria-hidden="true" />
+                  </div>
+
+                  {/* Çoklu Medya Küçük Noktalar */}
+                  {allMedia.length > 1 && (
+                    <div className="absolute bottom-2.5 left-1/2 -translate-x-1/2 flex items-center gap-1 bg-black/60 backdrop-blur-md px-2 py-1 rounded-full z-10">
+                      {allMedia.map((_, mi) => (
+                        <button
+                          key={mi}
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            setActiveMediaIndex((prev) => ({ ...prev, [project.id]: mi }))
+                          }}
+                          className={`w-1.5 h-1.5 rounded-full transition-all ${
+                            currentMediaIdx === mi ? 'bg-accent w-3.5' : 'bg-white/50'
+                          }`}
+                          aria-label={`Görsel ${mi + 1}`}
+                        />
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* Kart Gövdesi */}
+                <div className="flex flex-col flex-1 p-5 sm:p-6">
+                  {/* Meta Bilgiler: Tarih, Sektör, Süre */}
+                  <div className="flex flex-wrap items-center gap-3 text-xs text-neutral-400 mb-3.5">
+                    {project.completion_date && (
+                      <span className="inline-flex items-center gap-1 text-accent font-medium">
+                        <CalendarDays className="w-3.5 h-3.5" />
+                        {formatDate(project.completion_date)}
+                      </span>
+                    )}
+                    {clientType && (
+                      <span className="inline-flex items-center gap-1 text-neutral-300">
+                        <Building2 className="w-3.5 h-3.5 text-neutral-500" />
+                        {clientType}
+                      </span>
+                    )}
+                    {project.processing_time && (
+                      <span className="inline-flex items-center gap-1 text-neutral-400">
+                        <Clock className="w-3.5 h-3.5 text-neutral-500" />
+                        {project.processing_time}
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Başlık */}
+                  <h3 className="text-white font-bold text-lg sm:text-xl leading-snug mb-3 group-hover:text-accent transition-colors duration-200">
+                    {title}
+                  </h3>
+
+                  {/* Spec Pills */}
+                  {specs.length > 0 && (
+                    <div className="flex flex-wrap gap-1.5 mb-4">
+                      {specs.map((spec, si) => (
+                        <span
+                          key={si}
+                          className={`text-[10px] sm:text-[11px] font-medium px-2.5 py-1 rounded-md border ${
+                            PILL_COLORS[si % PILL_COLORS.length]
+                          } tracking-wide`}
+                        >
+                          {spec}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Açıklama */}
+                  {description && (
+                    <p className="text-neutral-400 text-sm leading-relaxed line-clamp-3 flex-1 mb-5">
+                      {description}
+                    </p>
+                  )}
+
+                  {/* WhatsApp İletişim Butonu */}
+                  <a
+                    href={waLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`"${title}" projesi hakkında WhatsApp'tan bilgi al`}
+                    className="
+                      mt-auto flex items-center justify-between gap-2
+                      px-4 py-3 rounded-xl
+                      bg-neutral-800/80 hover:bg-accent
+                      text-neutral-200 hover:text-white
+                      text-xs sm:text-sm font-semibold
+                      border border-neutral-700/60 hover:border-accent
+                      transition-all duration-200 group/btn
+                    "
+                  >
+                    <span>{lang === 'tr' ? 'Detay & Fiyat Sor' : 'Inquire Details & Quote'}</span>
+                    <ArrowRight className="w-4 h-4 flex-shrink-0 group-hover/btn:translate-x-1 transition-transform duration-200" />
+                  </a>
+                </div>
+              </motion.article>
+            )
+          })}
+        </div>
+
+        {/* Alt Aksiyon Butonu */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.4 }}
+          className="text-center mt-12 sm:mt-16 flex flex-col sm:flex-row items-center justify-center gap-4"
+        >
+          <a
+            href={getWhatsAppLink(WA_NUMBER, 'Merhaba, parça işleme projem için teklif ve teknik inceleme rica ediyorum.')}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Projeniz için WhatsApp üzerinden teknik teklif alın"
+            className="
+              w-full sm:w-auto inline-flex items-center justify-center gap-2.5
+              px-8 py-3.5 rounded-xl
+              bg-accent hover:bg-accent-600
+              text-white font-semibold text-sm
+              shadow-lg shadow-accent/20 hover:shadow-accent/40
+              transition-all duration-300
+            "
+          >
+            <span>{lang === 'tr' ? 'Benzer Parça İçin Teklif Al' : 'Request Quote for Similar Part'}</span>
+            <ArrowRight className="w-4 h-4" aria-hidden="true" />
+          </a>
+        </motion.div>
+      </div>
+
+      {/* Lightbox Modal */}
+      <AnimatePresence>
+        {lightboxProject && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setLightboxProject(null)}
+            className="fixed inset-0 z-[9999] bg-black/95 backdrop-blur-md flex items-center justify-center p-4"
+          >
+            <motion.div
+              initial={{ scale: 0.9, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.9, y: 20 }}
+              onClick={(e) => e.stopPropagation()}
+              className="relative max-w-4xl w-full bg-neutral-900 border border-neutral-800 rounded-2xl overflow-hidden flex flex-col shadow-2xl"
+            >
+              {(() => {
+                const { project, index } = lightboxProject
+                const allMedia = [
+                  ...(project.cover_image_url ? [project.cover_image_url] : []),
+                  ...(project.media_urls || []).filter((u) => u !== project.cover_image_url),
+                ]
+                const activeUrl = allMedia[index] || project.cover_image_url || ''
+                const isVid = isVideoUrl(activeUrl)
+                const pTitle = lang === 'tr' ? project.title_tr : (project.title_en || project.title_tr)
+
+                return (
+                  <>
+                    <div className="relative bg-black flex items-center justify-center min-h-[300px] max-h-[70vh] overflow-hidden">
+                      {isVid ? (
+                        <video src={activeUrl} controls autoPlay playsInline className="max-h-[70vh] w-full object-contain" />
+                      ) : (
+                        <img
+                          src={getOptimizedImageUrl(activeUrl, 1200)}
+                          alt={pTitle}
+                          className="max-h-[70vh] w-auto object-contain mx-auto"
+                        />
+                      )}
+
+                      {/* Çoklu Medya Gezinme Butonları */}
+                      {allMedia.length > 1 && (
+                        <>
+                          <button
+                            type="button"
+                            onClick={() =>
+                              setLightboxProject({
+                                project,
+                                index: (index - 1 + allMedia.length) % allMedia.length,
+                              })
+                            }
+                            className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/60 hover:bg-black/90 text-white flex items-center justify-center border border-white/10"
+                            aria-label="Önceki Medya"
+                          >
+                            <ChevronLeft className="w-5 h-5" />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() =>
+                              setLightboxProject({
+                                project,
+                                index: (index + 1) % allMedia.length,
+                              })
+                            }
+                            className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/60 hover:bg-black/90 text-white flex items-center justify-center border border-white/10"
+                            aria-label="Sonraki Medya"
+                          >
+                            <ChevronRight className="w-5 h-5" />
+                          </button>
+                        </>
+                      )}
+                    </div>
+
+                    <div className="p-6 bg-neutral-950 text-white border-t border-neutral-800">
+                      <div className="flex items-center justify-between gap-4 mb-2">
+                        <h3 className="font-bold text-lg sm:text-xl">{pTitle}</h3>
+                        {project.completion_date && (
+                          <span className="text-xs text-accent font-medium">
+                            {formatDate(project.completion_date)}
+                          </span>
+                        )}
+                      </div>
+                      {project.specs_tr && (
+                        <p className="text-xs text-neutral-400 mb-2 font-mono">
+                          {lang === 'tr' ? project.specs_tr : (project.specs_en || project.specs_tr)}
+                        </p>
+                      )}
+                      {project.description_tr && (
+                        <p className="text-sm text-neutral-300 leading-relaxed">
+                          {lang === 'tr' ? project.description_tr : (project.description_en || project.description_tr)}
+                        </p>
+                      )}
+                    </div>
+
+                    <button
+                      onClick={() => setLightboxProject(null)}
+                      className="absolute top-4 right-4 w-10 h-10 rounded-full bg-black/70 hover:bg-black text-white flex items-center justify-center transition-colors border border-white/10"
+                      aria-label="Kapat"
+                    >
+                      <X className="w-5 h-5" />
+                    </button>
+                  </>
+                )
+              })()}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </section>
+  )
+}

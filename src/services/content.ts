@@ -10,6 +10,7 @@ import type {
   SeoSettings,
   ContactSettings,
   CounterSettings,
+  ProjectData,
 } from '@/types'
 
 // ─── Fetch Fonksiyonları ──────────────────────────────────────────────────────
@@ -211,3 +212,51 @@ export async function updateOfferStatus(
     return false
   }
 }
+
+/**
+ * Üretim Günlüğü / Case Study projeleri — `projects` tablosu.
+ * completion_date DESC ile kronolojik sıralama (en yeni proje önce).
+ * Supabase'de tablo yoksa veya hata oluşursa boş dizi döner (graceful fallback).
+ */
+export async function fetchProjects(limit?: number): Promise<ProjectData[]> {
+  try {
+    let query = supabase
+      .from('projects')
+      .select('*')
+      .eq('is_active', true)
+      .order('completion_date', { ascending: false })
+      .order('sort_order', { ascending: true })
+    if (limit) query = query.limit(limit)
+    const { data, error } = await query
+    if (error) {
+      if (error.code === '42P01') return []
+      console.error('[content] fetchProjects:', error.message)
+    }
+    return (data || []) as ProjectData[]
+  } catch (err) {
+    console.error('[content] fetchProjects beklenmeyen hata:', err)
+    return []
+  }
+}
+
+/**
+ * Admin için — is_active durumundan bağımsız tüm projeleri getirir.
+ */
+export async function fetchAllProjects(): Promise<ProjectData[]> {
+  try {
+    const { data, error } = await supabase
+      .from('projects')
+      .select('*')
+      .order('completion_date', { ascending: false })
+      .order('sort_order', { ascending: true })
+    if (error) {
+      if (error.code === '42P01') return []
+      console.error('[content] fetchAllProjects:', error.message)
+    }
+    return (data || []) as ProjectData[]
+  } catch (err) {
+    console.error('[content] fetchAllProjects beklenmeyen hata:', err)
+    return []
+  }
+}
+

@@ -1,11 +1,12 @@
 {
   "nav": {
     "home": "Ana Sayfa",
-    "gallery": "Galeri",
-    "offer": "Teklif Al",
-    "contact": "İletişim",
     "services": "Hizmetler",
-    "machines": "Makine Parkuru"
+    "machines": "Makine Parkuru",
+    "diary": "Üretim Günlüğü",
+    "gallery": "Galeri",
+    "contact": "İletişim",
+    "offer": "Teklif Al"
   },
   "hero": {
     "title": "Hassas CNC Üretim",
@@ -100,6 +101,7 @@
     "gallery": "Galeri",
     "videos": "Videolar",
     "clients": "Müşteriler",
+    "projects": "Üretim Günlüğü",
     "offers": "Teklifler",
     "seo": "SEO Ayarları",
     "settings": "Ayarlar",

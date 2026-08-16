@@ -1,11 +1,12 @@
 {
   "nav": {
     "home": "Home",
-    "gallery": "Gallery",
-    "offer": "Get Quote",
-    "contact": "Contact",
     "services": "Services",
-    "machines": "Machine Park"
+    "machines": "Machine Park",
+    "diary": "Production Diary",
+    "gallery": "Gallery",
+    "contact": "Contact",
+    "offer": "Get Quote"
   },
   "hero": {
     "title": "Precision CNC Manufacturing",
@@ -98,6 +99,7 @@
     "gallery": "Gallery",
     "videos": "Videos",
     "clients": "Clients",
+    "projects": "Production Diary",
     "offers": "Offers",
     "seo": "SEO Settings",
     "settings": "Settings",

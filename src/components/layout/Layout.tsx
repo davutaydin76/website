@@ -1,9 +1,15 @@
+import { useLocation } from 'react-router-dom'
 import { Outlet } from 'react-router-dom'
 import Header from './Header'
 import Footer from './Footer'
 import ScrollObjects from '@/components/scroll/ScrollObjects'
+import FloatingWhatsApp from '@/components/common/FloatingWhatsApp'
 
 export default function Layout() {
+  const location = useLocation()
+  // Admin sayfalarında yüzen butonu gizle
+  const isAdmin = location.pathname.startsWith('/admin')
+
   return (
     <div className="relative min-h-screen flex flex-col">
       <ScrollObjects />
@@ -12,6 +18,8 @@ export default function Layout() {
         <Outlet />
       </main>
       <Footer />
+      {/* Yüzen WhatsApp Butonu — admin panelinde görünmez */}
+      {!isAdmin && <FloatingWhatsApp />}
     </div>
   )
 }

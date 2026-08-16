@@ -68,6 +68,7 @@ export default function Header() {
     { to: '/', label: t('nav.home') },
     { to: '/#services', label: t('nav.services') },
     { to: '/#machines', label: t('nav.machines') },
+    { to: '/diary', label: t('nav.diary') },
     { to: '/gallery', label: t('nav.gallery') },
     { to: '/#contact', label: t('nav.contact') },
   ]

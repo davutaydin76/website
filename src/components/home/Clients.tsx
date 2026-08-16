@@ -32,12 +32,12 @@ export default function Clients({ clients }: ClientsProps) {
   const displayList: BrandItem[] = [...singleSet, ...singleSet]
 
   return (
-    <section className="bg-zinc-950 py-16 md:py-20 overflow-hidden border-y border-zinc-900 relative">
+    <section className="bg-zinc-950 py-14 md:py-18 overflow-hidden border-y border-zinc-900/60 relative">
       {/* Sol ve sağ kenar karartma yumuşak geçiş efektleri (Fade Gradients) */}
-      <div className="pointer-events-none absolute inset-y-0 left-0 w-24 md:w-40 bg-gradient-to-r from-zinc-950 to-transparent z-10" />
-      <div className="pointer-events-none absolute inset-y-0 right-0 w-24 md:w-40 bg-gradient-to-l from-zinc-950 to-transparent z-10" />
+      <div className="pointer-events-none absolute inset-y-0 left-0 w-20 md:w-36 bg-gradient-to-r from-zinc-950 to-transparent z-10" />
+      <div className="pointer-events-none absolute inset-y-0 right-0 w-20 md:w-36 bg-gradient-to-l from-zinc-950 to-transparent z-10" />
 
-      <div className="container-max mx-auto px-4 sm:px-6 lg:px-8 mb-10">
+      <div className="container-max mx-auto px-4 sm:px-6 lg:px-8 mb-8">
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -54,23 +54,43 @@ export default function Clients({ clients }: ClientsProps) {
         </motion.div>
       </div>
 
-      {/* Sonsuz Kayan Bant (Infinite Marquee) */}
+      {/* Sonsuz Kayan Bant (Infinite Marquee)
+          Hover'da tamamen durmasın — yalnızca yavaşlasın.
+          CSS animasyon süresi geçiş (transition-all) ile sağlanır.  */}
       <div className="relative w-full overflow-hidden py-2 flex items-center">
-        <div className="flex w-max gap-4 md:gap-6 animate-marquee hover:[animation-play-state:paused] items-center">
+        <div
+          className="flex w-max gap-3 md:gap-4 animate-marquee items-center
+            hover:[animation-duration:80s] [animation-duration:35s]
+            transition-[animation-duration] duration-700"
+        >
           {displayList.map((item, index) => {
             const hasLogo = 'logo_url' in item && item.logo_url
 
             const content = (
-              <div className="min-w-[180px] md:min-w-[220px] h-[90px] md:h-[110px] p-4 md:p-6 bg-zinc-900/70 border border-zinc-800 rounded-2xl flex items-center justify-center backdrop-blur-sm transition-all duration-300 hover:border-orange-500/50 hover:bg-zinc-800/80 hover:scale-105 group select-none shadow-sm">
+              <div
+                className="
+                  min-w-[140px] md:min-w-[170px]
+                  h-[65px] md:h-[80px]
+                  px-4 py-3
+                  bg-zinc-900/40 border border-zinc-800/60 rounded-xl
+                  flex items-center justify-center
+                  transition-all duration-300
+                  hover:border-orange-500/40 hover:bg-zinc-800/60 hover:scale-105
+                  group select-none shadow-sm
+                "
+              >
                 {hasLogo ? (
                   <img
                     src={item.logo_url!}
                     alt={item.name}
-                    className="max-h-[50px] md:max-h-[65px] max-w-[140px] md:max-w-[170px] w-auto h-auto object-contain filter grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-300"
+                    width={130}
+                    height={50}
+                    className="max-h-[40px] md:max-h-[50px] max-w-[110px] md:max-w-[140px] w-auto h-auto object-contain opacity-90 group-hover:opacity-100 transition-opacity duration-300"
                     loading="lazy"
+                    decoding="async"
                   />
                 ) : (
-                  <span className="text-sm md:text-base font-bold text-zinc-400 group-hover:text-white uppercase tracking-wider text-center transition-colors duration-300">
+                  <span className="text-sm md:text-sm font-bold text-zinc-300 group-hover:text-white uppercase tracking-wider text-center transition-colors duration-300">
                     {item.name}
                   </span>
                 )}

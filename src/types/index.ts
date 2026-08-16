@@ -129,3 +129,33 @@ export interface LocalizedField {
   tr: string
   en: string
 }
+
+/** Üretim Günlüğü / Case Study — `projects` Supabase tablosu */
+export interface ProjectData {
+  id: string
+  created_at: string
+  /** Google Fotoğraflar tarihi — kronolojik sıralama için */
+  completion_date: string | null
+  title_tr: string
+  title_en: string
+  /** Kısa teknik özet pill'ler: "Ø1200mm · 4140 Çelik · ±0.02mm" */
+  specs_tr: string | null
+  specs_en: string | null
+  /** Uzun hikaye / süreç anlatımı */
+  description_tr: string | null
+  description_en: string | null
+  /** Müşteri sektörü — genel tanım, isim YOK: "Tuzla'da bir tersane" */
+  client_type_tr: string | null
+  client_type_en: string | null
+  /** Teslim süresi: "3 iş günü", "2 hafta" */
+  processing_time: string | null
+  /** Fotoğraf + video URL array (Supabase Storage, JSONB text[]) */
+  media_urls: string[]
+  /** Kapak görseli — kartlarda gösterilir */
+  cover_image_url: string | null
+  /** Default: false — incelenmeden yayınlanmaz */
+  is_active: boolean
+  sort_order: number
+  /** SEO meta keywords: "gemi şaftı torna, marine shaft machining, kocaeli" */
+  meta_keywords: string | null
+}
